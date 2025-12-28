@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
+use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -18,6 +20,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -25,9 +28,13 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('app')
+            ->path('/') // Racine du site
             ->login()
+            ->registration() // Inscription activée
+            ->passwordReset() // Réinitialisation mdp activée
+            ->emailVerification() // Vérification email
+            // ->profile() // Désactivé car géré par Breezy
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -40,6 +47,33 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
+            ])
+            ->plugins([
+                // Configuration de Filament Breezy (remplace Jetstream)
+                BreezyCore::make()
+                    ->myProfile(
+                        shouldRegisterUserMenu: true, // Remplace le menu profil standard
+                        shouldRegisterNavigation: false,
+                        hasAvatars: true, // Gestion des avatars
+                        slug: 'my-profile'
+                    )
+                    ->enableTwoFactorAuthentication(
+                        force: false, // Optionnel pour l'utilisateur
+                    )
+                    ->enableSanctumTokens(), // Gestion des tokens API
+
+                // Configuration de Filament Socialite (Google Login)
+                FilamentSocialitePlugin::make()
+                    ->providers([
+                        Provider::make('google')
+                            ->label('Google')
+                            ->icon('fab-google')
+                            ->color(Color::hex('#ea4335'))
+                            ->outlined(false)
+                            ->stateless(false)
+                    ])
+                    ->registration(true) // Permettre l'inscription via Google
+                    // ->domainAllowList(['mycompany.com']) // Restreindre si besoin
             ])
             ->middleware([
                 EncryptCookies::class,
