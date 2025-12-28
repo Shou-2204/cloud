@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Tenancy\EditTeamProfile;
+use App\Filament\Pages\Tenancy\RegisterTeam;
+use App\Models\Team;
 use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
 use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Http\Middleware\Authenticate;
@@ -48,6 +51,10 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
+            // Configuration de la Tenancy (Teams)
+            ->tenant(Team::class, slugAttribute: 'slug')
+            ->tenantRegistration(RegisterTeam::class)
+            ->tenantProfile(EditTeamProfile::class)
             ->plugins([
                 // Configuration de Filament Breezy (remplace Jetstream)
                 BreezyCore::make()
@@ -73,7 +80,6 @@ class AdminPanelProvider extends PanelProvider
                             ->stateless(false)
                     ])
                     ->registration(true) // Permettre l'inscription via Google
-                    // ->domainAllowList(['mycompany.com']) // Restreindre si besoin
             ])
             ->middleware([
                 EncryptCookies::class,
