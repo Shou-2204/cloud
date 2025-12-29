@@ -7,20 +7,33 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Styles -->
         @livewireStyles
+
+        {{-- Script Anti-Flash --}}
+        <script>
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
     </head>
-    <body>
-        <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
-            {{ $slot }}
-        </div>
+    <body class="font-sans antialiased text-gray-900 dark:text-gray-100"
+        x-data="{ 
+            darkMode: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) 
+        }" 
+        x-init="$watch('darkMode', val => {
+            localStorage.setItem('theme', val ? 'dark' : 'light');
+            val ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');
+        })"
+    >
+        {{-- J'ai retiré la div wrapper inutile car le body gère maintenant le x-data --}}
+        {{ $slot }}
 
         @livewireScripts
     </body>
