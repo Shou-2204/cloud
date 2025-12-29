@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Shou Cloud') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 {{-- 
     CORRECTION PRINCIPALE ICI :
@@ -157,6 +158,6 @@
             </div>
         </div>
     </section>
-
+@livewireScripts
 </body>
 </html>
