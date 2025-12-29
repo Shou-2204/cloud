@@ -10,8 +10,8 @@ body *:not(html):not(style):not(br):not(tr):not(code) {
 
 body {
     -webkit-text-size-adjust: none;
-    background-color: #ffffff;
-    color: #52525b;
+    background-color: #f1f5f9; /* Slate 100 - Fond gris très léger et moderne */
+    color: #334155; /* Slate 700 - Texte gris foncé lisible (pas noir pur) */
     height: 100%;
     line-height: 1.4;
     margin: 0;
@@ -28,7 +28,8 @@ blockquote {
 }
 
 a {
-    color: #18181b;
+    color: #4f46e5; /* Indigo 600 - Ta couleur primaire ShouCloud */
+    font-weight: 600;
 }
 
 a img {
@@ -38,7 +39,7 @@ a img {
 /* Typography */
 
 h1 {
-    color: #18181b;
+    color: #0f172a; /* Slate 900 - Titres quasi noirs */
     font-size: 18px;
     font-weight: bold;
     margin-top: 0;
@@ -46,6 +47,7 @@ h1 {
 }
 
 h2 {
+    color: #1e293b; /* Slate 800 */
     font-size: 16px;
     font-weight: bold;
     margin-top: 0;
@@ -53,6 +55,7 @@ h2 {
 }
 
 h3 {
+    color: #334155; /* Slate 700 */
     font-size: 14px;
     font-weight: bold;
     margin-top: 0;
@@ -64,10 +67,12 @@ p {
     line-height: 1.5em;
     margin-top: 0;
     text-align: left;
+    color: #334155;
 }
 
 p.sub {
     font-size: 12px;
+    color: #64748b; /* Slate 500 - Texte secondaire plus clair */
 }
 
 img {
@@ -80,7 +85,7 @@ img {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
-    background-color: #fafafa;
+    background-color: #f1f5f9; /* Match le body */
     margin: 0;
     padding: 0;
     width: 100%;
@@ -103,10 +108,11 @@ img {
 }
 
 .header a {
-    color: #18181b;
+    color: #0f172a; /* Slate 900 - Nom du site bien visible */
     font-size: 19px;
     font-weight: bold;
     text-decoration: none;
+    letter-spacing: -0.025em;
 }
 
 /* Logo */
@@ -125,9 +131,9 @@ img {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
-    background-color: #fafafa;
-    border-bottom: 1px solid #fafafa;
-    border-top: 1px solid #fafafa;
+    background-color: #f1f5f9;
+    border-bottom: 1px solid #e2e8f0; /* Slate 200 */
+    border-top: 1px solid #e2e8f0;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -137,11 +143,11 @@ img {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 570px;
-    background-color: #ffffff;
-    border-color: #e4e4e7;
-    border-radius: 4px;
+    background-color: #ffffff; /* Carte blanche propre */
+    border-color: #e2e8f0; /* Bordure très fine */
+    border-radius: 8px;
     border-width: 1px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); /* Ombre douce */
     margin: 0 auto;
     padding: 0;
     width: 570px;
@@ -154,13 +160,14 @@ img {
 /* Subcopy */
 
 .subcopy {
-    border-top: 1px solid #e4e4e7;
+    border-top: 1px solid #e2e8f0;
     margin-top: 25px;
     padding-top: 25px;
 }
 
 .subcopy p {
     font-size: 14px;
+    color: #64748b;
 }
 
 /* Footer */
@@ -176,13 +183,13 @@ img {
 }
 
 .footer p {
-    color: #a1a1aa;
+    color: #94a3b8; /* Slate 400 - Très discret */
     font-size: 12px;
     text-align: center;
 }
 
 .footer a {
-    color: #a1a1aa;
+    color: #94a3b8;
     text-decoration: underline;
 }
 
@@ -197,13 +204,14 @@ img {
 }
 
 .table th {
-    border-bottom: 1px solid #e4e4e7;
+    border-bottom: 1px solid #e2e8f0;
     margin: 0;
     padding-bottom: 8px;
+    color: #475569;
 }
 
 .table td {
-    color: #52525b;
+    color: #334155;
     font-size: 15px;
     line-height: 18px;
     margin: 0;
@@ -230,55 +238,61 @@ img {
 
 .button {
     -webkit-text-size-adjust: none;
-    border-radius: 4px;
+    border-radius: 6px;
     color: #fff;
     display: inline-block;
     overflow: hidden;
     text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+/* Bouton Primaire (Indigo ShouCloud) */
 .button-blue,
 .button-primary {
-    background-color: #18181b;
-    border-bottom: 8px solid #18181b;
-    border-left: 18px solid #18181b;
-    border-right: 18px solid #18181b;
-    border-top: 8px solid #18181b;
+    background-color: #4f46e5; /* Indigo 600 */
+    border-bottom: 8px solid #4f46e5;
+    border-left: 18px solid #4f46e5;
+    border-right: 18px solid #4f46e5;
+    border-top: 8px solid #4f46e5;
 }
 
+/* Bouton Succès */
 .button-green,
 .button-success {
-    background-color: #16a34a;
-    border-bottom: 8px solid #16a34a;
-    border-left: 18px solid #16a34a;
-    border-right: 18px solid #16a34a;
-    border-top: 8px solid #16a34a;
+    background-color: #10b981; /* Emerald 500 */
+    border-bottom: 8px solid #10b981;
+    border-left: 18px solid #10b981;
+    border-right: 18px solid #10b981;
+    border-top: 8px solid #10b981;
 }
 
+/* Bouton Erreur */
 .button-red,
 .button-error {
-    background-color: #dc2626;
-    border-bottom: 8px solid #dc2626;
-    border-left: 18px solid #dc2626;
-    border-right: 18px solid #dc2626;
-    border-top: 8px solid #dc2626;
+    background-color: #ef4444; /* Red 500 */
+    border-bottom: 8px solid #ef4444;
+    border-left: 18px solid #ef4444;
+    border-right: 18px solid #ef4444;
+    border-top: 8px solid #ef4444;
 }
 
 /* Panels */
 
 .panel {
-    border-left: #18181b solid 4px;
+    border-left: #4f46e5 solid 4px; /* Bordure Indigo */
     margin: 21px 0;
 }
 
 .panel-content {
-    background-color: #fafafa;
-    color: #52525b;
+    background-color: #f8fafc; /* Slate 50 - Très clair */
+    color: #334155;
     padding: 16px;
+    border-radius: 4px;
 }
 
 .panel-content p {
-    color: #52525b;
+    color: #334155;
 }
 
 .panel-item {
