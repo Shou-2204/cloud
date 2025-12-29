@@ -42,7 +42,7 @@
                 @auth
                     <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Log in</a>
+                    <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Connexion</a>
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="hidden sm:inline-block px-4 py-2 text-sm font-semibold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/30">Inscription</a>
                     @endif
