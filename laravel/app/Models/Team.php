@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
+use Laravel\Jetstream\Jetstream;
 use Laravel\Jetstream\Team as JetstreamTeam;
 
 class Team extends JetstreamTeam
@@ -21,6 +24,7 @@ class Team extends JetstreamTeam
     protected $fillable = [
         'name',
         'personal_team',
+        'join_code', // J'ai ajouté join_code ici par sécurité pour les updates de masse
     ];
 
     /**
@@ -44,5 +48,27 @@ class Team extends JetstreamTeam
         return [
             'personal_team' => 'boolean',
         ];
+    }
+
+    /**
+     * Génération automatique du code au démarrage.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function ($team) {
+            $team->join_code = strtoupper(Str::random(8));
+        });
+    }
+
+    /**
+     * C'EST ICI QUE LA MAGIE OPÈRE.
+     * On surcharge la méthode par défaut pour inclure 'is_approved'.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(Jetstream::userModel(), Jetstream::membershipModel())
+                    ->withPivot('role', 'is_approved') // <--- Indispensable pour ton système
+                    ->withTimestamps()
+                    ->as('membership');
     }
 }

@@ -12,6 +12,9 @@ class DeleteTeam implements DeletesTeams
      */
     public function delete(Team $team): void
     {
+        // On retire la validation pour autoriser la suppression de l'équipe perso
+        // $this->validate($team);
+
         $team->purge();
     }
 }
