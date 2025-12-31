@@ -10,11 +10,13 @@ use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Jetstream\Team as JetstreamTeam;
+use Laravel\Scout\Searchable;
 
 class Team extends JetstreamTeam
 {
     /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -70,5 +72,15 @@ class Team extends JetstreamTeam
                     ->withPivot('role', 'is_approved') // <--- Indispensable pour ton système
                     ->withTimestamps()
                     ->as('membership');
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            // Tu peux ajouter d'autres champs utiles pour la recherche
+            'owner_email' => $this->owner->email, 
+        ];
     }
 }
