@@ -36,7 +36,7 @@ class ShoucloudPageIndexer extends Command
                 'id' => 'nav_teams',
                 'title' => 'Équipe',
                 'description' => 'Gérer les membres de l\'Équipe',
-                'url' => '/teams',
+                'url' => '/myteams',
                 'category' => 'Paramètres'
             ],
         ];
