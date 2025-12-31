@@ -37,7 +37,7 @@ Route::middleware([
     })->name('dashboard');
 
 
-    Route::get('/myteams', function () {
+    Route::get('/myteam', function () {
         $user = auth()->user();
 
         if (! $user->current_team_id) {

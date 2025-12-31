@@ -16,7 +16,8 @@
                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                     Que souhaitez-vous <span class="text-indigo-600 dark:text-indigo-500">rechercher</span> ?
                 </h3>
-                <div class="max-w-2xl mx-auto">
+                {{-- AJOUT DU PADDING ICI POUR MOBILE --}}
+                <div class="max-w-2xl mx-auto px-4 sm:px-0">
                     <livewire:global-search />
                 </div>
             </div>
@@ -30,7 +31,7 @@
 
             {{-- SECTION ALERTE : Demandes en attente --}}
             @if($pendingTeams->isNotEmpty())
-                <div class="mb-8 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-2xl p-4 shadow-sm backdrop-blur-sm transition-colors duration-300">
+                <div class="mb-8 mx-4 sm:mx-0 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-2xl p-4 shadow-sm backdrop-blur-sm transition-colors duration-300">
                     <div class="flex">
                         <div class="flex-shrink-0">
                             <svg class="h-5 w-5 text-yellow-400 dark:text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
@@ -55,7 +56,7 @@
             @endif
 
             {{-- CARTE PRINCIPALE : STATUTS & BIENVENUE --}}
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            <div class="mx-4 sm:mx-0 bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
                 
                 <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                     <div class="flex items-center space-x-4">
