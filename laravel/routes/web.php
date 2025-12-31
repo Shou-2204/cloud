@@ -36,6 +36,18 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+
+    Route::get('/teams', function () {
+        $user = auth()->user();
+
+        if (! $user->current_team_id) {
+            return redirect()->route('onboarding');
+        }
+
+        return redirect()->route('teams.show', $user->current_team_id);
+    })->name('team.hub');
+
+
     Route::get('/onboarding', Onboarding::class)->name('onboarding');
 
     // >>> NOUVELLE ROUTE : ANNULER SA DEMANDE / QUITTER L'ÉQUIPE <<<
