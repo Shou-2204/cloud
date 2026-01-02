@@ -11,6 +11,8 @@ use App\Observers\TeamObserver;
 use Laravel\Jetstream\Events\TeamMemberAdded;
 use Laravel\Jetstream\Events\InvitingTeamMember;
 use App\Listeners\LogTeamMemberActivity;
+use Illuminate\Auth\Events\Login;
+use App\Listeners\LogUserLogin;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Team::observe(TeamObserver::class);
+
+        Event::listen(
+            Login::class,
+            [LogUserLogin::class, 'handle']
+        );
 
         Event::listen(
             TeamMemberAdded::class,
