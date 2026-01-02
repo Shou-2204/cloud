@@ -3,8 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\Team;
+use App\Notifications\TeamActivityLog;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB; // Important
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
@@ -25,12 +26,17 @@ class Onboarding extends Component
     {
         $this->validate(['newTeamName' => 'required|string|min:3']);
         $user = Auth::user();
+        
+        // Note: L'Observer TeamObserver détectera automatiquement cette création
+        // et enverra la notification 'team_created'. Pas besoin de code ici.
         $team = $user->ownedTeams()->create([
             'name' => $this->newTeamName,
             'personal_team' => false,
         ]);
+        
         $user->current_team_id = $team->id;
         $user->save();
+        
         return redirect()->route('dashboard');
     }
 
@@ -41,7 +47,6 @@ class Onboarding extends Component
         $user = Auth::user();
         $team = Team::where('join_code', $this->joinCode)->first();
 
-        // Si déjà dedans (approuvé ou non), on redirige
         $exists = DB::table('team_user')
                     ->where('team_id', $team->id)
                     ->where('user_id', $user->id)
@@ -53,15 +58,21 @@ class Onboarding extends Component
              return redirect()->route('dashboard');
         }
 
-        // INSERTION MANUELLE BRUTE (Force le 0)
         DB::table('team_user')->insert([
             'team_id' => $team->id,
             'user_id' => $user->id,
             'role' => 'editor',
-            'is_approved' => 0, // <--- C'est ça qui compte
+            'is_approved' => 0,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        // LOGGING MANUEL (Requis car DB::insert ne déclenche pas d'events)
+        $team->owner->notify(new TeamActivityLog('join_request_pending', [
+            'team_name' => $team->name,
+            'user_email' => $user->email,
+            'via' => 'onboarding'
+        ]));
 
         $user->current_team_id = $team->id;
         $user->save();

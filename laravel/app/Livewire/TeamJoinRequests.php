@@ -3,9 +3,15 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use App\Models\Team;
+use App\Notifications\TeamActivityLog;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
+/**
+ * Gère l'approbation et le refus des membres en attente.
+ * Les actions sont logguées en base de données via TeamActivityLog.
+ */
 class TeamJoinRequests extends Component
 {
     public int $teamId;
@@ -38,27 +44,43 @@ class TeamJoinRequests extends Component
             ->where('user_id', $userId)
             ->update(['is_approved' => 1]);
 
+        $team = Team::find($this->teamId);
+        $user = User::find($userId);
+
+        if ($team && $user) {
+            $team->owner->notify(new TeamActivityLog('member_approved', [
+                'team_name' => $team->name,
+                'user_email' => $user->email,
+                'user_id' => $user->id,
+            ]));
+
+            $user->notify(new TeamActivityLog('request_accepted', [
+                'team_name' => $team->name
+            ]));
+        }
+
         $this->dispatch('saved');
         
-        // CORRECTION ICI : Redirection propre vers la page de l'équipe
         return redirect()->route('teams.show', $this->teamId);
     }
 
     public function deny($userId)
     {
         $user = User::find($userId);
+        $team = Team::find($this->teamId);
 
-        if ($user) {
-            // 1. NETTOYAGE CRITIQUE :
-            // Si l'utilisateur a cette équipe définie comme "Équipe actuelle", on lui retire.
-            // Sinon, il verra toujours le nom de l'équipe en haut à droite (fantôme).
+        if ($user && $team) {
+            $team->owner->notify(new TeamActivityLog('member_denied', [
+                'team_name' => $team->name,
+                'denied_email' => $user->email,
+            ]));
+
             if ($user->current_team_id == $this->teamId) {
                 $user->forceFill([
                     'current_team_id' => null,
                 ])->save();
             }
 
-            // 2. SUPPRESSION DU LIEN
             DB::table('team_user')
                 ->where('team_id', $this->teamId)
                 ->where('user_id', $userId)

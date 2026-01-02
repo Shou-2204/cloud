@@ -2,66 +2,33 @@
 
 namespace App\Notifications;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
-class QueuedResetPassword extends Notification
+class QueuedResetPassword extends ResetPassword implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * Create a new notification instance.
+     * Ici, on ajoute 'database' à la liste.
+     * Laravel va donc : Envoyer le mail ET créer une ligne en base.
      */
-    public function __construct()
+    public function via($notifiable)
     {
-        //
+        return ['mail', 'database'];
     }
 
     /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
+     * Ce que l'on stocke dans la base de données (le JSON).
      */
-    public function via(object $notifiable): array
-    {
-        return ['mail'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
+    public function toDatabase($notifiable)
     {
         return [
-            //
+            'type' => 'security',
+            'action' => 'reset_password',
+            'ip_address' => request()->ip(), // On peut même loguer l'IP du demandeur !
+            'sent_at' => now(),
         ];
-    }
-
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new QueuedResetPassword($token));
-    }
-
-    /**
-     * Envoie la notification de vérification d'email via la Queue.
-     */
-    public function sendEmailVerificationNotification()
-    {
-        $this->notify(new QueuedVerifyEmail);
     }
 }

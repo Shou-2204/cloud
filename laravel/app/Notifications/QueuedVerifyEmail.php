@@ -10,5 +10,21 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 {
     use Queueable;
 
-    // Idem, on active juste le mode turbo.
+    public function via($notifiable)
+    {
+        return ['mail', 'database'];
+    }
+
+    /**
+     * Ce qui sera stocké dans la table "notifications"
+     */
+    public function toDatabase($notifiable)
+    {
+        return [
+            'type' => 'security',
+            'action' => 'verify_email',
+            'ip_address' => request()->ip(), // On logue l'IP par sécurité
+            'sent_at' => now(),
+        ];
+    }
 }
