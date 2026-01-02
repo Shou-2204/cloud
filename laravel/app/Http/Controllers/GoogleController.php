@@ -33,13 +33,6 @@ class GoogleController extends Controller
                     'email' => $googleUser->getEmail(),
                     'password' => Hash::make(Str::random(16)), // Mot de passe aléatoire sécurisé
                 ]);
-
-                // Création d'une Team personnelle (Spécifique à Jetstream)
-                $user->ownedTeams()->save(Team::forceCreate([
-                    'user_id' => $user->id,
-                    'name' => explode(' ', $user->name, 2)[0]."'s Team",
-                    'personal_team' => true,
-                ]));
             }
 
             // On connecte l'utilisateur
