@@ -10,7 +10,18 @@ class LoginDetected extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    // On utilise UNIQUEMENT le canal database (pas de mail)
+    public $details;
+
+    // On capture les infos dès la création de la notification
+    public function __construct()
+    {
+        $this->details = [
+            'ip' => request()->ip(),
+            'device' => request()->userAgent(),
+            'email' => auth()->user()?->email, // Optionnel mais rassurant
+        ];
+    }
+
     public function via($notifiable)
     {
         return ['database'];
@@ -20,8 +31,9 @@ class LoginDetected extends Notification implements ShouldQueue
     {
         return [
             'action' => 'login_successful',
-            'ip' => request()->ip(),
-            'device' => request()->userAgent(), // Utile pour savoir si c'est iPhone, Chrome, etc.
+            'ip' => $this->details['ip'],
+            'device' => $this->details['device'],
+            'user_email' => $this->details['email'],
         ];
     }
 }
