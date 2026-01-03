@@ -17,10 +17,15 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update(User $user, array $input): void
     {
+        
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
+        ], [
+            // --- Messages personnalisés ---
+            'photo.max' => 'La photo ne doit pas dépasser 1 Mo (1024 ko).',
+            'photo.uploaded' => 'Le fichier est trop lourd. Merci de choisir une photo de moins de 1 Mo.',
         ])->validateWithBag('updateProfileInformation');
 
         if (isset($input['photo'])) {

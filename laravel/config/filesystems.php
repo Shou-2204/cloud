@@ -58,6 +58,13 @@ return [
             'use_path_style_endpoint' => true,
             'visibility' => 'public', // Force la visibilité publique par défaut
             'throw' => false,
+            'http' => [
+                'verify' => false, // Désactive la vérif SSL pour le local
+                'curl' => [
+                    CURLOPT_SSL_VERIFYHOST => 0, // Désactive la vérif du nom de domaine
+                    CURLOPT_SSL_VERIFYPEER => 0, // Désactive la vérif de l'émetteur
+                ],
+             ],
         ],
 
         // 2. Disque Privé (Documents Teams, Factures, Backups)
@@ -72,6 +79,13 @@ return [
             'use_path_style_endpoint' => true,
             'visibility' => 'private', // Force la visibilité privée
             'throw' => false,
+            'http' => [
+                'verify' => false, // Désactive la vérif SSL pour le local
+                'curl' => [
+                    CURLOPT_SSL_VERIFYHOST => 0, // Désactive la vérif du nom de domaine
+                    CURLOPT_SSL_VERIFYPEER => 0, // Désactive la vérif de l'émetteur
+                ],
+            ],
         ],
 
         's3' => [
@@ -85,8 +99,14 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
             'report' => false,
+            'http' => [              // J'ai aligné ça correctement
+                'verify' => false,
+                'curl' => [
+                    CURLOPT_SSL_VERIFYHOST => 0, // Désactive la vérif du nom de domaine
+                    CURLOPT_SSL_VERIFYPEER => 0, // Désactive la vérif de l'émetteur
+                ],
+            ],
         ],
-
     ],
 
     /*
