@@ -50,12 +50,13 @@ services:
 
   stripe:
     image: stripe/stripe-cli:latest
+    container_name: cloud-stripe-1
     env_file:
       - ./laravel/.env
-    network_mode: "host"
     entrypoint: ["/bin/sh", "-c"]
-    command: ["stripe listen --forward-to https://web.shouphotobooth:44443/stripe/webhook --api-key $STRIPE_SECRET"]    
-    profiles: ["stripe"]
+    command: ["stripe listen --forward-to https://$$SESSION_DOMAIN/stripe/webhook --api-key $$STRIPE_SECRET"]
+    extra_hosts:
+      - "${SESSION_DOMAIN}:host-gateway"
     restart: unless-stopped
 
 volumes:
