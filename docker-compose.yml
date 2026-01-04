@@ -48,6 +48,13 @@ services:
     environment:
       MEILI_MASTER_KEY: masterKey
 
+  stripe:
+    image: stripe/stripe-cli:latest
+    command: listen --forward-to https://web.shouphotobooth:44443/stripe/webhook --api-key ${STRIPE_SECRET}
+    network_mode: "host" 
+    profiles: ["stripe"]
+    restart: unless-stopped
+
 volumes:
   db_data:
   redis_data:
