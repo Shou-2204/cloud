@@ -10,6 +10,7 @@ use App\Models\Team;
 use App\Observers\TeamObserver;
 use Laravel\Jetstream\Events\TeamMemberAdded;
 use Laravel\Jetstream\Events\InvitingTeamMember;
+use Laravel\Cashier\Cashier;
 use App\Listeners\LogTeamMemberActivity;
 use Illuminate\Auth\Events\Login;
 use App\Listeners\LogUserLogin;
@@ -23,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Cashier::useCustomerModel(Team::class);
         Team::observe(TeamObserver::class);
 
         Event::listen(

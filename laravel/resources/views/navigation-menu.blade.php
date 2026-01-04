@@ -61,6 +61,11 @@
                                 {{ Auth::user()->currentTeam ? __('Mon Equipe') : __(' Mon Equipe') }}
                             </x-dropdown-link>
 
+                            @if (Auth::user()->currentTeam && (Auth::user()->ownsTeam(Auth::user()->currentTeam) || Auth::user()->hasTeamRole(Auth::user()->currentTeam, 'admin')))
+                                <x-dropdown-link href="{{ route('billing') }}">
+                                    {{ __('Billing / Facturation') }}
+                                </x-dropdown-link>
+                            @endif
                             @if (Auth::user()->currentTeam && Auth::user()->allTeams()->count() > 1)
                                 <div class="border-t border-gray-100 dark:border-gray-800"></div>
                                 <div class="block px-4 py-2 text-xs text-gray-500">
@@ -129,6 +134,11 @@
                     {{ Auth::user()->currentTeam ? __('Paramètres Équipe') : __('Rejoindre une équipe') }}
                 </x-responsive-nav-link>
 
+                @if (Auth::user()->currentTeam && (Auth::user()->ownsTeam(Auth::user()->currentTeam) || Auth::user()->hasTeamRole(Auth::user()->currentTeam, 'admin')))
+                    <x-responsive-nav-link href="{{ route('billing') }}">
+                        {{ __('Billing / Facturation') }}
+                    </x-responsive-nav-link>
+                @endif
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
                     <x-responsive-nav-link href="{{ route('logout') }}" @click.prevent="$root.submit();">

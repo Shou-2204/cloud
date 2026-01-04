@@ -151,7 +151,7 @@ return [
     'timezone'               => 'Le champ :attribute doit être un fuseau horaire valide.',
     'ulid'                   => 'Le champ :attribute doit être un ULID valide.',
     'unique'                 => 'La valeur du champ :attribute est déjà utilisée.',
-    'uploaded'               => 'Le fichier du champ :attribute n\'a pu être téléversé.',
+    'uploaded'               => 'Le fichier est trop volumineux. La limite actuelle du serveur est de ' . ini_get('upload_max_filesize') . '.',
     'uppercase'              => 'Le champ :attribute doit être en majuscules.',
     'url'                    => 'Le format de l\'URL de :attribute n\'est pas valide.',
     'uuid'                   => 'Le champ :attribute doit être un UUID valide',

@@ -1,10 +1,15 @@
 <?php
+/*
+ * File: app/Models/Team.php
+ */
+
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Billable;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
@@ -14,47 +19,31 @@ use Laravel\Scout\Searchable;
 
 class Team extends JetstreamTeam
 {
-    /** @use HasFactory<\Database\Factories\TeamFactory> */
+    use Billable;
     use HasFactory;
     use Searchable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'personal_team',
-        'join_code', // J'ai ajouté join_code ici par sécurité pour les updates de masse
+        'join_code',
+        'auto_approval',
     ];
 
-    /**
-     * The event map for the model.
-     *
-     * @var array<string, class-string>
-     */
     protected $dispatchesEvents = [
         'created' => TeamCreated::class,
         'updated' => TeamUpdated::class,
         'deleted' => TeamDeleted::class,
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'personal_team' => 'boolean',
+            'auto_approval' => 'boolean',
         ];
     }
 
-    /**
-     * Génération automatique du code au démarrage.
-     */
     protected static function booted(): void
     {
         static::creating(function ($team) {
@@ -62,14 +51,10 @@ class Team extends JetstreamTeam
         });
     }
 
-    /**
-     * C'EST ICI QUE LA MAGIE OPÈRE.
-     * On surcharge la méthode par défaut pour inclure 'is_approved'.
-     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(Jetstream::userModel(), Jetstream::membershipModel())
-                    ->withPivot('role', 'is_approved') // <--- Indispensable pour ton système
+                    ->withPivot('role', 'is_approved')
                     ->withTimestamps()
                     ->as('membership');
     }
@@ -79,7 +64,6 @@ class Team extends JetstreamTeam
         return [
             'id' => $this->id,
             'name' => $this->name,
-            // Tu peux ajouter d'autres champs utiles pour la recherche
             'owner_email' => $this->owner->email, 
         ];
     }

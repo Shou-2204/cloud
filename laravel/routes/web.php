@@ -68,4 +68,24 @@ Route::middleware([
         return redirect()->route('dashboard');
     })->name('teams.cancel-request');
 
+    Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+
+    Route::get('/billing-portal', function (Request $request) {
+        $user = $request->user();
+        $team = $user->currentTeam;
+
+        // Sécurité : Vérifie si user est propriétaire OU a le rôle 'admin'
+        if (! $user->ownsTeam($team) && ! $user->hasTeamRole($team, 'admin')) {
+            abort(403, 'Seuls les administrateurs peuvent gérer la facturation.');
+        }
+
+        return $team->redirectToBillingPortal(route('dashboard'));
+    })->name('billing');
+
+});
+
 });
