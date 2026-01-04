@@ -41,4 +41,18 @@ return [
         ],
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook' => [
+            'secret' => env('STRIPE_WEBHOOK_SECRET'),
+            'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
+        ],
+        'plans' => [
+            'starter' => env('STRIPE_PRICE_ID_STARTER'),
+            'pro' => env('STRIPE_PRICE_ID_PRO'),
+            'enterprise' => env('STRIPE_PRICE_ID_ENTERPRISE'),
+        ],
+    ],
+
 ];

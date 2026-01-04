@@ -11,6 +11,12 @@ use Illuminate\Http\Request;   // <--- Important pour la route custom
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
+
+Route::get('/pricing', [SubscriptionController::class, 'index'])->name('subscription.index');
+
+    // Action de paiement (Lien vers Stripe)
+Route::get('/subscribe/{price}', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
+
 Route::get('/', function () {
     return view('welcome');
 });

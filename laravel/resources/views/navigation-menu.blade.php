@@ -62,9 +62,17 @@
                             </x-dropdown-link>
 
                             @if (Auth::user()->currentTeam && (Auth::user()->ownsTeam(Auth::user()->currentTeam) || Auth::user()->hasTeamRole(Auth::user()->currentTeam, 'admin')))
-                                <x-dropdown-link href="{{ route('billing') }}">
-                                    {{ __('Billing / Facturation') }}
-                                </x-dropdown-link>
+                                <div class="border-t border-gray-100 dark:border-gray-800"></div>
+                                
+                                @if (Auth::user()->currentTeam->subscribed())
+                                    <x-dropdown-link href="{{ route('billing') }}">
+                                        {{ __('Mon Abonnement') }}
+                                    </x-dropdown-link>
+                                @else
+                                    <x-dropdown-link href="{{ route('subscription.index') }}">
+                                        <span class="text-indigo-600 dark:text-indigo-400 font-semibold">{{ __('Passer Premium') }}</span>
+                                    </x-dropdown-link>
+                                @endif
                             @endif
                             @if (Auth::user()->currentTeam && Auth::user()->allTeams()->count() > 1)
                                 <div class="border-t border-gray-100 dark:border-gray-800"></div>
@@ -135,9 +143,15 @@
                 </x-responsive-nav-link>
 
                 @if (Auth::user()->currentTeam && (Auth::user()->ownsTeam(Auth::user()->currentTeam) || Auth::user()->hasTeamRole(Auth::user()->currentTeam, 'admin')))
-                    <x-responsive-nav-link href="{{ route('billing') }}">
-                        {{ __('Billing / Facturation') }}
-                    </x-responsive-nav-link>
+                    @if (Auth::user()->currentTeam->subscribed())
+                        <x-responsive-nav-link href="{{ route('billing') }}">
+                            {{ __('Mon Abonnement') }}
+                        </x-responsive-nav-link>
+                    @else
+                        <x-responsive-nav-link href="{{ route('subscription.index') }}" class="text-indigo-600 dark:text-indigo-400 font-semibold">
+                            {{ __('Passer Premium') }}
+                        </x-responsive-nav-link>
+                    @endif
                 @endif
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
