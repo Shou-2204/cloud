@@ -50,8 +50,11 @@ services:
 
   stripe:
     image: stripe/stripe-cli:latest
-    command: listen --forward-to https://web.shouphotobooth:44443/stripe/webhook --api-key ${STRIPE_SECRET}
-    network_mode: "host" 
+    env_file:
+      - ./laravel/.env
+    network_mode: "host"
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["stripe listen --forward-to https://web.shouphotobooth:44443/stripe/webhook --api-key $STRIPE_SECRET"]    
     profiles: ["stripe"]
     restart: unless-stopped
 
