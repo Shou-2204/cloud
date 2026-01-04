@@ -2,9 +2,18 @@
     <div x-data="{ 
             annual: false,
             plans: {
-                starter: { monthly: '{{ config('services.stripe.plans.starter') }}', yearly: 'price_ID_STARTER_YEARLY' },
-                smart:   { monthly: '{{ config('services.stripe.plans.pro') }}',     yearly: 'price_ID_SMART_YEARLY' },
-                pro:     { monthly: '{{ config('services.stripe.plans.enterprise') }}', yearly: 'price_ID_PRO_YEARLY' }
+                starter: { 
+                    monthly: '{{ config('services.stripe.plans.starter.monthly') }}', 
+                    yearly:  '{{ config('services.stripe.plans.starter.yearly') }}' 
+                },
+                smart: { 
+                    monthly: '{{ config('services.stripe.plans.smart.monthly') }}', 
+                    yearly:  '{{ config('services.stripe.plans.smart.yearly') }}' 
+                },
+                pro: { 
+                    monthly: '{{ config('services.stripe.plans.pro.monthly') }}', 
+                    yearly:  '{{ config('services.stripe.plans.pro.yearly') }}' 
+                }
             }
          }" 
          class="relative min-h-screen bg-gray-50 dark:bg-gray-950 py-20 overflow-hidden font-sans">
@@ -53,7 +62,7 @@
                     <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Idéal pour démarrer proprement.</p>
                     
                     <div class="my-8 flex items-baseline">
-                        <span class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight" x-text="annual ? '490€' : '49€'"></span>
+                        <span class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight" x-text="annual ? '490€ HT' : '49€ HT'"></span>
                         <span class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400" x-text="annual ? '/an' : '/mois'"></span>
                     </div>
 
@@ -99,7 +108,7 @@
                             <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Le parfait équilibre pour la croissance.</p>
                             
                             <div class="my-8 flex items-baseline">
-                                <span class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 tracking-tight" x-text="annual ? '790€' : '79€'"></span>
+                                <span class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 tracking-tight" x-text="annual ? '790€ HT' : '79€ HT'"></span>
                                 <span class="ml-2 text-lg font-medium text-gray-500 dark:text-gray-400" x-text="annual ? '/an' : '/mois'"></span>
                             </div>
 
@@ -142,7 +151,7 @@
                     <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Pour les équipes structurées.</p>
                     
                     <div class="my-8 flex items-baseline">
-                        <span class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight" x-text="annual ? '1490€' : '149€'"></span>
+                        <span class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight" x-text="annual ? '1490€ HT' : '149€ HT'"></span>
                         <span class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400" x-text="annual ? '/an' : '/mois'"></span>
                     </div>
 

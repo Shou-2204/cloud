@@ -48,10 +48,20 @@ return [
             'secret' => env('STRIPE_WEBHOOK_SECRET'),
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
+        // Structure hiérarchique : Plan -> Périodicité
         'plans' => [
-            'starter' => env('STRIPE_PRICE_ID_STARTER'),
-            'pro' => env('STRIPE_PRICE_ID_PRO'),
-            'enterprise' => env('STRIPE_PRICE_ID_ENTERPRISE'),
+            'starter' => [
+                'monthly' => env('STRIPE_PRICE_ID_STARTER_MONTHLY'),
+                'yearly'  => env('STRIPE_PRICE_ID_STARTER_YEARLY'),
+            ],
+            'smart' => [
+                'monthly' => env('STRIPE_PRICE_ID_SMART_MONTHLY'),
+                'yearly'  => env('STRIPE_PRICE_ID_SMART_YEARLY'),
+            ],
+            'pro' => [
+                'monthly' => env('STRIPE_PRICE_ID_PRO_MONTHLY'),
+                'yearly'  => env('STRIPE_PRICE_ID_PRO_YEARLY'),
+            ],
         ],
     ],
 
