@@ -3,8 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Livewire\Onboarding;
-use App\Models\Team;           // <--- Important pour la route custom
-use Illuminate\Http\Request;   // <--- Important pour la route custom
+use App\Models\Team;           
+use Illuminate\Http\Request;   
+use App\Http\Controllers\SubscriptionController;
 
 // --- ROUTES PUBLIQUES ---
 
