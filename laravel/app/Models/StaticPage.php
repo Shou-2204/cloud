@@ -34,7 +34,7 @@ class StaticPage extends Model
                 'url' => '/dashboard',
                 'content' => 'Vue d\'ensemble de votre activité, accueil, start, home',
                 'category' => 'Navigation',
-                'permission' => null,
+                'permission' => 'public',
             ],
             [
                 'id' => md5('/user/profile'),
@@ -42,7 +42,7 @@ class StaticPage extends Model
                 'url' => '/user/profile',
                 'content' => 'Gérer vos infos, sécurité, mot de passe, 2fa, avatar',
                 'category' => 'Paramètres',
-                'permission' => null,
+                'permission' => 'public',
             ],
             [
                 'id' => md5('/myteams'),
@@ -50,7 +50,7 @@ class StaticPage extends Model
                 'url' => '/myteams',
                 'content' => 'Gérer les membres de l\'Équipe, invitation, settings',
                 'category' => 'Paramètres',
-                'permission' => null, 
+                'permission' => 'public', 
             ],
             [
                 'id' => md5('/pricing'),
@@ -58,7 +58,7 @@ class StaticPage extends Model
                 'url' => '/pricing',
                 'content' => 'Abonnements, factures, offres, business, pro',
                 'category' => 'Général',
-                'permission' => null,
+                'permission' => 'public',
             ]
         ];
     }

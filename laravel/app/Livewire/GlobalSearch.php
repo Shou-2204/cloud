@@ -42,11 +42,9 @@ class GlobalSearch extends Component
         $this->results = StaticPage::search($this->query, function ($meilisearch, $query, $options) use ($permissions) {
             
             // Construction du filtre de sécurité
-            $filter = 'permission IS NULL';
+            $filter = "permission = 'public'";
 
             if (!empty($permissions)) {
-                // Si l'user est admin (*), on ne filtre pas plus.
-                // Sinon, on ajoute ses permissions explicites.
                 if (!in_array('*', $permissions)) {
                     $permsString = collect($permissions)
                         ->map(fn($p) => "permission = '$p'")
