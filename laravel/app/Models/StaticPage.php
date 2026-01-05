@@ -1,10 +1,5 @@
 <?php
 
-/*
- * Modèle virtuel pour l'indexation des pages statiques et de navigation via Sushi.
- * Remplace l'ancienne commande manuelle ShoucloudPageIndexer.
- */
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +11,12 @@ class StaticPage extends Model
     use Sushi;
     use Searchable;
 
+    // 1. IMPORTANT : On dit à Eloquent que l'ID n'est pas un chiffre auto-incrémenté
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $schema = [
+        'id' => 'string', // 2. On définit explicitement la colonne ID dans le schéma
         'title' => 'string',
         'url' => 'string',
         'content' => 'text',
@@ -28,6 +28,8 @@ class StaticPage extends Model
     {
         return [
             [
+                // 3. On génère l'ID tout de suite, ici. Plus de magie plus tard.
+                'id' => md5('/dashboard'), 
                 'title' => 'Tableau de bord',
                 'url' => '/dashboard',
                 'content' => 'Vue d\'ensemble de votre activité, accueil, start, home',
@@ -35,6 +37,7 @@ class StaticPage extends Model
                 'permission' => null,
             ],
             [
+                'id' => md5('/user/profile'),
                 'title' => 'Mon Profil',
                 'url' => '/user/profile',
                 'content' => 'Gérer vos infos, sécurité, mot de passe, 2fa, avatar',
@@ -42,13 +45,15 @@ class StaticPage extends Model
                 'permission' => null,
             ],
             [
+                'id' => md5('/myteams'),
                 'title' => 'Équipe',
-                'url' => '/myteams', 
+                'url' => '/myteams',
                 'content' => 'Gérer les membres de l\'Équipe, invitation, settings',
                 'category' => 'Paramètres',
                 'permission' => null, 
             ],
             [
+                'id' => md5('/pricing'),
                 'title' => 'Tarifs',
                 'url' => '/pricing',
                 'content' => 'Abonnements, factures, offres, business, pro',
@@ -60,8 +65,9 @@ class StaticPage extends Model
 
     public function toSearchableArray()
     {
+        // 4. C'est maintenant très simple, l'ID existe déjà
         return [
-            'id' => md5($this->url), 
+            'id' => $this->id, 
             'title' => $this->title,
             'url' => $this->url,
             'content' => $this->content, 
@@ -70,13 +76,6 @@ class StaticPage extends Model
         ];
     }
     
-    public function getScoutKey()
-    {
-        return md5($this->url);
-    }
-
-    public function getScoutKeyName()
-    {
-        return 'id';
-    }
+    // 5. On peut supprimer getScoutKey() et getScoutKeyName() 
+    // car Laravel utilise maintenant l'ID standard du modèle par défaut.
 }
