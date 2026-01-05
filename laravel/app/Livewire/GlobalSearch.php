@@ -1,34 +1,71 @@
 <?php
 
+/*
+ * Composant de recherche globale.
+ * Utilise Laravel Scout et le modèle virtuel StaticPage.
+ * Intègre le filtrage par permissions Jetstream.
+ */
+
 namespace App\Livewire;
 
 use Livewire\Component;
-use Meilisearch\Client;
+use App\Models\StaticPage;
+use Illuminate\Support\Facades\Auth;
 
 class GlobalSearch extends Component
 {
-    public $query = ''; // Doit être public
-    public $results = []; // Doit être public
+    public $query = ''; 
+    public $results = []; 
 
-    // Dans Livewire 3, updatedQuery() est appelé automatiquement quand $query change
     public function updatedQuery()
     {
+        // Nettoyage si la requête est trop courte
         if (strlen($this->query) < 2) {
             $this->results = [];
             return;
         }
 
-        try {
-            $client = new Client(config('scout.meilisearch.host'), config('scout.meilisearch.key'));
-            $index = $client->index('pages');
-            
-            $searchResponse = $index->search($this->query, ['limit' => 5]);
-            $this->results = $searchResponse->getHits();
-        } catch (\Exception $e) {
-            // Log l'erreur pour voir si c'est un problème de connexion Meilisearch
-            \Log::error("Erreur Meilisearch: " . $e->getMessage());
-            $this->results = [];
+        // Récupération des permissions de l'utilisateur connecté
+        $user = Auth::user();
+        $permissions = [];
+
+        if ($user && $user->currentTeam) {
+            // Si propriétaire, on donne accès à tout, sinon on liste les droits
+            if ($user->ownsTeam($user->currentTeam)) {
+                $permissions = ['*']; 
+            } else {
+                $permissions = $user->teamPermissions($user->currentTeam);
+            }
         }
+
+        // Lancement de la recherche via Scout (plus de Client manuel)
+        $this->results = StaticPage::search($this->query, function ($meilisearch, $query, $options) use ($permissions) {
+            
+            // Construction du filtre de sécurité
+            $filter = 'permission IS NULL';
+
+            if (!empty($permissions)) {
+                // Si l'user est admin (*), on ne filtre pas plus.
+                // Sinon, on ajoute ses permissions explicites.
+                if (!in_array('*', $permissions)) {
+                    $permsString = collect($permissions)
+                        ->map(fn($p) => "permission = '$p'")
+                        ->join(' OR ');
+                    $filter = "($filter) OR ($permsString)";
+                } else {
+                    // L'utilisateur a tous les droits, on annule le filtre restrictif
+                    $filter = null;
+                }
+            }
+
+            if ($filter) {
+                $options['filter'] = $filter;
+            }
+            
+            $options['limit'] = 5;
+
+            return $meilisearch->search($query, $options);
+        })->get();
     }
 
     public function render()

@@ -140,9 +140,21 @@ return [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
-            // 'users' => [
-            //     'filterableAttributes'=> ['id', 'name', 'email'],
-            // ],
+            // AJOUTER CE BLOC
+            \App\Models\StaticPage::class => [
+                'filterableAttributes' => ['category', 'permission'],
+                'searchableAttributes' => ['title', 'content', 'category'],
+                'displayedAttributes' => ['title', 'url', 'content', 'category'],
+                'rankingRules' => [
+                    'words',
+                    'typo',
+                    'proximity',
+                    'attribute',
+                    'sort',
+                    'exactness',
+                ],
+            ],
+            // FIN DU BLOC
         ],
     ],
 
