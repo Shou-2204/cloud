@@ -144,7 +144,10 @@ return [
             \App\Models\StaticPage::class => [
                 'filterableAttributes' => ['category', 'permission'],
                 'searchableAttributes' => ['title', 'content', 'category'],
-                'displayedAttributes' => ['title', 'url', 'content', 'category'],
+                
+                // C'EST ICI QU'IL FAUT CORRIGER :
+                'displayedAttributes' => ['id', 'title', 'url', 'content', 'category', 'permission'],
+                
                 'rankingRules' => [
                     'words',
                     'typo',
