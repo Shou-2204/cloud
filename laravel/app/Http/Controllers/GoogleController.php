@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Team;
+use App\Actions\Auth\CreateUserFromProvider;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
@@ -18,22 +15,12 @@ class GoogleController extends Controller
     }
 
     // 2. Google nous renvoie l'utilisateur
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(CreateUserFromProvider $creator)
     {
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            // On cherche si l'utilisateur existe déjà par email
-            $user = User::where('email', $googleUser->getEmail())->first();
-
-            if (!$user) {
-                // Il n'existe pas, on le crée
-                $user = User::create([
-                    'name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'password' => Hash::make(Str::random(16)), // Mot de passe aléatoire sécurisé
-                ]);
-            }
+            $user = $creator->execute('google', $googleUser);
 
             // On connecte l'utilisateur
             Auth::login($user);

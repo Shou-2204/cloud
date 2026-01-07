@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Billing\SubscribeTeam;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
@@ -18,20 +18,20 @@ class SubscriptionController extends Controller
     /**
      * Redirige vers le paiement Stripe pour une offre donnée
      */
-    public function checkout(Request $request, string $priceId)
+    public function checkout(Request $request, string $priceId, SubscribeTeam $subscriber)
     {
         $team = $request->user()->currentTeam;
 
-        // Empêcher de s'abonner deux fois
-        if ($team->subscribed('default')) {
-            return redirect()->route('dashboard')->with('flash.banner', 'Votre équipe est déjà abonnée !');
-        }
+        try {
+            $checkout = $subscriber->execute($team, $priceId);
 
-        return $team
-            ->newSubscription('default', $priceId)
-            ->checkout([
+            return $checkout->checkout([
                 'success_url' => route('dashboard') . '?checkout=success',
                 'cancel_url' => route('subscription.index'),
             ]);
+
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard')->with('flash.banner', $e->getMessage());
+        }
     }
 }
