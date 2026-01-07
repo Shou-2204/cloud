@@ -43,7 +43,7 @@ class SubscribeTeamTest extends TestCase
         // We need to simulate the team is subscribed.
         // Usually done by creating a subscription in DB.
         $team->subscriptions()->create([
-            'name' => 'default',
+            'type' => 'default',
             'stripe_id' => 'sub_123',
             'stripe_status' => 'active',
             'stripe_price' => 'price_123',
