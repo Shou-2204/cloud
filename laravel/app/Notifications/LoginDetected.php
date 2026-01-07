@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -10,17 +11,11 @@ class LoginDetected extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $details;
-
-    // On capture les infos dès la création de la notification
-    public function __construct()
-    {
-        $this->details = [
-            'ip' => request()->ip(),
-            'device' => request()->userAgent(),
-            'email' => auth()->user()?->email, // Optionnel mais rassurant
-        ];
-    }
+    public function __construct(
+        public User $user,
+        public string $ip,
+        public string $userAgent
+    ) {}
 
     public function via($notifiable)
     {
@@ -31,9 +26,14 @@ class LoginDetected extends Notification implements ShouldQueue
     {
         return [
             'action' => 'login_successful',
-            'ip' => $this->details['ip'],
-            'device' => $this->details['device'],
-            'user_email' => $this->details['email'],
+            'ip' => $this->ip,
+            'device' => $this->userAgent,
+            'user_email' => $this->user->email,
         ];
+    }
+
+    public function tags(): array
+    {
+        return ['login', 'user:' . $this->user->id];
     }
 }
