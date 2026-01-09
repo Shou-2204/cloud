@@ -16,6 +16,15 @@ class SubscriptionController extends Controller
     {
         $user = $request->user();
 
+        // --- CORRECTION DU PROBLEME ---
+        // Si l'utilisateur n'a pas d'équipe active, on regarde s'il en a une en stock
+        if (! $user->currentTeam && $user->allTeams()->isNotEmpty()) {
+            // On le force à basculer sur sa première équipe disponible
+            $user->switchTeam($user->allTeams()->first());
+        }
+        // ------------------------------
+
+        // Maintenant, on vérifie s'il est VRAIMENT sans équipe
         if (! $user->currentTeam) {
             return redirect()->route('onboarding')
                 ->with('flash.banner', 'Veuillez créer une équipe pour souscrire un abonnement.');
