@@ -74,14 +74,37 @@
                 <div class="mt-10 sm:mt-0">
                     @livewire('teams.team-member-manager', ['team' => $team])
                 </div>
-
-                @if (Gate::check('delete', $team) && ! $team->personal_team)
+                @if (Gate::check('delete', $team))
                     <x-section-border />
+
                     <div class="mt-10 sm:mt-0">
-                        @livewire('teams.delete-team-form', ['team' => $team])
+                        {{-- Si l'équipe est abonnée, on affiche un message d'explication --}}
+                        @if ($team->subscribed('default'))
+                            <div class="md:grid md:grid-cols-3 md:gap-6">
+                                <x-section-title>
+                                    <x-slot name="title">{{ __('Supprimer l\'équipe') }}</x-slot>
+                                    <x-slot name="description">{{ __('Supprimer définitivement cette équipe.') }}</x-slot>
+                                </x-section-title>
+
+                                <div class="mt-5 md:mt-0 md:col-span-2">
+                                    <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
+                                        <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
+                                            {{ __('Cette équipe possède un abonnement actif. Pour la supprimer, vous devez d\'abord résilier votre abonnement dans la section Facturation.') }}
+                                        </div>
+                                        <div class="mt-5">
+                                            <a href="{{ route('billing') }}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 active:bg-indigo-600 disabled:opacity-25 transition">
+                                                {{ __('Gérer mon abonnement') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            {{-- Sinon, on affiche le formulaire de suppression normal --}}
+                            @livewire('teams.delete-team-form', ['team' => $team])
+                        @endif
                     </div>
                 @endif
-
             @endif
         </div>
     </div>
