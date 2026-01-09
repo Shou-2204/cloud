@@ -5,15 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Event;
+// use Illuminate\Support\Facades\Event; // Plus besoin de cette façade pour ça
 use App\Models\Team;
 use App\Observers\TeamObserver;
-use Laravel\Jetstream\Events\TeamMemberAdded;
-use Laravel\Jetstream\Events\InvitingTeamMember;
 use Laravel\Cashier\Cashier;
-use App\Listeners\LogTeamMemberActivity;
-use Illuminate\Auth\Events\Login;
-use App\Listeners\LogUserLogin;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,24 +19,14 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Configuration Cashier & Modèles
         Cashier::useCustomerModel(Team::class);
         Team::observe(TeamObserver::class);
 
-        Event::listen(
-            Login::class,
-            [LogUserLogin::class, 'handle']
-        );
+        // J'AI SUPPRIMÉ LES BLOCS "Event::listen" ICI.
+        // Laravel fait maintenant la liaison automatiquement grâce à l'Event Discovery.
 
-        Event::listen(
-            TeamMemberAdded::class,
-            [LogTeamMemberActivity::class, 'handleTeamMemberAdded']
-        );
-
-        Event::listen(
-            InvitingTeamMember::class,
-            [LogTeamMemberActivity::class, 'handleInvitingTeamMember']
-        );
-
+        // Force HTTPS en prod
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
             URL::forceRootUrl(Config::get('app.url'));
