@@ -7,20 +7,21 @@ use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
-    /**
-     * Affiche la page de choix des offres (Pricing)
-     */
     public function index()
     {
         return view('billing.pricing');
     }
 
-    /**
-     * Redirige vers le paiement Stripe pour une offre donnée
-     */
     public function checkout(Request $request, string $priceId, SubscribeTeam $subscriber)
     {
-        $team = $request->user()->currentTeam;
+        $user = $request->user();
+
+        if (! $user->currentTeam) {
+            return redirect()->route('onboarding')
+                ->with('flash.banner', 'Veuillez créer une équipe pour souscrire un abonnement.');
+        }
+
+        $team = $user->currentTeam;
 
         try {
             $checkout = $subscriber->execute($team, $priceId);
