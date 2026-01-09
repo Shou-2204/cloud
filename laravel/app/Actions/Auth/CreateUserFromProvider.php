@@ -22,11 +22,11 @@ class CreateUserFromProvider
         $user = User::where('email', $providerUser->getEmail())->first();
 
         if (!$user) {
-            // Il n'existe pas, on le crée
             $user = User::create([
                 'name' => $providerUser->getName(),
                 'email' => $providerUser->getEmail(),
                 'password' => Hash::make(Str::random(16)), // Mot de passe aléatoire sécurisé
+                'email_verified_at' => now(),
             ]);
         }
 
