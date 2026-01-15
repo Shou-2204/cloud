@@ -61,6 +61,13 @@ Route::middleware([
     // >>> NOUVELLE ROUTE : ANNULER SA DEMANDE / QUITTER L'ÉQUIPE <<<
     Route::delete('/teams/{team}/cancel-request', [TeamController::class, 'cancelRequest'])->name('teams.cancel-request');
 
+    // Restoration des routes Jetstream (au cas où elles ne se chargent pas automatiquement)
+    Route::group(['middleware' => 'verified'], function () {
+        Route::get('/teams/create', [\Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'create'])->name('teams.create');
+        Route::get('/teams/{team}', [\Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'show'])->name('teams.show');
+        Route::put('/teams/{team}', [\Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'update'])->name('teams.update');
+    });
+
     Route::middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),
