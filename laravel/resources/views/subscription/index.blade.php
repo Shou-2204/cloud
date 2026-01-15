@@ -36,19 +36,19 @@
 
                 {{-- TOGGLE ANNUEL / MENSUEL --}}
                 <div class="mt-12 flex justify-center">
-                    <div class="bg-gray-100 dark:bg-gray-800 p-1 rounded-full inline-flex items-center relative">
-                        <div class="w-full h-full absolute bg-white dark:bg-gray-700 rounded-full shadow-sm transition-all duration-300 ease-out"
-                            :class="annual ? 'translate-x-[calc(100%-4px)] w-[calc(50%)]' : 'translate-x-0 w-[calc(50%)]'">
-                        </div>
+                    <div class="relative bg-gray-100 dark:bg-gray-800 p-1 rounded-full inline-flex items-center">
+                        {{-- Sliding Background --}}
+                        <div class="absolute inset-y-1 left-1 w-[calc(50%-4px)] bg-white dark:bg-gray-700 rounded-full shadow-sm transition-transform duration-300 ease-in-out"
+                            :class="annual ? 'translate-x-full' : 'translate-x-0'"></div>
 
                         <button @click="annual = false"
-                            class="relative z-10 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200"
-                            :class="!annual ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'">
+                            class="relative z-10 w-32 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 text-center"
+                            :class="!annual ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'">
                             Mensuel
                         </button>
                         <button @click="annual = true"
-                            class="relative z-10 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 flex items-center gap-2"
-                            :class="annual ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'">
+                            class="relative z-10 w-32 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 flex items-center justify-center gap-2"
+                            :class="annual ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'">
                             Annuel
                             <span
                                 class="text-[10px] font-bold tracking-wide uppercase bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded-full">
@@ -74,7 +74,7 @@
                     </div>
                     <div class="mb-6 flex items-baseline gap-1">
                         <span class="text-4xl font-extrabold"
-                            x-text="annual ? plans.starter.price_yearly / 12 : plans.starter.price_monthly"></span>
+                            x-text="annual ? Math.round(plans.starter.price_yearly / 12) : plans.starter.price_monthly"></span>
                         <span class="text-xl font-bold">€</span>
                         <span class="text-gray-500 dark:text-gray-400">/mois</span>
                         <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
@@ -137,7 +137,7 @@
                     </div>
                     <div class="mb-6 flex items-baseline gap-1">
                         <span class="text-5xl font-extrabold"
-                            x-text="annual ? plans.smart.price_yearly / 12 : plans.smart.price_monthly"></span>
+                            x-text="annual ? Math.round(plans.smart.price_yearly / 12) : plans.smart.price_monthly"></span>
                         <span class="text-xl font-bold">€</span>
                         <span class="text-gray-500 dark:text-gray-400">/mois</span>
                         <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
@@ -197,7 +197,7 @@
                     </div>
                     <div class="mb-6 flex items-baseline gap-1">
                         <span class="text-4xl font-extrabold"
-                            x-text="annual ? plans.pro.price_yearly / 12 : plans.pro.price_monthly"></span>
+                            x-text="annual ? Math.round(plans.pro.price_yearly / 12) : plans.pro.price_monthly"></span>
                         <span class="text-xl font-bold">€</span>
                         <span class="text-gray-500 dark:text-gray-400">/mois</span>
                         <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
@@ -292,7 +292,8 @@
                                     <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
+                                    </svg>
+                                </td>
                                 <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -311,7 +312,8 @@
                                     <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
+                                    </svg>
+                                </td>
                                 <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -345,7 +347,8 @@
                                     <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
+                                    </svg>
+                                </td>
                                 <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -360,7 +363,8 @@
                                     <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
+                                    </svg>
+                                </td>
                                 <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
