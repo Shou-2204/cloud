@@ -92,9 +92,15 @@
                                             {{ __('Cette équipe possède un abonnement actif. Pour la supprimer, vous devez d\'abord résilier votre abonnement dans la section Facturation.') }}
                                         </div>
                                         <div class="mt-5">
-                                            <a href="{{ route('billing') }}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 active:bg-indigo-600 disabled:opacity-25 transition">
-                                                {{ __('Gérer mon abonnement') }}
-                                            </a>
+                                            @if($team->subscribed())
+                                                <a href="{{ route('subscription.show', $team) }}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 active:bg-indigo-600 disabled:opacity-25 transition">
+                                                    {{ __('Gérer l\'abonnement') }}
+                                                </a>
+                                            @else
+                                                <a href="{{ route('subscription.index') }}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 active:bg-indigo-600 disabled:opacity-25 transition">
+                                                    {{ __('Souscrire') }}
+                                                </a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
