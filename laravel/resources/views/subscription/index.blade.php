@@ -105,6 +105,14 @@
                                 </svg>
                                 <span>Gestion des <strong>Avis Google</strong></span>
                             </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span><strong>Roue de la Fortune</strong> (Capture Data)</span>
+                            </li>
                             <li class="flex items-start gap-3 text-gray-400 dark:text-gray-600">
                                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -266,7 +274,7 @@
                                 <th class="py-4 px-6 bg-transparent w-1/4"></th>
                                 <th class="py-4 px-6 text-center text-lg font-bold w-1/4">Starter</th>
                                 <th
-                                    class="py-4 px-6 text-center text-lg font-bold text-indigo-600 dark:text-indigo-400 w-1/4 bg-white dark:bg-gray-800 rounded-t-xl border-x-2 border-t-2 border-indigo-600 border-b-0 shadow-lg relative -top-2">
+                                    class="py-4 px-6 text-center text-lg font-bold text-indigo-600 dark:text-indigo-400 w-1/4 bg-white dark:bg-gray-800 rounded-t-xl border-x-2 border-t-2 border-indigo-600 border-b-0 shadow-lg">
                                     Smart
                                 </th>
                                 <th class="py-4 px-6 text-center text-lg font-bold w-1/4">Pro</th>
@@ -275,10 +283,13 @@
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
 
                             {{-- SECTION: AVIS & RÉPUTATION --}}
+                            {{-- SECTION: AVIS & RÉPUTATION --}}
                             <tr>
-                                <td colspan="4"
-                                    class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">Avis &
+                                <td class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">Avis &
                                     Réputation</td>
+                                <td></td>
+                                <td class="bg-white dark:bg-gray-800 border-x-2 border-indigo-600"></td>
+                                <td></td>
                             </tr>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td class="py-4 px-6 text-sm font-medium">Collecte d'avis (Email/QR)</td>
@@ -321,6 +332,26 @@
                                     </svg></td>
                             </tr>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                <td class="py-4 px-6 text-sm font-medium">Jeux / Roue de la Fortune (Data)</td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                                <td
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td class="py-4 px-6 text-sm font-medium">Réponses Automatisées (IA)</td>
                                 <td class="text-center py-4 text-gray-300">-</td>
                                 <td
@@ -334,10 +365,13 @@
                             </tr>
 
                             {{-- SECTION: FIDÉLISATION (WALLET) --}}
+                            {{-- SECTION: FIDÉLISATION (WALLET) --}}
                             <tr>
-                                <td colspan="4"
-                                    class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
+                                <td class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
                                     Fidélisation & Wallet</td>
+                                <td></td>
+                                <td class="bg-white dark:bg-gray-800 border-x-2 border-indigo-600"></td>
+                                <td></td>
                             </tr>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td class="py-4 px-6 text-sm font-medium">Cartes de Fidélité Digitales</td>
@@ -381,10 +415,13 @@
                             </tr>
 
                             {{-- SECTION: MARKETING AUTOMATION --}}
+                            {{-- SECTION: MARKETING AUTOMATION --}}
                             <tr>
-                                <td colspan="4"
-                                    class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
+                                <td class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
                                     Marketing & Automation</td>
+                                <td></td>
+                                <td class="bg-white dark:bg-gray-800 border-x-2 border-indigo-600"></td>
+                                <td></td>
                             </tr>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td class="py-4 px-6 text-sm font-medium">Campagnes SMS Marketing</td>
