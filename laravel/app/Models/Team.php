@@ -54,9 +54,14 @@ class Team extends JetstreamTeam
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(Jetstream::userModel(), Jetstream::membershipModel())
-                    ->withPivot('role', 'is_approved')
-                    ->withTimestamps()
-                    ->as('membership');
+            ->withPivot('role', 'is_approved')
+            ->withTimestamps()
+            ->as('membership');
+    }
+
+    public function invoicesRel()
+    {
+        return $this->hasMany(TeamInvoice::class)->orderByDesc('issued_at');
     }
 
     public function toSearchableArray()
@@ -64,7 +69,7 @@ class Team extends JetstreamTeam
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'owner_email' => $this->owner->email, 
+            'owner_email' => $this->owner->email,
         ];
     }
 }

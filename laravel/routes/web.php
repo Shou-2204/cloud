@@ -67,17 +67,21 @@ Route::middleware([
         'verified',
     ])->group(function () {
 
-        Route::get('/billing-portal', function (Request $request) {
-            $user = $request->user();
-            $team = $user->currentTeam;
+        // Route::get('/billing-portal', function (Request $request) {
+        //     $user = $request->user();
+        //     $team = $user->currentTeam;
+        //     if (!$user->ownsTeam($team) && !$user->hasTeamRole($team, 'admin')) {
+        //         abort(403, 'Seuls les administrateurs peuvent gérer la facturation.');
+        //     }
+        //     return $team->redirectToBillingPortal(route('dashboard'));
+        // })->name('billing');
 
-            // Sécurité : Vérifie si user est propriétaire OU a le rôle 'admin'
-            if (!$user->ownsTeam($team) && !$user->hasTeamRole($team, 'admin')) {
-                abort(403, 'Seuls les administrateurs peuvent gérer la facturation.');
-            }
-
-            return $team->redirectToBillingPortal(route('dashboard'));
-        })->name('billing');
+        // NEW : Subscription Management
+        Route::prefix('team/{team}/subscription')->name('subscription.')->group(function () {
+            Route::get('/', [SubscriptionController::class, 'show'])->name('show');
+            Route::post('/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
+            Route::post('/resume', [SubscriptionController::class, 'resume'])->name('resume');
+        });
 
     });
 

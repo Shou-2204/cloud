@@ -1,0 +1,243 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
+            {{ __('Mon Abonnement') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+            @if (session('status'))
+                <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            {{-- PLAN ACTUEL --}}
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <div class="max-w-xl">
+                    <section>
+                        <header>
+                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                {{ __('Plan Actuel') }}
+                            </h2>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                {{ __('Détails de l\'offre souscrite pour l\'équipe') }} <span
+                                    class="font-bold text-gray-900 dark:text-white">{{ $team->name }}</span>.
+                            </p>
+                        </header>
+
+                        <div class="mt-6 space-y-4">
+                            <div
+                                class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Offre</div>
+                                    <div class="text-xl font-bold text-indigo-600 dark:text-indigo-400">Premium Team
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400 text-right">Statut
+                                    </div>
+                                    <div class="flex items-center justify-end">
+                                        @if ($subscription->onGracePeriod())
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                                                {{ __('Annulation programmée') }}
+                                            </span>
+                                        @elseif ($subscription->active())
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                {{ __('Actif') }}
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                                {{ __('Inactif') }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if ($subscription->onGracePeriod())
+                                <div class="text-sm text-yellow-600 dark:text-yellow-400">
+                                    {{ __('Votre abonnement prendra fin le') }}
+                                    {{ $subscription->ends_at->format('d/m/Y') }}.
+
+                                    <form method="POST" action="{{ route('subscription.resume', $team) }}" class="mt-2">
+                                        @csrf
+                                        <button type="submit"
+                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 underline text-sm font-medium">
+                                            {{ __('Réactiver mon abonnement') }}
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            {{-- FACTURES --}}
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <section>
+                    <header class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                {{ __('Factures') }}
+                            </h2>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                {{ __('Historique de vos factures téléchargeables.') }}
+                            </p>
+                        </div>
+                    </header>
+
+                    @if($invoices->isEmpty())
+                        <div class="text-sm text-gray-500 dark:text-gray-400 italic">
+                            {{ __('Aucune facture disponible pour le moment.') }}
+                        </div>
+                    @else
+                        <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-50 dark:bg-gray-700/50">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                            {{ __('Date') }}</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                            {{ __('Montant') }}</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                            {{ __('Statut') }}</th>
+                                        <th scope="col" class="relative px-6 py-3">
+                                            <span class="sr-only">{{ __('Télécharger') }}</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    @foreach($invoices as $invoice)
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                                {{ $invoice->issued_at ? $invoice->issued_at->format('d/m/Y') : '-' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                                {{ number_format($invoice->amount / 100, 2) }}
+                                                {{ strtoupper($invoice->currency) }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span
+                                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                    {{ ucfirst($invoice->status) }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                @if($invoice->s3_path)
+                                                    {{-- Note: En prod il faudrait une route sécurisée qui génère une URL signée,
+                                                    mais si le bucket est public ou si on utilise Storage::url() ça peut aller pour
+                                                    un MVP.
+                                                    Idéalement: route download --}}
+                                                    <a href="{{ Storage::disk('s3')->url($invoice->s3_path) }}" target="_blank"
+                                                        class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600">
+                                                        {{ __('Télécharger PDF') }}
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-400">{{ __('En cours...') }}</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </section>
+            </div>
+
+            {{-- ZONE DE DANGER : DÉSABONNEMENT --}}
+            @if (!$subscription->onGracePeriod() && $subscription->active())
+                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg border-l-4 border-red-500">
+                    <div class="max-w-xl">
+                        <section>
+                            <header>
+                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    {{ __('Annuler l\'abonnement') }}
+                                </h2>
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    {{ __('Arrêter le renouvellement automatique à la fin de la période.') }}
+                                </p>
+                            </header>
+
+                            <div class="mt-6">
+                                <button x-data=""
+                                    x-on:click.prevent="$dispatch('open-modal', 'confirm-subscription-cancellation')"
+                                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                    {{ __('Se désabonner') }}
+                                </button>
+                            </div>
+
+                            <x-modal name="confirm-subscription-cancellation" :show="false" focusable>
+                                <form method="POST" action="{{ route('subscription.cancel', $team) }}" class="p-6">
+                                    @csrf
+
+                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                        {{ __('Êtes-vous sûr de vouloir vous désabonner ?') }}
+                                    </h2>
+
+                                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                        {{ __('Aidez-nous à nous améliorer. Pourquoi partez-vous ?') }}
+                                    </p>
+
+                                    <div class="mt-6 space-y-4">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="reason" value="too_expensive"
+                                                class="form-radio text-indigo-600" required>
+                                            <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Trop cher</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="reason" value="missing_features"
+                                                class="form-radio text-indigo-600">
+                                            <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Fonctionnalités
+                                                manquantes</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="reason" value="bugs"
+                                                class="form-radio text-indigo-600">
+                                            <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Trop de bugs</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="reason" value="other"
+                                                class="form-radio text-indigo-600">
+                                            <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Autre</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="contact_allowed"
+                                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                                            <span
+                                                class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Pouvons-nous vous recontacter pour en discuter ?') }}</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="mt-6 flex justify-end">
+                                        <x-secondary-button x-on:click="$dispatch('close')">
+                                            {{ __('Annuler') }}
+                                        </x-secondary-button>
+
+                                        <x-danger-button class="ml-3">
+                                            {{ __('Confirmer le désabonnement') }}
+                                        </x-danger-button>
+                                    </div>
+                                </form>
+                            </x-modal>
+                        </section>
+                    </div>
+                </div>
+            @endif
+
+        </div>
+    </div>
+</x-app-layout>
