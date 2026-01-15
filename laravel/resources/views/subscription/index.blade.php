@@ -1,287 +1,413 @@
 <x-app-layout>
     <div x-data="{ 
-            annual: false,
+            annual: true,
+            selected: 'smart',
             plans: {
                 starter: { 
                     monthly: '{{ config('services.stripe.plans.starter.monthly') }}', 
-                    yearly:  '{{ config('services.stripe.plans.starter.yearly') }}' 
+                    yearly:  '{{ config('services.stripe.plans.starter.yearly') }}',
+                    price_monthly: 29,
+                    price_yearly: 290
                 },
                 smart: { 
                     monthly: '{{ config('services.stripe.plans.smart.monthly') }}', 
-                    yearly:  '{{ config('services.stripe.plans.smart.yearly') }}' 
+                    yearly:  '{{ config('services.stripe.plans.smart.yearly') }}',
+                    price_monthly: 79,
+                    price_yearly: 790
                 },
                 pro: { 
                     monthly: '{{ config('services.stripe.plans.pro.monthly') }}', 
-                    yearly:  '{{ config('services.stripe.plans.pro.yearly') }}' 
+                    yearly:  '{{ config('services.stripe.plans.pro.yearly') }}',
+                    price_monthly: 149,
+                    price_yearly: 1490
                 }
             }
-         }" class="relative min-h-screen bg-gray-50 dark:bg-gray-950 py-20 overflow-hidden font-sans">
+         }" class="bg-white dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100">
 
-        <div
-            class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-600/20 dark:bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none -z-10">
-        </div>
-        <div
-            class="absolute bottom-0 right-0 w-[800px] h-[600px] bg-purple-600/10 dark:bg-purple-900/10 rounded-full blur-[120px] pointer-events-none -z-10">
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2
-                    class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 sm:text-5xl tracking-tight">
-                    Des tarifs clairs, <br>une puissance illimitée.
-                </h2>
-                <p class="mt-6 text-xl text-gray-600 dark:text-gray-400">
-                    Choisissez l'offre qui correspond à votre ambition. Changez d'avis à tout moment.
+        {{-- HERO SECTION --}}
+        <div class="relative overflow-hidden pt-16 pb-12 lg:pt-24 lg:pb-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+                    Boostez votre <span class="text-indigo-600 dark:text-indigo-400">fidélisation client</span>.
+                </h1>
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-400">
+                    Des outils puissants pour collecter des avis, engager vos clients et automatiser votre marketing.
                 </p>
-            </div>
 
-            <div class="flex justify-center items-center mb-16">
-                <div
-                    class="bg-white dark:bg-slate-900 p-1.5 rounded-full border border-gray-200 dark:border-slate-800 flex items-center shadow-sm">
-                    <button @click="annual = false"
-                        class="px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300"
-                        :class="!annual ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'">
-                        Mensuel
-                    </button>
-                    <button @click="annual = true"
-                        class="px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 flex items-center"
-                        :class="annual ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'">
-                        Annuel
-                        <span
-                            class="ml-2 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full">
-                            -20%
-                        </span>
-                    </button>
+                {{-- TOGGLE ANNUEL / MENSUEL --}}
+                <div class="mt-12 flex justify-center">
+                    <div class="bg-gray-100 dark:bg-gray-800 p-1 rounded-full inline-flex items-center relative">
+                        <div class="w-full h-full absolute bg-white dark:bg-gray-700 rounded-full shadow-sm transition-all duration-300 ease-out"
+                            :class="annual ? 'translate-x-[calc(100%-4px)] w-[calc(50%)]' : 'translate-x-0 w-[calc(50%)]'">
+                        </div>
+
+                        <button @click="annual = false"
+                            class="relative z-10 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200"
+                            :class="!annual ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'">
+                            Mensuel
+                        </button>
+                        <button @click="annual = true"
+                            class="relative z-10 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 flex items-center gap-2"
+                            :class="annual ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'">
+                            Annuel
+                            <span
+                                class="text-[10px] font-bold tracking-wide uppercase bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded-full">
+                                -2 mois
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="grid gap-8 lg:grid-cols-3 lg:gap-8 items-stretch max-w-7xl mx-auto">
+        {{-- PRICING CARDS (GRID) --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+            <div class="grid md:grid-cols-3 gap-8 items-start">
 
+                {{-- STARTER --}}
                 <div
-                    class="group relative bg-white dark:bg-slate-900/80 backdrop-blur-xl rounded-[2rem] border border-gray-200 dark:border-slate-800 p-8 flex flex-col hover:shadow-2xl hover:shadow-gray-200/50 dark:hover:shadow-indigo-900/10 transition-all duration-500 hover:-translate-y-2">
-                    <div class="mb-6">
-                        <span
-                            class="inline-block p-3 rounded-2xl bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </span>
+                    class="h-full p-8 bg-gray-50 dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 flex flex-col hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold">Starter</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 min-h-[40px]">L'essentiel pour maîtriser
+                            votre e-réputation.</p>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Starter</h3>
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Idéal pour démarrer proprement.</p>
-
-                    <div class="my-8 flex items-baseline">
-                        <span class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight"
-                            x-text="annual ? '490€ HT' : '49€ HT'"></span>
-                        <span class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"
-                            x-text="annual ? '/an' : '/mois'"></span>
+                    <div class="mb-6 flex items-baseline gap-1">
+                        <span class="text-4xl font-extrabold"
+                            x-text="annual ? plans.starter.price_yearly / 12 : plans.starter.price_monthly"></span>
+                        <span class="text-xl font-bold">€</span>
+                        <span class="text-gray-500 dark:text-gray-400">/mois</span>
+                        <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
                     </div>
-
-                    <ul class="space-y-4 mb-8 flex-1">
-                        <li class="flex items-start text-gray-600 dark:text-gray-300 text-sm">
-                            <svg class="h-5 w-5 text-indigo-500 mr-3 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Jusqu'à 5 membres
-                        </li>
-                        <li class="flex items-start text-gray-600 dark:text-gray-300 text-sm">
-                            <svg class="h-5 w-5 text-indigo-500 mr-3 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Stockage 10 Go
-                        </li>
-                        <li class="flex items-start text-gray-600 dark:text-gray-300 text-sm">
-                            <svg class="h-5 w-5 text-indigo-500 mr-3 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Support par email
-                        </li>
-                    </ul>
 
                     <a :href="'/subscribe/' + (annual ? plans.starter.yearly : plans.starter.monthly)"
-                        class="block w-full py-3 px-6 text-center rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white font-semibold hover:bg-gray-100 dark:hover:bg-slate-700 transition duration-200">
-                        Choisir Starter
+                        class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
+                        Commencer
                     </a>
-                </div>
 
-                <div class="relative group transform lg:scale-110 z-20">
-                    <div
-                        class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-[2.2rem] blur opacity-25 group-hover:opacity-60 transition duration-500">
-                    </div>
-
-                    <div
-                        class="relative h-full bg-gradient-to-b from-indigo-500 to-purple-600 rounded-[2.1rem] p-[2px]">
-                        <div
-                            class="h-full bg-white dark:bg-slate-900 rounded-[2rem] p-8 flex flex-col relative overflow-hidden">
-
-                            <div class="absolute top-0 right-0">
-                                <div
-                                    class="bg-gradient-to-bl from-indigo-500 to-purple-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-bl-2xl uppercase tracking-wider shadow-lg">
-                                    Recommandé
-                                </div>
-                            </div>
-
-                            <div class="mb-6">
-                                <span
-                                    class="inline-block p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
-                                        </path>
-                                    </svg>
-                                </span>
-                            </div>
-
-                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Smart</h3>
-                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Le parfait équilibre pour la
-                                croissance.</p>
-
-                            <div class="my-8 flex items-baseline">
-                                <span
-                                    class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 tracking-tight"
-                                    x-text="annual ? '790€ HT' : '79€ HT'"></span>
-                                <span class="ml-2 text-lg font-medium text-gray-500 dark:text-gray-400"
-                                    x-text="annual ? '/an' : '/mois'"></span>
-                            </div>
-
-                            <ul class="space-y-4 mb-8 flex-1">
-                                <li class="flex items-start text-gray-900 dark:text-white font-medium text-sm">
-                                    <div class="p-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 mr-3 shrink-0">
-                                        <svg class="h-4 w-4 text-indigo-600 dark:text-indigo-400" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    </div>
-                                    Jusqu'à 20 membres
-                                </li>
-                                <li class="flex items-start text-gray-900 dark:text-white font-medium text-sm">
-                                    <div class="p-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 mr-3 shrink-0">
-                                        <svg class="h-4 w-4 text-indigo-600 dark:text-indigo-400" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    </div>
-                                    Stockage 500 Go
-                                </li>
-                                <li class="flex items-start text-gray-900 dark:text-white font-medium text-sm">
-                                    <div class="p-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 mr-3 shrink-0">
-                                        <svg class="h-4 w-4 text-indigo-600 dark:text-indigo-400" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    </div>
-                                    Support Prioritaire
-                                </li>
-                            </ul>
-
-                            <a :href="'/subscribe/' + (annual ? plans.smart.yearly : plans.smart.monthly)"
-                                class="block w-full py-4 px-6 text-center rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-[1.02] transition-all duration-200">
-                                Je passe au niveau supérieur
-                            </a>
-                        </div>
+                    <div class="flex-1 space-y-4">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Fonctionnalités
+                            incluses :</p>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Collecte de <strong>Feedback</strong></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Gestion des <strong>Avis Google</strong></span>
+                            </li>
+                            <li class="flex items-start gap-3 text-gray-400 dark:text-gray-600">
+                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                <span>Wallet Mobile</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-gray-400 dark:text-gray-600">
+                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                <span>Campagnes SMS</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
+                {{-- SMART (Highlighted) --}}
                 <div
-                    class="group relative bg-white dark:bg-slate-900/80 backdrop-blur-xl rounded-[2rem] border border-gray-200 dark:border-slate-800 p-8 flex flex-col hover:shadow-2xl hover:shadow-gray-200/50 dark:hover:shadow-indigo-900/10 transition-all duration-500 hover:-translate-y-2">
-                    <div class="mb-6">
+                    class="h-full relative p-8 bg-white dark:bg-gray-800 rounded-3xl border-2 border-indigo-600 shadow-2xl z-10 scale-105 flex flex-col">
+                    <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2">
                         <span
-                            class="inline-block p-3 rounded-2xl bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                </path>
-                            </svg>
-                        </span>
+                            class="bg-indigo-600 text-white text-[10px] font-bold uppercase py-1 px-3 rounded-bl-xl rounded-tr-xl shadow-sm">Populaire</span>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Pro</h3>
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Pour les équipes structurées.</p>
-
-                    <div class="my-8 flex items-baseline">
-                        <span class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight"
-                            x-text="annual ? '1490€ HT' : '149€ HT'"></span>
-                        <span class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"
-                            x-text="annual ? '/an' : '/mois'"></span>
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">Smart</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 min-h-[40px]">Fidélisez votre clientèle
+                            avec le Wallet Mobile.</p>
+                    </div>
+                    <div class="mb-6 flex items-baseline gap-1">
+                        <span class="text-5xl font-extrabold"
+                            x-text="annual ? plans.smart.price_yearly / 12 : plans.smart.price_monthly"></span>
+                        <span class="text-xl font-bold">€</span>
+                        <span class="text-gray-500 dark:text-gray-400">/mois</span>
+                        <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
                     </div>
 
-                    <ul class="space-y-4 mb-8 flex-1">
-                        <li class="flex items-start text-gray-600 dark:text-gray-300 text-sm">
-                            <svg class="h-5 w-5 text-indigo-500 mr-3 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Membres illimités
-                        </li>
-                        <li class="flex items-start text-gray-600 dark:text-gray-300 text-sm">
-                            <svg class="h-5 w-5 text-indigo-500 mr-3 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Stockage 2 To
-                        </li>
-                        <li class="flex items-start text-gray-600 dark:text-gray-300 text-sm">
-                            <svg class="h-5 w-5 text-indigo-500 mr-3 shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Manager Dédié
-                        </li>
-                    </ul>
+                    <a :href="'/subscribe/' + (annual ? plans.smart.yearly : plans.smart.monthly)"
+                        class="w-full block text-center bg-indigo-600 text-white font-semibold py-4 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all mb-8">
+                        Choisir Smart
+                    </a>
+
+                    <div class="flex-1 space-y-4">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Tout de Starter, plus :
+                        </p>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Cartes de Fidélité <strong>Wallet</strong> (Apple/Google)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span><strong>CRM Clé en main</strong></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Notifications Push illimitées</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-gray-400 dark:text-gray-600">
+                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                <span>Automatisation IA</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                {{-- PRO --}}
+                <div
+                    class="h-full p-8 bg-gray-50 dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 flex flex-col hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold">Pro</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 min-h-[40px]">Automatisez tout. Dominez
+                            votre marché.</p>
+                    </div>
+                    <div class="mb-6 flex items-baseline gap-1">
+                        <span class="text-4xl font-extrabold"
+                            x-text="annual ? plans.pro.price_yearly / 12 : plans.pro.price_monthly"></span>
+                        <span class="text-xl font-bold">€</span>
+                        <span class="text-gray-500 dark:text-gray-400">/mois</span>
+                        <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
+                    </div>
 
                     <a :href="'/subscribe/' + (annual ? plans.pro.yearly : plans.pro.monthly)"
-                        class="block w-full py-3 px-6 text-center rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white font-semibold hover:bg-gray-100 dark:hover:bg-slate-700 transition duration-200">
+                        class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
                         Choisir Pro
                     </a>
-                </div>
-            </div>
 
-            <div class="mt-24 max-w-4xl mx-auto">
-                <div
-                    class="relative bg-indigo-900 rounded-3xl p-8 sm:p-12 overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-8 shadow-2xl">
-                    <div
-                        class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-indigo-500 rounded-full blur-[80px] opacity-40">
-                    </div>
-                    <div
-                        class="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-purple-500 rounded-full blur-[80px] opacity-40">
-                    </div>
-
-                    <div class="relative z-10 text-left">
-                        <h3 class="text-2xl font-bold text-white mb-2">Besoins spécifiques ?</h3>
-                        <p class="text-indigo-200 text-lg max-w-md">
-                            Vous gérez une très grande structure ou avez des exigences de conformité particulières ?
+                    <div class="flex-1 space-y-4">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Tout de Smart, plus :
                         </p>
-                    </div>
-
-                    <div class="relative z-10 shrink-0">
-                        <a href="mailto:contact@shoucloud.com"
-                            class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-indigo-900 transition-all duration-200 bg-white border border-transparent rounded-xl hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-900 focus:ring-white">
-                            Obtenir un devis sur mesure
-                            <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                            </svg>
-                        </a>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-purple-500 shrink-0" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Marketing <strong>SMS Automatisé</strong></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-purple-500 shrink-0" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Réponses Avis Google via <strong>IA (SEO)</strong></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-purple-500 shrink-0" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Dashboard Analytics Avancé</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-purple-500 shrink-0" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Manager de Compte Dédié</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <p class="text-center text-gray-500 dark:text-gray-500 text-sm mt-8">
-                    Tous les prix sont affichés hors taxes. TVA applicable selon votre pays de résidence.
-                </p>
-            </div>
 
+            </div>
         </div>
+
+        {{-- COMPARISON TABLE SECTION --}}
+        <div class="bg-gray-50 dark:bg-gray-900/50 py-24 border-t border-gray-200 dark:border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold">Comparatif détaillé</h2>
+                    <p class="mt-4 text-gray-500">Un regard approfondi sur ce qui est inclus.</p>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="py-4 px-6 bg-transparent w-1/4"></th>
+                                <th class="py-4 px-6 text-center text-lg font-bold w-1/4">Starter</th>
+                                <th
+                                    class="py-4 px-6 text-center text-lg font-bold text-indigo-600 dark:text-indigo-400 w-1/4 bg-white dark:bg-gray-800 rounded-t-xl border-x-2 border-t-2 border-indigo-600 border-b-0 shadow-lg relative -top-2">
+                                    Smart
+                                </th>
+                                <th class="py-4 px-6 text-center text-lg font-bold w-1/4">Pro</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+
+                            {{-- SECTION: AVIS & RÉPUTATION --}}
+                            <tr>
+                                <td colspan="4"
+                                    class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">Avis &
+                                    Réputation</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                <td class="py-4 px-6 text-sm font-medium">Collecte d'avis (Email/QR)</td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                                <td
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                <td class="py-4 px-6 text-sm font-medium">Centralisation Google Reviews</td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                                <td
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                <td class="py-4 px-6 text-sm font-medium">Réponses Automatisées (IA)</td>
+                                <td class="text-center py-4 text-gray-300">-</td>
+                                <td
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-gray-300">
+                                    -</td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                            </tr>
+
+                            {{-- SECTION: FIDÉLISATION (WALLET) --}}
+                            <tr>
+                                <td colspan="4"
+                                    class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
+                                    Fidélisation & Wallet</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                <td class="py-4 px-6 text-sm font-medium">Cartes de Fidélité Digitales</td>
+                                <td class="text-center py-4 text-gray-300">-</td>
+                                <td
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                <td class="py-4 px-6 text-sm font-medium">Notifications Push (Geo-fencing)</td>
+                                <td class="text-center py-4 text-gray-300">-</td>
+                                <td
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                <td class="py-4 px-6 text-sm font-medium">CRM Client</td>
+                                <td class="text-center py-4 text-gray-300">Basic</td>
+                                <td
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 font-bold text-indigo-600">
+                                    Avancé</td>
+                                <td class="text-center py-4 font-bold text-indigo-600">Expert</td>
+                            </tr>
+
+                            {{-- SECTION: MARKETING AUTOMATION --}}
+                            <tr>
+                                <td colspan="4"
+                                    class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
+                                    Marketing & Automation</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                <td class="py-4 px-6 text-sm font-medium">Campagnes SMS Marketing</td>
+                                <td class="text-center py-4 text-gray-300">-</td>
+                                <td
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-gray-300">
+                                    -</td>
+                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                <td class="py-4 px-6 text-sm font-medium">Support Client</td>
+                                <td class="text-center py-4 text-sm">Email 48h</td>
+                                <td
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 border-b-2 rounded-b-xl text-sm font-bold">
+                                    Chat & Email 24h</td>
+                                <td class="text-center py-4 text-sm font-bold">Dédié + Téléphone</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </x-app-layout>
