@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Livewire\Onboarding;
-use App\Models\Team;           
-use Illuminate\Http\Request;   
+use App\Models\Team;
+use Illuminate\Http\Request;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\TeamController;
 
 // --- ROUTES PUBLIQUES ---
 
@@ -15,7 +16,7 @@ Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallba
 
 Route::get('/pricing', [SubscriptionController::class, 'index'])->name('subscription.index');
 
-    // Action de paiement (Lien vers Stripe)
+// Action de paiement (Lien vers Stripe)
 Route::get('/subscribe/{price}', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
 
 Route::get('/', function () {
@@ -38,7 +39,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -47,7 +48,7 @@ Route::middleware([
     Route::get('/myteam', function () {
         $user = auth()->user();
 
-        if (! $user->current_team_id) {
+        if (!$user->current_team_id) {
             return redirect()->route('onboarding');
         }
 
@@ -58,41 +59,26 @@ Route::middleware([
     Route::get('/onboarding', Onboarding::class)->name('onboarding');
 
     // >>> NOUVELLE ROUTE : ANNULER SA DEMANDE / QUITTER L'ÉQUIPE <<<
-    Route::delete('/teams/{team}/cancel-request', function (Request $request, Team $team) {
-        // 1. Sécurité : On vérifie que l'utilisateur est bien lié à l'équipe (même en attente)
-        if (! $request->user()->teams()->where('team_id', $team->id)->exists()) {
-            abort(403);
-        }
-
-        // 2. On retire l'utilisateur de l'équipe
-        $team->removeUser($request->user());
-
-        // 3. Si c'était son équipe active, on remet à NULL pour éviter le bug d'affichage
-        if ($request->user()->current_team_id === $team->id) {
-            $request->user()->forceFill(['current_team_id' => null])->save();
-        }
-
-        return redirect()->route('dashboard');
-    })->name('teams.cancel-request');
+    Route::delete('/teams/{team}/cancel-request', [TeamController::class, 'cancelRequest'])->name('teams.cancel-request');
 
     Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+        'auth:sanctum',
+        config('jetstream.auth_session'),
+        'verified',
+    ])->group(function () {
 
-    Route::get('/billing-portal', function (Request $request) {
-        $user = $request->user();
-        $team = $user->currentTeam;
+        Route::get('/billing-portal', function (Request $request) {
+            $user = $request->user();
+            $team = $user->currentTeam;
 
-        // Sécurité : Vérifie si user est propriétaire OU a le rôle 'admin'
-        if (! $user->ownsTeam($team) && ! $user->hasTeamRole($team, 'admin')) {
-            abort(403, 'Seuls les administrateurs peuvent gérer la facturation.');
-        }
+            // Sécurité : Vérifie si user est propriétaire OU a le rôle 'admin'
+            if (!$user->ownsTeam($team) && !$user->hasTeamRole($team, 'admin')) {
+                abort(403, 'Seuls les administrateurs peuvent gérer la facturation.');
+            }
 
-        return $team->redirectToBillingPortal(route('dashboard'));
-    })->name('billing');
+            return $team->redirectToBillingPortal(route('dashboard'));
+        })->name('billing');
 
-});
+    });
 
 });
