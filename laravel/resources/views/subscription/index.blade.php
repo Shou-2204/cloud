@@ -1,27 +1,21 @@
 <x-app-layout>
+    @php
+        $plans = config('subscription_plans');
+        // Preparation des plans pour JS
+        $jsPlans = [];
+        foreach ($plans as $key => $plan) {
+            $jsPlans[$key] = [
+                'monthly' => $plan['stripe_id_monthly'],
+                'yearly' => $plan['stripe_id_yearly'],
+                'price_monthly' => $plan['price_monthly'],
+                'price_yearly' => $plan['price_yearly'],
+            ];
+        }
+    @endphp
     <div x-data="{ 
             annual: true,
             selected: 'smart',
-            plans: {
-                starter: { 
-                    monthly: '{{ config('services.stripe.plans.starter.monthly') }}', 
-                    yearly:  '{{ config('services.stripe.plans.starter.yearly') }}',
-                    price_monthly: 29,
-                    price_yearly: 290
-                },
-                smart: { 
-                    monthly: '{{ config('services.stripe.plans.smart.monthly') }}', 
-                    yearly:  '{{ config('services.stripe.plans.smart.yearly') }}',
-                    price_monthly: 79,
-                    price_yearly: 790
-                },
-                pro: { 
-                    monthly: '{{ config('services.stripe.plans.pro.monthly') }}', 
-                    yearly:  '{{ config('services.stripe.plans.pro.yearly') }}',
-                    price_monthly: 149,
-                    price_yearly: 1490
-                }
-            }
+            plans: {{ Js::from($jsPlans) }}
          }" class="bg-white dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100">
 
         {{-- HERO SECTION --}}
@@ -68,198 +62,187 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
             <div class="grid md:grid-cols-3 gap-8 items-start">
 
-                {{-- STARTER --}}
-                <div
-                    class="h-full p-8 bg-gray-50 dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 flex flex-col hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
-                    <div class="mb-4">
-                        <h3 class="text-xl font-bold">Starter</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 min-h-[40px]">L'essentiel pour maîtriser
-                            votre e-réputation.</p>
-                    </div>
-                    <div class="mb-6 flex items-baseline gap-1">
-                        <span class="text-4xl font-extrabold"
-                            x-text="annual ? Math.round(plans.starter.price_yearly / 12) : plans.starter.price_monthly"></span>
-                        <span class="text-xl font-bold">€</span>
-                        <span class="text-gray-500 dark:text-gray-400">/mois</span>
-                        <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
-                    </div>
+                {{-- Formulaire caché pour le swap (utilisé par JS ou direct) --}}
+                <form id="swap-form" method="POST" action="{{ route('subscription.swap', $currentTeam) }}" class="hidden">
+                    @csrf
+                    <input type="hidden" name="price" id="swap-price-input">
+                </form>
 
-                    <a @if($isSubscribed) href="{{ route('subscription.show', $currentTeam) }}" @else :href="'/subscribe/' + (annual ? plans.starter.yearly : plans.starter.monthly)" @endif
-                        class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
-                        {{ $isSubscribed ? __('Gérer mon abonnement') : __('Commencer') }}
-                    </a>
+                @foreach ($plans as $key => $plan)
+                    @if ($plan['popular'])
+                         {{-- POPULAR CARD (Highlighted) --}}
+                        <div class="h-full relative p-8 bg-white dark:bg-gray-800 rounded-3xl border-2 border-indigo-600 shadow-2xl z-10 scale-105 flex flex-col">
+                            <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2">
+                                <span class="bg-indigo-600 text-white text-[10px] font-bold uppercase py-1 px-3 rounded-bl-xl rounded-tr-xl shadow-sm">Populaire</span>
+                            </div>
+                            <div class="mb-4">
+                                <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">{{ $plan['name'] }}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 min-h-[40px]">{{ $plan['description'] }}</p>
+                            </div>
+                            <div class="mb-6 flex items-baseline gap-1">
+                                <span class="text-5xl font-extrabold" x-text="annual ? Math.round(plans.{{ $key }}.price_yearly / 12) : plans.{{ $key }}.price_monthly"></span>
+                                <span class="text-xl font-bold">€</span>
+                                <span class="text-gray-500 dark:text-gray-400">/mois</span>
+                                <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
+                            </div>
 
-                    <div class="flex-1 space-y-4">
-                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Fonctionnalités
-                            incluses :</p>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Collecte de <strong>Feedback</strong></span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Gestion des <strong>Avis Google</strong></span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span><strong>Roue de la Fortune</strong> (Capture Data)</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-gray-400 dark:text-gray-600">
-                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                <span>Wallet Mobile</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-gray-400 dark:text-gray-600">
-                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                <span>Campagnes SMS</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                            
+                            @php
+                                // Check if this specific plan is the current one
+                                $isCurrentPlan = false;
+                                if ($isSubscribed && $currentTeam->subscription('default')->active()) {
+                                     $stripePriceId = $currentTeam->subscription('default')->stripe_price;
+                                     if ($stripePriceId === $plan['stripe_id_monthly'] || $stripePriceId === $plan['stripe_id_yearly']) {
+                                         $isCurrentPlan = true;
+                                     }
+                                }
+                            @endphp
 
-                {{-- SMART (Highlighted) --}}
-                <div
-                    class="h-full relative p-8 bg-white dark:bg-gray-800 rounded-3xl border-2 border-indigo-600 shadow-2xl z-10 scale-105 flex flex-col">
-                    <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2">
-                        <span
-                            class="bg-indigo-600 text-white text-[10px] font-bold uppercase py-1 px-3 rounded-bl-xl rounded-tr-xl shadow-sm">Populaire</span>
-                    </div>
-                    <div class="mb-4">
-                        <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">Smart</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 min-h-[40px]">Fidélisez votre clientèle
-                            avec le Wallet Mobile.</p>
-                    </div>
-                    <div class="mb-6 flex items-baseline gap-1">
-                        <span class="text-5xl font-extrabold"
-                            x-text="annual ? Math.round(plans.smart.price_yearly / 12) : plans.smart.price_monthly"></span>
-                        <span class="text-xl font-bold">€</span>
-                        <span class="text-gray-500 dark:text-gray-400">/mois</span>
-                        <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
-                    </div>
+                            {{-- BUTTON LOGIC --}}
+                            @if ($isCurrentPlan)
+                                <button disabled class="w-full block text-center bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800 font-semibold py-4 rounded-xl cursor-not-allowed mb-8">
+                                    <span class="flex items-center justify-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        {{ __('Votre offre actuelle') }}
+                                    </span>
+                                </button>
+                            @elseif ($isSubscribed)
+                                <button 
+                                    @click="if(confirm('Voulez-vous vraiment changer pour l\'offre {{ $plan['name'] }} ? Le montant sera ajusté au prorata.')) { 
+                                        document.getElementById('swap-price-input').value = annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly; 
+                                        document.getElementById('swap-form').submit(); 
+                                    }"
+                                    class="w-full block text-center bg-indigo-600 text-white font-semibold py-4 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all mb-8">
+                                    {{ __('Changer pour ' . $plan['name']) }}
+                                </button>
+                            @else
+                                <a :href="'/subscribe/' + (annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly)"
+                                    class="w-full block text-center bg-indigo-600 text-white font-semibold py-4 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all mb-8">
+                                    {{ __('Choisir ' . $plan['name']) }}
+                                </a>
+                            @endif
 
-                    <a @if($isSubscribed) href="{{ route('subscription.show', $currentTeam) }}" @else :href="'/subscribe/' + (annual ? plans.smart.yearly : plans.smart.monthly)" @endif
-                        class="w-full block text-center bg-indigo-600 text-white font-semibold py-4 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all mb-8">
-                        {{ $isSubscribed ? __('Gérer mon abonnement') : __('Choisir Smart') }}
-                    </a>
+                            <div class="flex-1 space-y-4">
+                                @if (isset($plan['features'][0]['highlight']) && $plan['features'][0]['highlight'])
+                                     <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">{{ $plan['features'][0]['name'] }} :</p>
+                                     @php $startFeatureIndex = 1; @endphp
+                                @else
+                                     <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Fonctionnalités incluses :</p>
+                                     @php $startFeatureIndex = 0; @endphp
+                                @endif
 
-                    <div class="flex-1 space-y-4">
-                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Tout de Starter, plus :
-                        </p>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Cartes de Fidélité <strong>Wallet</strong> (Apple/Google)</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span><strong>CRM Clé en main</strong></span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Notifications Push illimitées</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-gray-400 dark:text-gray-600">
-                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                <span>Automatisation IA</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                                <ul class="space-y-3 text-sm">
+                                    @for ($i = $startFeatureIndex; $i < count($plan['features']); $i++)
+                                        @php $feature = $plan['features'][$i]; @endphp
+                                        <li class="flex items-start gap-3 {{ !$feature['included'] ? 'text-gray-400 dark:text-gray-600' : '' }}">
+                                            @if ($feature['included'])
+                                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                            @else
+                                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            @endif
+                                            <span>
+                                                 @if(str_contains($feature['name'], 'Wallet') && $feature['included'])
+                                                    Cartes de Fidélité <strong>Wallet</strong> (Apple/Google)
+                                                 @elseif(str_contains($feature['name'], 'CRM') && $feature['included'])
+                                                     <strong>CRM Clé en main</strong>
+                                                 @else
+                                                    {!! $feature['name'] !!}
+                                                 @endif
+                                            </span>
+                                        </li>
+                                    @endfor
+                                </ul>
+                            </div>
+                        </div>
+                    @else
+                        {{-- STANDARD CARD --}}
+                        <div class="h-full p-8 bg-gray-50 dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 flex flex-col hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+                            <div class="mb-4">
+                                <h3 class="text-xl font-bold">{{ $plan['name'] }}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 min-h-[40px]">{{ $plan['description'] }}</p>
+                            </div>
+                            <div class="mb-6 flex items-baseline gap-1">
+                                <span class="text-4xl font-extrabold" x-text="annual ? Math.round(plans.{{ $key }}.price_yearly / 12) : plans.{{ $key }}.price_monthly"></span>
+                                <span class="text-xl font-bold">€</span>
+                                <span class="text-gray-500 dark:text-gray-400">/mois</span>
+                                <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
+                            </div>
 
-                {{-- PRO --}}
-                <div
-                    class="h-full p-8 bg-gray-50 dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 flex flex-col hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
-                    <div class="mb-4">
-                        <h3 class="text-xl font-bold">Pro</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 min-h-[40px]">Automatisez tout. Dominez
-                            votre marché.</p>
-                    </div>
-                    <div class="mb-6 flex items-baseline gap-1">
-                        <span class="text-4xl font-extrabold"
-                            x-text="annual ? Math.round(plans.pro.price_yearly / 12) : plans.pro.price_monthly"></span>
-                        <span class="text-xl font-bold">€</span>
-                        <span class="text-gray-500 dark:text-gray-400">/mois</span>
-                        <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
-                    </div>
+                            {{-- BUTTON LOGIC STANDARD --}}
+                            @if ($isCurrentPlan)
+                                <button disabled class="w-full block text-center bg-gray-100 text-gray-500 border border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700 font-semibold py-3 rounded-xl cursor-not-allowed mb-8">
+                                    <span class="flex items-center justify-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        {{ __('Votre offre actuelle') }}
+                                    </span>
+                                </button>
+                            @elseif ($isSubscribed)
+                                <button 
+                                    @click="if(confirm('Voulez-vous vraiment changer pour l\'offre {{ $plan['name'] }} ? Le montant sera ajusté au prorata.')) { 
+                                        document.getElementById('swap-price-input').value = annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly; 
+                                        document.getElementById('swap-form').submit(); 
+                                    }"
+                                    class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
+                                    {{ __('Changer pour ' . $plan['name']) }}
+                                </button>
+                            @else
+                                <a :href="'/subscribe/' + (annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly)"
+                                    class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
+                                    {{ $key === 'pro' ? __('Choisir Pro') : __('Commencer') }}
+                                </a>
+                            @endif
 
-                    <a @if($isSubscribed) href="{{ route('subscription.show', $currentTeam) }}" @else
-                    :href="'/subscribe/' + (annual ? plans.pro.yearly : plans.pro.monthly)" @endif
-                        class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
-                        {{ $isSubscribed ? __('Gérer mon abonnement') : __('Choisir Pro') }}
-                    </a>
+                            <div class="flex-1 space-y-4">
+                                 @if (isset($plan['features'][0]['highlight']) && $plan['features'][0]['highlight'])
+                                     <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">{{ $plan['features'][0]['name'] }} :</p>
+                                     @php $startFeatureIndex = 1; @endphp
+                                @else
+                                     <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Fonctionnalités incluses :</p>
+                                     @php $startFeatureIndex = 0; @endphp
+                                @endif
 
-                    <div class="flex-1 space-y-4">
-                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Tout de Smart, plus :
-                        </p>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-purple-500 shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Marketing <strong>SMS Automatisé</strong></span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-purple-500 shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Réponses Avis Google via <strong>IA (SEO)</strong></span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-purple-500 shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Dashboard Analytics Avancé</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-5 h-5 text-purple-500 shrink-0" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Manager de Compte Dédié</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                                <ul class="space-y-3 text-sm">
+                                    @for ($i = $startFeatureIndex; $i < count($plan['features']); $i++)
+                                        @php $feature = $plan['features'][$i]; @endphp
+                                        <li class="flex items-start gap-3 {{ !$feature['included'] ? 'text-gray-400 dark:text-gray-600' : '' }}">
+                                             @if ($feature['included'])
+                                                {{-- Checkmark Icon --}}
+                                                <svg class="w-5 h-5 {{ $key === 'pro' ? 'text-purple-500' : 'text-green-500' }} shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                             @else
+                                                {{-- Cross Icon --}}
+                                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                             @endif
+                                            <span>
+                                                {{-- Petit fix pour le gras qui est dans le HTML d'origine --}}
+                                                @if(str_contains($feature['name'], 'Feedback') && $feature['included'])
+                                                    Collecte de <strong>Feedback</strong>
+                                                @elseif(str_contains($feature['name'], 'Avis Google') && $feature['included'] && !str_contains($feature['name'], 'IA'))
+                                                    Gestion des <strong>Avis Google</strong>
+                                                @elseif(str_contains($feature['name'], 'Roue de la Fortune') && $feature['included'])
+                                                    <strong>Roue de la Fortune</strong> (Capture Data)
+                                                @elseif(str_contains($feature['name'], 'SMS Automatisé') && $feature['included'])
+                                                    Marketing <strong>SMS Automatisé</strong>
+                                                @elseif(str_contains($feature['name'], 'IA (SEO)') && $feature['included'])
+                                                    Réponses Avis Google via <strong>IA (SEO)</strong>
+                                                @else
+                                                    {!! $feature['name'] !!}
+                                                @endif
+                                            </span>
+                                        </li>
+                                    @endfor
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
 
             </div>
         </div>

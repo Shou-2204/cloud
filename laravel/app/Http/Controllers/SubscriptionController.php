@@ -192,6 +192,38 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Swap the subscription to a new plan.
+     */
+    public function update(Request $request, Team $team)
+    {
+        $this->authorize('update', $team);
+
+        $validated = $request->validate([
+            'price' => 'required|string',
+        ]);
+
+        $subscription = $team->subscription('default');
+
+        if (!$subscription) {
+            return redirect()->route('subscription.index')
+                ->with('error', 'Aucun abonnement actif à modifier.');
+        }
+
+        // Swap and prorate
+        // Cashier gère le prorata par défaut lors d'un swapAndInvoice ou on peut le forcer.
+        // Ici on utilise swap() et on laisse Stripe gérer la facturation immédiate ou différée selon le réglage
+        // Mais souvent on veut facturer le prorata tout de suite pour éviter les surprises : swapAndInvoice
+        try {
+            $subscription->swapAndInvoice($validated['price']);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erreur lors du changement de plan : ' . $e->getMessage());
+        }
+
+        return redirect()->route('subscription.index')
+            ->with('status', 'Votre abonnement a été mis à jour avec succès !');
+    }
+
+    /**
      * Cancel the subscription.
      */
     public function cancel(Request $request, Team $team)

@@ -87,6 +87,7 @@ Route::middleware([
         // NEW : Subscription Management
         Route::prefix('team/{team}/subscription')->name('subscription.')->group(function () {
             Route::get('/', [SubscriptionController::class, 'show'])->name('show');
+            Route::post('/swap', [SubscriptionController::class, 'update'])->name('swap');
             Route::post('/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
             Route::post('/resume', [SubscriptionController::class, 'resume'])->name('resume');
             Route::post('/billing', [SubscriptionController::class, 'updateBilling'])->name('update-billing');
