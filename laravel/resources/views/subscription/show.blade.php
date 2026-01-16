@@ -61,9 +61,17 @@
                             </div>
 
                             @if ($subscription->onGracePeriod())
-                                <div class="text-sm text-yellow-600 dark:text-yellow-400 mt-2">
-                                    {{ __('Votre abonnement prendra fin le') }}
-                                    {{ $subscription->ends_at->format('d/m/Y') }}.
+                                <div class="mt-2">
+                                    <div class="text-sm text-yellow-600 dark:text-yellow-400">
+                                        {{ __('Votre abonnement prendra fin le') }}
+                                        {{ $subscription->ends_at->format('d/m/Y') }}.
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="{{ route('subscription.index') }}"
+                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 underline text-sm font-medium">
+                                            {{ __('Se réabonner') }}
+                                        </a>
+                                    </div>
                                 </div>
                             @elseif ($subscription->active())
                                 @php
@@ -78,6 +86,16 @@
                                     @else
                                         {{ __('Actif') }}
                                     @endif
+                                </div>
+                            @else
+                                <div class="mt-4">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                        {{ __('Votre abonnement est inactif. Réabonnez-vous pour accéder à toutes les fonctionnalités.') }}
+                                    </p>
+                                    <a href="{{ route('subscription.index') }}"
+                                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                        {{ __('Se réabonner') }}
+                                    </a>
                                 </div>
                             @endif
                         </div>
