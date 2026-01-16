@@ -350,11 +350,11 @@
                                             </div>
 
                                             <div class="mt-6 flex justify-end">
-                                                <x-secondary-button x-on:click="show = false">
+                                                <x-secondary-button type="button" x-on:click="show = false">
                                                     {{ __('Annuler') }}
                                                 </x-secondary-button>
 
-                                                <x-danger-button class="ml-3">
+                                                <x-danger-button class="ml-3" type="submit">
                                                     {{ __('Confirmer le désabonnement') }}
                                                 </x-danger-button>
                                             </div>
