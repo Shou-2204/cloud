@@ -30,6 +30,11 @@ class Team extends JetstreamTeam
         'auto_approval',
         'billing_name',
         'billing_address',
+        'billing_address_line2',
+        'billing_city',
+        'billing_state',
+        'billing_postal_code',
+        'billing_country',
         'vat_id',
     ];
 

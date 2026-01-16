@@ -29,7 +29,7 @@ class SubscriptionController extends Controller
         }
 
         // Check if billing info is missing
-        if (empty($team->billing_name) || empty($team->billing_address)) {
+        if (empty($team->billing_name) || empty($team->billing_address) || empty($team->billing_city) || empty($team->billing_postal_code) || empty($team->billing_country)) {
             return view('subscription.checkout-form', [
                 'team' => $team,
                 'price' => $price
@@ -48,6 +48,11 @@ class SubscriptionController extends Controller
         $validated = $request->validate([
             'billing_name' => 'required|string|max:255',
             'billing_address' => 'required|string|max:255',
+            'billing_address_line2' => 'nullable|string|max:255',
+            'billing_city' => 'required|string|max:255',
+            'billing_state' => 'nullable|string|max:255',
+            'billing_postal_code' => 'required|string|max:20',
+            'billing_country' => 'required|string|max:2',
             'vat_id' => 'nullable|string|max:50',
             'price' => 'required|string',
         ]);
@@ -57,18 +62,15 @@ class SubscriptionController extends Controller
         $team->update([
             'billing_name' => $validated['billing_name'],
             'billing_address' => $validated['billing_address'],
+            'billing_address_line2' => $validated['billing_address_line2'],
+            'billing_city' => $validated['billing_city'],
+            'billing_state' => $validated['billing_state'],
+            'billing_postal_code' => $validated['billing_postal_code'],
+            'billing_country' => $validated['billing_country'],
             'vat_id' => $validated['vat_id'],
         ]);
 
-        // Sync with Stripe Customer immediately if exists
-        if ($team->hasStripeId()) {
-            $team->updateStripeCustomer([
-                'name' => $validated['billing_name'],
-                'address' => [
-                    'line1' => $validated['billing_address'],
-                ],
-            ]);
-        }
+        $this->syncStripeBilling($team);
 
         // Proceed to checkout
         return $team->newSubscription('default', $validated['price'])
@@ -83,25 +85,93 @@ class SubscriptionController extends Controller
         $validated = $request->validate([
             'billing_name' => 'required|string|max:255',
             'billing_address' => 'required|string|max:255',
+            'billing_address_line2' => 'nullable|string|max:255',
+            'billing_city' => 'required|string|max:255',
+            'billing_state' => 'nullable|string|max:255',
+            'billing_postal_code' => 'required|string|max:20',
+            'billing_country' => 'required|string|max:2',
             'vat_id' => 'nullable|string|max:50',
         ]);
 
         $team = $request->user()->currentTeam;
         $team->update($validated);
 
-        if ($team->hasStripeId()) {
-            $team->updateStripeCustomer([
-                'name' => $validated['billing_name'],
-                'address' => [
-                    'line1' => $validated['billing_address'],
-                ],
-            ]);
-
-            // Note: Syncing Tax IDs via API is complex due to validation/types.
-            // Ideally should use Customer Portal or explicit Tax ID management.
-        }
+        $this->syncStripeBilling($team);
 
         return back()->with('status', 'billing-updated');
+    }
+
+    protected function syncStripeBilling($team)
+    {
+        if (!$team->hasStripeId()) {
+            return;
+        }
+
+        // 1. Update Customer Details (Name & Address)
+        $team->updateStripeCustomer([
+            'name' => $team->billing_name,
+            'address' => [
+                'line1' => $team->billing_address,
+                'line2' => $team->billing_address_line2,
+                'city' => $team->billing_city,
+                'state' => $team->billing_state,
+                'postal_code' => $team->billing_postal_code,
+                'country' => $team->billing_country,
+            ],
+        ]);
+
+        // 2. Manage Tax IDs
+        $existingTaxIds = $team->taxIds();
+        $vatId = $team->vat_id;
+
+        // If no VAT ID provided, remove all existing ones
+        if (empty($vatId)) {
+            foreach ($existingTaxIds as $taxId) {
+                $team->deleteTaxId($taxId->id);
+            }
+            return;
+        }
+
+        // Determine Type
+        $type = $this->determineTaxIdType($vatId);
+
+        // Check if we already have this Tax ID
+        $hasTaxId = $existingTaxIds->contains(function ($t) use ($vatId, $type) {
+            return $t->value === $vatId && $t->type === $type;
+        });
+
+        if ($hasTaxId) {
+            return; // Already synced
+        }
+
+        // Remove old Tax IDs (assuming 1 active for simplicity)
+        foreach ($existingTaxIds as $taxId) {
+            $team->deleteTaxId($taxId->id);
+        }
+
+        // Create new Tax ID
+        try {
+            $team->createTaxId($type, $vatId);
+        } catch (\Exception $e) {
+            // Ignore invalid tax ID errors from Stripe to prevent crashing
+            // user feedback could be improved here but preventing 500 is priority
+        }
+    }
+
+    protected function determineTaxIdType($vatId)
+    {
+        $vatId = strtoupper(trim($vatId));
+
+        if (str_starts_with($vatId, 'GB')) {
+            return 'gb_vat';
+        }
+
+        if (str_starts_with($vatId, 'CH')) {
+            return 'ch_vat';
+        }
+
+        // Default to EU VAT for most European countries
+        return 'eu_vat';
     }
 
     /**
