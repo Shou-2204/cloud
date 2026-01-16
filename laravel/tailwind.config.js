@@ -43,19 +43,19 @@ export default {
                     500: '#FFF2D5',
                     DEFAULT: '#FFFBF5',
                 },
-                // Emerald Dark - Mapped to NEUTRAL/GRAY for a Classic Monochrome Dark Mode
+                // Emerald Dark - Mapped to User Requested Variables
                 'emerald-dark': {
-                    DEFAULT: '#0a0a0a', // Neutral 950 (Nearly Black)
-                    50: '#fafafa',
+                    DEFAULT: 'var(--primary-black)', // #000000
+                    50: 'var(--gray25)',             // #F9FAFB (Text/Lightest)
                     100: '#f5f5f5',
                     200: '#e5e5e5',
                     300: '#d4d4d4',
                     400: '#a3a3a3',
-                    500: '#404040', // Neutral 700 (Lighter panels)
-                    600: '#262626', // Neutral 800
+                    500: 'var(--gray900)',           // #171717 (Cards/Surfaces)
+                    600: '#262626',
                     700: '#171717',
-                    800: '#0a0a0a', // Neutral 950 (Card Backgrounds)
-                    900: '#000000', // Pure Black
+                    800: 'var(--primary-black)',     // #000000 (Backgrounds)
+                    900: '#000000',
                     950: '#000000',
                 },
             },
