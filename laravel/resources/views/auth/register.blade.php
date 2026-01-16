@@ -51,15 +51,94 @@
                             required autocomplete="username" />
                     </div>
 
-                    <div class="mt-4">
-                        <x-label for="password" value="{{ __('Password') }}" />
-                        <x-input-password id="password" name="password" required autocomplete="new-password" />
-                    </div>
+                    <div x-data="{
+                        password: '',
+                        password_confirmation: '',
+                        get criteria() {
+                            return {
+                                length: this.password.length >= 8,
+                                mixed: /[a-z]/.test(this.password) && /[A-Z]/.test(this.password),
+                                number: /[0-9]/.test(this.password),
+                                match: this.password.length > 0 && this.password === this.password_confirmation
+                            }
+                        }
+                    }">
+                        <div class="mt-4">
+                            <x-label for="password" value="{{ __('Password') }}" />
+                            <x-input-password id="password" name="password" required autocomplete="new-password"
+                                x-model="password" />
+                        </div>
 
-                    <div class="mt-4">
-                        <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                        <x-input-password id="password_confirmation" name="password_confirmation" required
-                            autocomplete="new-password" />
+                        <div class="mt-4">
+                            <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
+                            <x-input-password id="password_confirmation" name="password_confirmation" required
+                                autocomplete="new-password" x-model="password_confirmation" />
+                        </div>
+
+                        {{-- Password Validation Checklist --}}
+                        <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-sm"
+                            x-show="password.length > 0" x-transition x-cloak>
+                            <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Critères du mot de passe :
+                            </h4>
+                            <ul class="space-y-1">
+                                <li class="flex items-center gap-2"
+                                    :class="criteria.length ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+                                    <svg x-show="criteria.length" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <svg x-show="!criteria.length" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Au moins 8 caractères
+                                </li>
+                                <li class="flex items-center gap-2"
+                                    :class="criteria.mixed ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+                                    <svg x-show="criteria.mixed" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <svg x-show="!criteria.mixed" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Majuscule & Minuscule
+                                </li>
+                                <li class="flex items-center gap-2"
+                                    :class="criteria.number ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+                                    <svg x-show="criteria.number" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <svg x-show="!criteria.number" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Au moins un chiffre
+                                </li>
+                                <li class="flex items-center gap-2"
+                                    :class="criteria.match ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+                                    <svg x-show="criteria.match" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <svg x-show="!criteria.match" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Les mots de passe correspondent
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                     @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
