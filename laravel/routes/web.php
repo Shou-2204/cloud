@@ -57,6 +57,14 @@ Route::middleware([
     })->name('team.hub');
 
 
+    Route::get('/mysubscription', function () {
+        $user = auth()->user();
+        if (!$user->current_team_id) {
+            return redirect()->route('onboarding');
+        }
+        return redirect()->route('subscription.show', $user->current_team_id);
+    })->name('mysubscription');
+
     Route::get('/onboarding', Onboarding::class)->name('onboarding');
 
     // >>> NOUVELLE ROUTE : ANNULER SA DEMANDE / QUITTER L'ÉQUIPE <<<

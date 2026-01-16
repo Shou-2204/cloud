@@ -29,7 +29,7 @@ class StaticPage extends Model
         return [
             [
                 // 3. On génère l'ID tout de suite, ici. Plus de magie plus tard.
-                'id' => md5('/dashboard'), 
+                'id' => md5('/dashboard'),
                 'title' => 'Tableau de bord',
                 'url' => '/dashboard',
                 'content' => 'Vue d\'ensemble de votre activité, accueil, start, home, dashboard',
@@ -50,7 +50,15 @@ class StaticPage extends Model
                 'url' => '/myteam',
                 'content' => 'Gérer les membres de l\'Équipe, invitation, settings, team',
                 'category' => 'Paramètres',
-                'permission' => 'public', 
+                'permission' => 'public',
+            ],
+            [
+                'id' => md5('/mysubscription'),
+                'title' => 'Mon Abonnement',
+                'url' => '/mysubscription',
+                'content' => 'Gérer mon offre, changer de plan, factures, Starter, Smart, Pro, Upgrade',
+                'category' => 'Facturation',
+                'permission' => 'public',
             ],
             [
                 'id' => md5('/pricing'),
@@ -67,15 +75,15 @@ class StaticPage extends Model
     {
         // 4. C'est maintenant très simple, l'ID existe déjà
         return [
-            'id' => $this->id, 
+            'id' => $this->id,
             'title' => $this->title,
             'url' => $this->url,
-            'content' => $this->content, 
+            'content' => $this->content,
             'category' => $this->category,
             'permission' => $this->permission,
         ];
     }
-    
+
     // 5. On peut supprimer getScoutKey() et getScoutKeyName() 
     // car Laravel utilise maintenant l'ID standard du modèle par défaut.
 }
