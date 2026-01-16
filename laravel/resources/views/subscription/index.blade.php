@@ -69,6 +69,17 @@
                 </form>
 
                 @foreach ($plans as $key => $plan)
+                    @php
+                        // Check if this specific plan is the current one
+                        $isCurrentPlan = false;
+                        if ($isSubscribed && $currentTeam->subscription('default')->active()) {
+                                $stripePriceId = $currentTeam->subscription('default')->stripe_price;
+                                if ($stripePriceId === $plan['stripe_id_monthly'] || $stripePriceId === $plan['stripe_id_yearly']) {
+                                    $isCurrentPlan = true;
+                                }
+                        }
+                    @endphp
+
                     @if ($plan['popular'])
                          {{-- POPULAR CARD (Highlighted) --}}
                         <div class="h-full relative p-8 bg-white dark:bg-gray-800 rounded-3xl border-2 border-indigo-600 shadow-2xl z-10 scale-105 flex flex-col">
@@ -85,18 +96,6 @@
                                 <span class="text-gray-500 dark:text-gray-400">/mois</span>
                                 <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
                             </div>
-
-                            
-                            @php
-                                // Check if this specific plan is the current one
-                                $isCurrentPlan = false;
-                                if ($isSubscribed && $currentTeam->subscription('default')->active()) {
-                                     $stripePriceId = $currentTeam->subscription('default')->stripe_price;
-                                     if ($stripePriceId === $plan['stripe_id_monthly'] || $stripePriceId === $plan['stripe_id_yearly']) {
-                                         $isCurrentPlan = true;
-                                     }
-                                }
-                            @endphp
 
                             {{-- BUTTON LOGIC --}}
                             @if ($isCurrentPlan)
