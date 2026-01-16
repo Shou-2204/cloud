@@ -20,14 +20,14 @@
                 open: false,
                 planName: '',
                 planKey: '',
-                price: 0
+                price: 0,
+                annual: true
             },
             openConfirmModal(name, key) {
                 this.confirmModal.planKey = key;
                 this.confirmModal.planName = name;
-                this.confirmModal.price = this.annual ? this.plans[key].yearly : this.plans[key].monthly; // Display monthly equivalent or full price? Usually for swap confirmation we show what they will pay if immediate, or just the new rate. Let's show the new rate.
-                // Actually the user pays the difference. Let's just show the new rate per month/year.
-                // Better: Show the raw price like in the card.
+                this.confirmModal.annual = this.annual;
+                this.confirmModal.price = this.annual ? this.plans[key].yearly : this.plans[key].monthly;
                 this.confirmModal.open = true;
             },
             submitSwap() {
@@ -451,7 +451,7 @@
             </div>
         </div>
 
-    </div>
+
 
     {{-- CUSTOM CONFIRMATION MODAL --}}
     <div x-show="confirmModal.open" style="display: none;" class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -498,9 +498,9 @@
                                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
                                         Le nouveau tarif sera de 
                                         <span class="font-bold text-indigo-600 dark:text-indigo-400 text-lg">
-                                            <span x-text="annual ? Math.round(confirmModal.price / 12) : confirmModal.price"></span>€<span class="text-sm text-gray-500 dark:text-gray-400">/mois</span>
+                                            <span x-text="confirmModal.annual ? Math.round(confirmModal.price / 12) : confirmModal.price"></span>€<span class="text-sm text-gray-500 dark:text-gray-400">/mois</span>
                                         </span>
-                                        <span x-show="annual" class="hidden text-xs text-gray-400" :class="{ 'inline': annual }"> (facturé annuellement)</span>.
+                                        <span x-show="confirmModal.annual" class="hidden text-xs text-gray-400" :class="{ 'inline': confirmModal.annual }"> (facturé annuellement)</span>.
                                     </p>
                                     <div class="mt-4 rounded-md bg-yellow-50 dark:bg-yellow-900/30 p-3">
                                         <div class="flex">
@@ -536,5 +536,6 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </x-app-layout>
