@@ -43,18 +43,18 @@ export default {
                     500: '#FFF2D5',
                     DEFAULT: '#FFFBF5',
                 },
-                // Emerald Dark - NOW MAPPED TO SLATE/ZINC for a Premium Dark Mode
+                // Emerald Dark - Mapped to Slate (Lighter background as requested)
                 'emerald-dark': {
-                    DEFAULT: '#020617', // Slate 950 (Main Background)
+                    DEFAULT: '#0f172a', // Slate 900 (Lighter than previous 950)
                     50: '#f8fafc',
                     100: '#f1f5f9',
                     200: '#e2e8f0',
                     300: '#cbd5e1',
                     400: '#94a3b8',
-                    500: '#1e293b', // Slate 800 (Cards/Panels)
-                    600: '#334155', // Slate 700 (Borders/Secondary)
-                    700: '#475569',
-                    800: '#1e293b',
+                    500: '#334155', // Slate 700 (Lighter panels)
+                    600: '#475569', // Slate 600
+                    700: '#64748b',
+                    800: '#1e293b', // Slate 800
                     900: '#0f172a',
                     950: '#020617',
                 },
