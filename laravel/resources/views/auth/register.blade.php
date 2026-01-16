@@ -1,17 +1,17 @@
 <x-guest-layout>
-    <div class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
+    <div class="min-h-screen flex flex-col bg-ivory dark:bg-emerald-dark">
 
         {{-- 1. NAVBAR (Avec lien vers Connexion) --}}
         <nav
-            class="flex-none w-full py-5 px-8 flex justify-between items-center z-20 transition-colors duration-300 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 shadow-sm dark:shadow-xl">
+            class="flex-none w-full py-5 px-8 flex justify-between items-center z-20 transition-colors duration-300 bg-ivory-100 dark:bg-emerald-dark-600 border-b border-gray-200 dark:border-emerald-dark-500 shadow-sm dark:shadow-xl">
             <a href="{{ url('/') }}" class="text-xl font-bold tracking-tighter text-gray-900 dark:text-white">
-                <span class="text-indigo-600 dark:text-indigo-500">Shou</span>Cloud
+                <span class="text-emerald-600 dark:text-emerald-500">Shou</span>Cloud
             </a>
 
             <div class="flex items-center space-x-6">
                 <x-theme-switch />
                 <a href="{{ route('login') }}"
-                    class="px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                    class="px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition">
                     Se connecter
                 </a>
             </div>
@@ -21,12 +21,12 @@
         <main class="flex-1 flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8 relative overflow-hidden">
             {{-- Fond décoratif --}}
             <div
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 dark:bg-indigo-600/10 blur-[100px] rounded-full -z-10 pointer-events-none">
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 dark:bg-emerald-600/10 blur-[100px] rounded-full -z-10 pointer-events-none">
             </div>
 
             {{-- Carte --}}
             <div
-                class="w-full max-w-md space-y-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 z-10">
+                class="w-full max-w-md space-y-8 bg-ivory-100 dark:bg-emerald-dark-500 p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-emerald-dark-400 z-10">
 
                 <div class="text-center">
                     <h2 class="mt-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -78,32 +78,79 @@
                         </div>
 
                         {{-- Password Validation Checklist --}}
-                        <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-sm" x-show="password.length > 0" x-transition x-cloak>
-                            <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Critères du mot de passe :</h4>
+                        <div class="mt-4 p-4 bg-gray-50 dark:bg-emerald-dark-600/50 rounded-lg text-sm"
+                            x-show="password.length > 0" x-transition x-cloak>
+                            <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Critères du mot de passe :
+                            </h4>
                             <ul class="space-y-1">
-                                <li class="flex items-center gap-2" :class="criteria.length ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
-                                    <svg x-show="criteria.length" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <svg x-show="!criteria.length" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                <li class="flex items-center gap-2"
+                                    :class="criteria.length ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-gray-400'">
+                                    <svg x-show="criteria.length" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <svg x-show="!criteria.length" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
                                     <span x-text="'Au moins ' + policy.min + ' caractères'"></span>
                                 </li>
-                                <li x-show="policy.mixedCase" class="flex items-center gap-2" :class="criteria.mixed ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
-                                    <svg x-show="criteria.mixed" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <svg x-show="!criteria.mixed" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                <li x-show="policy.mixedCase" class="flex items-center gap-2"
+                                    :class="criteria.mixed ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-gray-400'">
+                                    <svg x-show="criteria.mixed" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <svg x-show="!criteria.mixed" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
                                     Majuscule & Minuscule
                                 </li>
-                                <li x-show="policy.numbers" class="flex items-center gap-2" :class="criteria.number ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
-                                    <svg x-show="criteria.number" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <svg x-show="!criteria.number" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                <li x-show="policy.numbers" class="flex items-center gap-2"
+                                    :class="criteria.number ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+                                    <svg x-show="criteria.number" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <svg x-show="!criteria.number" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
                                     Au moins un chiffre
                                 </li>
-                                <li x-show="policy.symbols" class="flex items-center gap-2" :class="criteria.symbol ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
-                                    <svg x-show="criteria.symbol" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <svg x-show="!criteria.symbol" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                <li x-show="policy.symbols" class="flex items-center gap-2"
+                                    :class="criteria.symbol ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+                                    <svg x-show="criteria.symbol" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <svg x-show="!criteria.symbol" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
                                     Au moins un symbole
                                 </li>
-                                <li class="flex items-center gap-2" :class="criteria.match ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
-                                    <svg x-show="criteria.match" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <svg x-show="!criteria.match" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                <li class="flex items-center gap-2"
+                                    :class="criteria.match ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+                                    <svg x-show="criteria.match" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <svg x-show="!criteria.match" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
                                     Les mots de passe correspondent
                                 </li>
                             </ul>
@@ -117,8 +164,8 @@
                                                     <x-checkbox name="terms" id="terms" required />
                                                     <div class="ms-2">
                                                         {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                            'terms_of_service' => '<a target="_blank" href="' . route('terms.show') . '" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">' . __('Terms of Service') . '</a>',
-                            'privacy_policy' => '<a target="_blank" href="' . route('policy.show') . '" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">' . __('Privacy Policy') . '</a>',
+                            'terms_of_service' => '<a target="_blank" href="' . route('terms.show') . '" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 dark:focus:ring-offset-gray-800">' . __('Terms of Service') . '</a>',
+                            'privacy_policy' => '<a target="_blank" href="' . route('policy.show') . '" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 dark:focus:ring-offset-gray-800">' . __('Privacy Policy') . '</a>',
                         ]) !!}
                                                     </div>
                                                 </div>
@@ -135,10 +182,10 @@
                     {{-- Divider --}}
                     <div class="relative mt-8">
                         <div class="absolute inset-0 flex items-center">
-                            <span class="w-full border-t border-gray-300 dark:border-gray-700"></span>
+                            <span class="w-full border-t border-gray-300 dark:border-emerald-dark-400"></span>
                         </div>
                         <div class="relative flex justify-center text-xs uppercase">
-                            <span class="bg-white dark:bg-gray-800 px-2 text-gray-500 dark:text-gray-400">
+                            <span class="bg-white dark:bg-emerald-dark-500 px-2 text-gray-500 dark:text-gray-400">
                                 Ou s'inscrire avec
                             </span>
                         </div>
@@ -147,7 +194,7 @@
                     {{-- Bouton Google --}}
                     <div class="mt-6">
                         <a href="{{ route('auth.google') }}"
-                            class="flex w-full items-center justify-center gap-3 rounded-md bg-white dark:bg-slate-800 px-3 py-3 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 hover:bg-gray-50 dark:hover:bg-slate-700 focus-visible:ring-transparent transition-all duration-200">
+                            class="flex w-full items-center justify-center gap-3 rounded-md bg-white dark:bg-emerald-dark-600 px-3 py-3 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-emerald-dark-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-500 focus-visible:ring-transparent transition-all duration-200">
                             <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
                                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
