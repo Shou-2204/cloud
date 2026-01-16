@@ -27,7 +27,7 @@
                 this.confirmModal.planKey = key;
                 this.confirmModal.planName = name;
                 this.confirmModal.annual = this.annual;
-                this.confirmModal.price = this.annual ? this.plans[key].yearly : this.plans[key].monthly;
+                this.confirmModal.price = this.annual ? this.plans[key].price_yearly : this.plans[key].price_monthly;
                 this.confirmModal.open = true;
             },
             submitSwap() {
