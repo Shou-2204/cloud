@@ -5,3 +5,33 @@
 [x-cloak] {
     display: none;
 }
+
+/* Base layer for consistent theming */
+@layer base {
+    /* Light mode defaults */
+    :root {
+        --color-bg-primary: theme('colors.ivory.DEFAULT');
+        --color-bg-secondary: theme('colors.ivory.100');
+        --color-bg-tertiary: theme('colors.ivory.200');
+    }
+
+    /* Dark mode overrides */
+    .dark {
+        --color-bg-primary: theme('colors.emerald-dark.DEFAULT');
+        --color-bg-secondary: theme('colors.emerald-dark.500');
+        --color-bg-tertiary: theme('colors.emerald-dark.600');
+    }
+}
+
+/* Utility classes for themed backgrounds */
+@layer utilities {
+    .bg-themed {
+        background-color: var(--color-bg-primary);
+    }
+    .bg-themed-secondary {
+        background-color: var(--color-bg-secondary);
+    }
+    .bg-themed-tertiary {
+        background-color: var(--color-bg-tertiary);
+    }
+}
