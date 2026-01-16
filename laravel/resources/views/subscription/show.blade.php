@@ -66,11 +66,17 @@
                                             {{ __('Réactiver maintenant') }}
                                         </a>
                                     @elseif ($subscription->active())
-                                        <span
-                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">
-                                            <span class="w-2 h-2 mr-2 bg-green-500 rounded-full"></span>
-                                            {{ __('Actif') }}
-                                        </span>
+                                        <div class="flex items-center gap-3">
+                                            <a href="{{ route('subscription.index') }}"
+                                                class="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">
+                                                {{ __('Changer d\'offre') }}
+                                            </a>
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">
+                                                <span class="w-2 h-2 mr-2 bg-green-500 rounded-full"></span>
+                                                {{ __('Actif') }}
+                                            </span>
+                                        </div>
                                     @else
                                         <span
                                             class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800">

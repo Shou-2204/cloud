@@ -15,7 +15,7 @@
     <div x-data="{ 
             annual: true,
             selected: 'smart',
-            plans: {{ Js::from($jsPlans) }},
+            plans: {!! json_encode($jsPlans) !!},
             confirmModal: {
                 open: false,
                 planName: '',
