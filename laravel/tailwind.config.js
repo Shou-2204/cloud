@@ -43,20 +43,20 @@ export default {
                     500: '#FFF2D5',
                     DEFAULT: '#FFFBF5',
                 },
-                // Emerald Dark - Mapped to Slate (Lighter background as requested)
+                // Emerald Dark - Mapped to NEUTRAL/GRAY for a Classic Monochrome Dark Mode
                 'emerald-dark': {
-                    DEFAULT: '#0f172a', // Slate 900 (Lighter than previous 950)
-                    50: '#f8fafc',
-                    100: '#f1f5f9',
-                    200: '#e2e8f0',
-                    300: '#cbd5e1',
-                    400: '#94a3b8',
-                    500: '#334155', // Slate 700 (Lighter panels)
-                    600: '#475569', // Slate 600
-                    700: '#64748b',
-                    800: '#1e293b', // Slate 800
-                    900: '#0f172a',
-                    950: '#020617',
+                    DEFAULT: '#0a0a0a', // Neutral 950 (Nearly Black)
+                    50: '#fafafa',
+                    100: '#f5f5f5',
+                    200: '#e5e5e5',
+                    300: '#d4d4d4',
+                    400: '#a3a3a3',
+                    500: '#404040', // Neutral 700 (Lighter panels)
+                    600: '#262626', // Neutral 800
+                    700: '#171717',
+                    800: '#0a0a0a', // Neutral 950 (Card Backgrounds)
+                    900: '#000000', // Pure Black
+                    950: '#000000',
                 },
             },
         },
