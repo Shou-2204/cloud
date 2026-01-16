@@ -66,9 +66,18 @@
                                     {{ $subscription->ends_at->format('d/m/Y') }}.
                                 </div>
                             @elseif ($subscription->active())
+                                @php
+                                    $stripeSubscription = $subscription->asStripeSubscription();
+                                    $currentPeriodEnd = $stripeSubscription->current_period_end ?? null;
+                                @endphp
                                 <div class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                                    {{ __('Prochain renouvellement le') }} :
-                                    {{ \Carbon\Carbon::createFromTimestamp($subscription->asStripeSubscription()->current_period_end)->format('d/m/Y') }}
+                                    @if($currentPeriodEnd)
+                                        {{ __('Abonné jusqu\'au') }} :
+                                        {{ \Carbon\Carbon::createFromTimestamp($currentPeriodEnd)->format('d/m/Y') }} <span
+                                            class="text-xs text-gray-500">({{ __('Renouvellement automatique') }})</span>
+                                    @else
+                                        {{ __('Actif') }}
+                                    @endif
                                 </div>
                             @endif
                         </div>
