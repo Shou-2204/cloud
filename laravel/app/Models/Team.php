@@ -28,6 +28,9 @@ class Team extends JetstreamTeam
         'personal_team',
         'join_code',
         'auto_approval',
+        'billing_name',
+        'billing_address',
+        'vat_id',
     ];
 
     protected $dispatchesEvents = [

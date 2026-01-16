@@ -88,6 +88,7 @@ Route::middleware([
             Route::get('/', [SubscriptionController::class, 'show'])->name('show');
             Route::post('/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
             Route::post('/resume', [SubscriptionController::class, 'resume'])->name('resume');
+            Route::post('/billing', [SubscriptionController::class, 'updateBilling'])->name('update-billing');
         });
 
     });

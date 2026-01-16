@@ -35,6 +35,32 @@ class SubscriptionController extends Controller
             ]);
     }
 
+    public function updateBilling(\Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'billing_name' => 'required|string|max:255',
+            'billing_address' => 'required|string|max:255',
+            'vat_id' => 'nullable|string|max:50',
+        ]);
+
+        $team = $request->user()->currentTeam;
+        $team->update($validated);
+
+        if ($team->hasStripeId()) {
+            $team->updateStripeCustomer([
+                'name' => $validated['billing_name'],
+                'address' => [
+                    'line1' => $validated['billing_address'],
+                ],
+            ]);
+
+            // Note: Syncing Tax IDs via API is complex due to validation/types.
+            // Ideally should use Customer Portal or explicit Tax ID management.
+        }
+
+        return back()->with('status', 'billing-updated');
+    }
+
     /**
      * Display the subscription management page.
      */

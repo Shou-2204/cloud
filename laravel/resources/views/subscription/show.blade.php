@@ -79,6 +79,57 @@
                 </div>
             </div>
 
+            {{-- FACTURATION --}}
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <section>
+                    <header>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                            {{ __('Informations de Facturation') }}
+                        </h2>
+                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                            {{ __('Ces informations apparaîtront sur vos futures factures.') }}
+                        </p>
+                    </header>
+
+                    <form method="POST" action="{{ route('subscription.update-billing', $team) }}"
+                        class="mt-6 space-y-6">
+                        @csrf
+
+                        <div>
+                            <x-label for="billing_name" value="{{ __('Nom de facturation / Entreprise') }}" />
+                            <x-input id="billing_name" name="billing_name" type="text" class="mt-1 block w-full"
+                                :value="old('billing_name', $team->billing_name)" required />
+                            <x-input-error for="billing_name" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-label for="billing_address" value="{{ __('Adresse de facturation') }}" />
+                            <x-input id="billing_address" name="billing_address" type="text" class="mt-1 block w-full"
+                                :value="old('billing_address', $team->billing_address)" required
+                                placeholder="123 Rue de la Paix, 75000 Paris" />
+                            <x-input-error for="billing_address" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-label for="vat_id" value="{{ __('Numéro de TVA (Optionnel)') }}" />
+                            <x-input id="vat_id" name="vat_id" type="text" class="mt-1 block w-full"
+                                :value="old('vat_id', $team->vat_id)" placeholder="FRXX123456789" />
+                            <x-input-error for="vat_id" class="mt-2" />
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <x-button>{{ __('Enregistrer') }}</x-button>
+
+                            @if (session('status') === 'billing-updated')
+                                <p x-data="{ show: true }" x-show="show" x-transition
+                                    x-init="setTimeout(() => show = false, 2000)"
+                                    class="text-sm text-gray-600 dark:text-gray-400">{{ __('Enregistré.') }}</p>
+                            @endif
+                        </div>
+                    </form>
+                </section>
+            </div>
+
             {{-- FACTURES --}}
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <section>
