@@ -198,18 +198,8 @@ class SubscriptionController extends Controller
     {
         $this->authorize('update', $team);
 
-        // Optional: Save the feedback/reason from $request->input('reason')
-
-        if ($team->subscription('default')->onGracePeriod()) {
-            // Already on grace period
-            return back()->with('status', 'Votre abonnement est déjà en cours d\'annulation.');
-        }
-
-        // Cancel at end of period
-        $team->subscription('default')->cancel();
-
-        return redirect()->route('subscription.show', $team)
-            ->with('status', 'Votre abonnement a été annulé avec succès. Il restera actif jusqu\'à la fin de la période.');
+        // Redirect to Stripe Billing Portal
+        return $team->redirectToBillingPortal(route('subscription.show', $team));
     }
 
     /**

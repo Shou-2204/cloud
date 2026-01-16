@@ -61,17 +61,14 @@
                             </div>
 
                             @if ($subscription->onGracePeriod())
-                                <div class="text-sm text-yellow-600 dark:text-yellow-400">
+                                <div class="text-sm text-yellow-600 dark:text-yellow-400 mt-2">
                                     {{ __('Votre abonnement prendra fin le') }}
                                     {{ $subscription->ends_at->format('d/m/Y') }}.
-
-                                    <form method="POST" action="{{ route('subscription.resume', $team) }}" class="mt-2">
-                                        @csrf
-                                        <button type="submit"
-                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 underline text-sm font-medium">
-                                            {{ __('Réactiver mon abonnement') }}
-                                        </button>
-                                    </form>
+                                </div>
+                            @elseif ($subscription->active())
+                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                                    {{ __('Prochain renouvellement le') }} :
+                                    {{ \Carbon\Carbon::createFromTimestamp($subscription->asStripeSubscription()->current_period_end)->format('d/m/Y') }}
                                 </div>
                             @endif
                         </div>
