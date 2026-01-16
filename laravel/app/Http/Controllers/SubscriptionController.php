@@ -28,7 +28,50 @@ class SubscriptionController extends Controller
                 ->with('status', 'Vous avez déjà un abonnement actif pour cette équipe.');
         }
 
+        // Check if billing info is missing
+        if (empty($team->billing_name) || empty($team->billing_address)) {
+            return view('subscription.checkout-form', [
+                'team' => $team,
+                'price' => $price
+            ]);
+        }
+
         return $team->newSubscription('default', $price)
+            ->checkout([
+                'success_url' => route('dashboard'),
+                'cancel_url' => route('subscription.index'),
+            ]);
+    }
+
+    public function storeBillingAndCheckout(\Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'billing_name' => 'required|string|max:255',
+            'billing_address' => 'required|string|max:255',
+            'vat_id' => 'nullable|string|max:50',
+            'price' => 'required|string',
+        ]);
+
+        $team = $request->user()->currentTeam;
+
+        $team->update([
+            'billing_name' => $validated['billing_name'],
+            'billing_address' => $validated['billing_address'],
+            'vat_id' => $validated['vat_id'],
+        ]);
+
+        // Sync with Stripe Customer immediately if exists
+        if ($team->hasStripeId()) {
+            $team->updateStripeCustomer([
+                'name' => $validated['billing_name'],
+                'address' => [
+                    'line1' => $validated['billing_address'],
+                ],
+            ]);
+        }
+
+        // Proceed to checkout
+        return $team->newSubscription('default', $validated['price'])
             ->checkout([
                 'success_url' => route('dashboard'),
                 'cancel_url' => route('subscription.index'),

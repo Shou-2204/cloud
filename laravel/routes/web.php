@@ -18,6 +18,7 @@ Route::get('/pricing', [SubscriptionController::class, 'index'])->name('subscrip
 
 // Action de paiement (Lien vers Stripe)
 Route::get('/subscribe/{price}', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
+Route::post('/subscribe/checkout', [SubscriptionController::class, 'storeBillingAndCheckout'])->name('subscription.store-checkout');
 
 Route::get('/', function () {
     return view('welcome');
