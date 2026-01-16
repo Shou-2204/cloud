@@ -1,27 +1,62 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Actions\Billing\SwapSubscription;
+use App\Actions\Billing\SyncStripeBilling;
+use App\Http\Requests\Billing\StoreBillingRequest;
+use App\Http\Requests\Billing\SwapSubscriptionRequest;
 use App\Models\Team;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Exception;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Cashier\Checkout;
 
+/**
+ * Handles subscription management: pricing, checkout, billing, and plan swaps.
+ */
 class SubscriptionController extends Controller
 {
+    public function __construct(
+        protected SyncStripeBilling $syncStripeBilling,
+        protected SwapSubscription $swapSubscription,
+    ) {
+    }
+
     /**
      * Display the pricing page (public).
      */
-    public function index()
+    public function index(): View
     {
         return view('subscription.index');
     }
 
     /**
-     * Checkout logic (existing).
+     * Redirect to current team's subscription page.
      */
-    public function checkout($price)
+    public function redirectToCurrentTeam(): RedirectResponse
     {
-        $team = auth()->user()->currentTeam;
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user->current_team_id) {
+            return redirect()->route('onboarding');
+        }
+
+        return redirect()->route('subscription.show', $user->current_team_id);
+    }
+
+    /**
+     * Handle checkout flow - show billing form or redirect to Stripe.
+     */
+    public function checkout(string $price): View|Checkout|RedirectResponse
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $team = $user->currentTeam;
 
         if ($team->subscribed('default')) {
             return redirect()->route('subscription.show', $team)
@@ -29,172 +64,55 @@ class SubscriptionController extends Controller
         }
 
         // Check if billing info is missing
-        if (empty($team->billing_name) || empty($team->billing_address) || empty($team->billing_city) || empty($team->billing_postal_code) || empty($team->billing_country)) {
+        if ($this->isBillingInfoMissing($team)) {
             return view('subscription.checkout-form', [
                 'team' => $team,
-                'price' => $price
+                'price' => $price,
             ]);
         }
 
-        return $team->newSubscription('default', $price)
-            ->checkout([
-                'success_url' => route('dashboard'),
-                'cancel_url' => route('subscription.index'),
-            ]);
+        return $this->createCheckoutSession($team, $price);
     }
 
-    public function storeBillingAndCheckout(\Illuminate\Http\Request $request)
+    /**
+     * Store billing info and proceed to Stripe checkout.
+     */
+    public function storeBillingAndCheckout(StoreBillingRequest $request): Checkout
     {
-        $validated = $request->validate([
-            'billing_name' => 'required|string|max:255',
-            'billing_address' => 'required|string|max:255',
-            'billing_address_line2' => 'nullable|string|max:255',
-            'billing_city' => 'required|string|max:255',
-            'billing_state' => 'nullable|string|max:255',
-            'billing_postal_code' => 'required|string|max:20',
-            'billing_country' => 'required|string|max:2',
-            'vat_id' => 'nullable|string|max:50',
-            'price' => 'required|string',
-        ]);
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+        $team = $user->currentTeam;
 
-        $team = $request->user()->currentTeam;
+        $this->updateTeamBilling($team, $request->validated());
+        $this->syncStripeBilling->execute($team);
 
-        $team->update([
-            'billing_name' => $validated['billing_name'],
-            'billing_address' => $validated['billing_address'],
-            'billing_address_line2' => $validated['billing_address_line2'] ?? null,
-            'billing_city' => $validated['billing_city'],
-            'billing_state' => $validated['billing_state'] ?? null,
-            'billing_postal_code' => $validated['billing_postal_code'],
-            'billing_country' => $validated['billing_country'],
-            'vat_id' => $validated['vat_id'] ?? null,
-        ]);
-
-        $this->syncStripeBilling($team);
-
-        // Proceed to checkout
-        return $team->newSubscription('default', $validated['price'])
-            ->checkout([
-                'success_url' => route('dashboard'),
-                'cancel_url' => route('subscription.index'),
-            ]);
+        return $this->createCheckoutSession($team, $request->validated('price'));
     }
 
-    public function updateBilling(\Illuminate\Http\Request $request)
+    /**
+     * Update team billing information.
+     */
+    public function updateBilling(StoreBillingRequest $request, Team $team): RedirectResponse
     {
-        $validated = $request->validate([
-            'billing_name' => 'required|string|max:255',
-            'billing_address' => 'required|string|max:255',
-            'billing_address_line2' => 'nullable|string|max:255',
-            'billing_city' => 'required|string|max:255',
-            'billing_state' => 'nullable|string|max:255',
-            'billing_postal_code' => 'required|string|max:20',
-            'billing_country' => 'required|string|max:2',
-            'vat_id' => 'nullable|string|max:50',
-        ]);
+        $this->authorize('update', $team);
 
-        $team = $request->user()->currentTeam;
-        $team->update([
-            'billing_name' => $validated['billing_name'],
-            'billing_address' => $validated['billing_address'],
-            'billing_address_line2' => $validated['billing_address_line2'] ?? null,
-            'billing_city' => $validated['billing_city'],
-            'billing_state' => $validated['billing_state'] ?? null,
-            'billing_postal_code' => $validated['billing_postal_code'],
-            'billing_country' => $validated['billing_country'],
-            'vat_id' => $validated['vat_id'] ?? null,
-        ]);
-
-        $this->syncStripeBilling($team);
+        $this->updateTeamBilling($team, $request->validated());
+        $this->syncStripeBilling->execute($team);
 
         return back()->with('status', 'billing-updated');
-    }
-
-    protected function syncStripeBilling($team)
-    {
-        if (!$team->hasStripeId()) {
-            return;
-        }
-
-        // 1. Sync Customer Details (Name & Address) using model defaults
-        $team->syncStripeCustomerDetails();
-
-        // 2. Manage Tax IDs (remains manual as it's specific)
-        $existingTaxIds = $team->taxIds();
-        $vatId = $team->vat_id;
-
-        // If no VAT ID provided, remove all existing ones
-        if (empty($vatId)) {
-            foreach ($existingTaxIds as $taxId) {
-                $team->deleteTaxId($taxId->id);
-            }
-            return;
-        }
-
-        // Determine Type
-        $type = $this->determineTaxIdType($vatId);
-
-        // Check if we already have this Tax ID
-        $hasTaxId = $existingTaxIds->contains(function ($t) use ($vatId, $type) {
-            return $t->value === $vatId && $t->type === $type;
-        });
-
-        if ($hasTaxId) {
-            return; // Already synced
-        }
-
-        // Remove old Tax IDs (assuming 1 active for simplicity)
-        foreach ($existingTaxIds as $taxId) {
-            $team->deleteTaxId($taxId->id);
-        }
-
-        // Create new Tax ID
-        try {
-            $team->createTaxId($type, $vatId);
-        } catch (\Exception $e) {
-            // Ignore invalid tax ID errors from Stripe to prevent crashing
-            // user feedback could be improved here but preventing 500 is priority
-        }
-    }
-
-    protected function determineTaxIdType($vatId)
-    {
-        $vatId = strtoupper(trim($vatId));
-
-        if (str_starts_with($vatId, 'GB')) {
-            return 'gb_vat';
-        }
-
-        if (str_starts_with($vatId, 'CH')) {
-            return 'ch_vat';
-        }
-
-        // Default to EU VAT for most European countries
-        return 'eu_vat';
     }
 
     /**
      * Display the subscription management page.
      */
-    public function show(Team $team)
+    public function show(Team $team): View
     {
-        // Security check
         $this->authorize('update', $team);
 
         $subscription = $team->subscription('default');
-        $invoices = $team->invoicesRel; // Using the relationship we just added
+        $invoices = $team->invoicesRel;
 
-        // Determine Plan Name
-        $planName = 'Abonnement Inconnu';
-        if ($subscription) {
-            $stripePrice = $subscription->stripe_price;
-            foreach (config('subscription_plans') as $plan) {
-                if ($plan['stripe_id_monthly'] === $stripePrice || $plan['stripe_id_yearly'] === $stripePrice) {
-                    $planName = $plan['name'];
-                    break;
-                }
-            }
-        }
+        $planName = $this->resolvePlanName($subscription?->stripe_price);
 
         return view('subscription.show', [
             'team' => $team,
@@ -207,28 +125,13 @@ class SubscriptionController extends Controller
     /**
      * Swap the subscription to a new plan.
      */
-    public function update(Request $request, Team $team)
+    public function update(SwapSubscriptionRequest $request, Team $team): RedirectResponse
     {
         $this->authorize('update', $team);
 
-        $validated = $request->validate([
-            'price' => 'required|string',
-        ]);
-
-        $subscription = $team->subscription('default');
-
-        if (!$subscription) {
-            return redirect()->route('subscription.index')
-                ->with('error', 'Aucun abonnement actif à modifier.');
-        }
-
-        // Swap and prorate
-        // Cashier gère le prorata par défaut lors d'un swapAndInvoice ou on peut le forcer.
-        // Ici on utilise swap() et on laisse Stripe gérer la facturation immédiate ou différée selon le réglage
-        // Mais souvent on veut facturer le prorata tout de suite pour éviter les surprises : swapAndInvoice
         try {
-            $subscription->swapAndInvoice($validated['price']);
-        } catch (\Exception $e) {
+            $this->swapSubscription->execute($team, $request->validated('price'));
+        } catch (Exception $e) {
             return back()->with('error', 'Erreur lors du changement de plan : ' . $e->getMessage());
         }
 
@@ -237,20 +140,19 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Cancel the subscription.
+     * Redirect to Stripe Billing Portal for cancellation.
      */
-    public function cancel(Request $request, Team $team)
+    public function cancel(Team $team): mixed
     {
         $this->authorize('update', $team);
 
-        // Redirect to Stripe Billing Portal
         return $team->redirectToBillingPortal(route('subscription.show', $team));
     }
 
     /**
-     * Resume the subscription.
+     * Resume a cancelled subscription.
      */
-    public function resume(Team $team)
+    public function resume(Team $team): RedirectResponse
     {
         $this->authorize('update', $team);
 
@@ -258,5 +160,70 @@ class SubscriptionController extends Controller
 
         return redirect()->route('subscription.show', $team)
             ->with('status', 'Votre abonnement a été réactivé !');
+    }
+
+    // ========================================
+    // Private Helper Methods
+    // ========================================
+
+    /**
+     * Check if required billing fields are missing.
+     */
+    private function isBillingInfoMissing(Team $team): bool
+    {
+        return empty($team->billing_name)
+            || empty($team->billing_address)
+            || empty($team->billing_city)
+            || empty($team->billing_postal_code)
+            || empty($team->billing_country);
+    }
+
+    /**
+     * Update team with billing information.
+     *
+     * @param array<string, mixed> $data
+     */
+    private function updateTeamBilling(Team $team, array $data): void
+    {
+        $team->update([
+            'billing_name' => $data['billing_name'],
+            'billing_address' => $data['billing_address'],
+            'billing_address_line2' => $data['billing_address_line2'] ?? null,
+            'billing_city' => $data['billing_city'],
+            'billing_state' => $data['billing_state'] ?? null,
+            'billing_postal_code' => $data['billing_postal_code'],
+            'billing_country' => $data['billing_country'],
+            'vat_id' => $data['vat_id'] ?? null,
+        ]);
+    }
+
+    /**
+     * Create a Stripe Checkout session.
+     */
+    private function createCheckoutSession(Team $team, string $price): Checkout
+    {
+        return $team->newSubscription('default', $price)
+            ->checkout([
+                'success_url' => route('dashboard'),
+                'cancel_url' => route('subscription.index'),
+            ]);
+    }
+
+    /**
+     * Resolve plan name from Stripe price ID.
+     */
+    private function resolvePlanName(?string $stripePrice): string
+    {
+        if (!$stripePrice) {
+            return 'Abonnement Inconnu';
+        }
+
+        foreach (config('subscription_plans') as $plan) {
+            if ($plan['stripe_id_monthly'] === $stripePrice || $plan['stripe_id_yearly'] === $stripePrice) {
+                return $plan['name'];
+            }
+        }
+
+        return 'Abonnement Inconnu';
     }
 }
