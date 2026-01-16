@@ -141,7 +141,8 @@
                                                     mais si le bucket est public ou si on utilise Storage::url() ça peut aller pour
                                                     un MVP.
                                                     Idéalement: route download --}}
-                                                    <a href="{{ Storage::disk('s3')->url($invoice->s3_path) }}" target="_blank"
+                                                    <a href="{{ Storage::disk('s3')->temporaryUrl($invoice->s3_path, now()->addMinutes(10)) }}"
+                                                        target="_blank"
                                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600">
                                                         {{ __('Télécharger PDF') }}
                                                     </a>
