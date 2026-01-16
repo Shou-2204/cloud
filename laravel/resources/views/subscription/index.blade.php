@@ -71,6 +71,17 @@
                         </button>
                     </div>
                 </div>
+                
+                {{-- Comparison Link --}}
+                <div class="mt-6">
+                    <a href="#compare" 
+                       class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 flex items-center justify-center gap-1 transition-colors">
+                        Voir le comparatif complet
+                        <svg class="h-4 w-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -261,7 +272,7 @@
         </div>
 
         {{-- COMPARISON TABLE SECTION --}}
-        <div class="bg-gray-50 dark:bg-gray-900/50 py-24 border-t border-gray-200 dark:border-gray-800">
+        <div id="compare" class="bg-gray-50 dark:bg-gray-900/50 py-24 border-t border-gray-200 dark:border-gray-800 scroll-mt-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl font-bold">Comparatif détaillé</h2>
