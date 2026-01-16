@@ -62,12 +62,12 @@ class SubscriptionController extends Controller
         $team->update([
             'billing_name' => $validated['billing_name'],
             'billing_address' => $validated['billing_address'],
-            'billing_address_line2' => $validated['billing_address_line2'],
+            'billing_address_line2' => $validated['billing_address_line2'] ?? null,
             'billing_city' => $validated['billing_city'],
-            'billing_state' => $validated['billing_state'],
+            'billing_state' => $validated['billing_state'] ?? null,
             'billing_postal_code' => $validated['billing_postal_code'],
             'billing_country' => $validated['billing_country'],
-            'vat_id' => $validated['vat_id'],
+            'vat_id' => $validated['vat_id'] ?? null,
         ]);
 
         $this->syncStripeBilling($team);
@@ -94,7 +94,16 @@ class SubscriptionController extends Controller
         ]);
 
         $team = $request->user()->currentTeam;
-        $team->update($validated);
+        $team->update([
+            'billing_name' => $validated['billing_name'],
+            'billing_address' => $validated['billing_address'],
+            'billing_address_line2' => $validated['billing_address_line2'] ?? null,
+            'billing_city' => $validated['billing_city'],
+            'billing_state' => $validated['billing_state'] ?? null,
+            'billing_postal_code' => $validated['billing_postal_code'],
+            'billing_country' => $validated['billing_country'],
+            'vat_id' => $validated['vat_id'] ?? null,
+        ]);
 
         $this->syncStripeBilling($team);
 
