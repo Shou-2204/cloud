@@ -43,20 +43,20 @@ export default {
                     500: '#FFF2D5',
                     DEFAULT: '#FFFBF5',
                 },
-                // Deep emerald for dark mode backgrounds
+                // Emerald Dark - NOW MAPPED TO SLATE/ZINC for a Premium Dark Mode
                 'emerald-dark': {
-                    DEFAULT: '#0f3d2e',
-                    50: '#1a5c45',
-                    100: '#17503c',
-                    200: '#144534',
-                    300: '#123a2c',
-                    400: '#0f3d2e',
-                    500: '#0c3226',
-                    600: '#0a281e',
-                    700: '#081f17',
-                    800: '#05150f',
-                    900: '#030b08',
-                    950: '#010503',
+                    DEFAULT: '#020617', // Slate 950 (Main Background)
+                    50: '#f8fafc',
+                    100: '#f1f5f9',
+                    200: '#e2e8f0',
+                    300: '#cbd5e1',
+                    400: '#94a3b8',
+                    500: '#1e293b', // Slate 800 (Cards/Panels)
+                    600: '#334155', // Slate 700 (Borders/Secondary)
+                    700: '#475569',
+                    800: '#1e293b',
+                    900: '#0f172a',
+                    950: '#020617',
                 },
             },
         },
