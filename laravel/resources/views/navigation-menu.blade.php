@@ -1,5 +1,5 @@
 <nav x-data="{ open: false }"
-    class="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 sticky top-0 z-30 transition-colors duration-300">
+    class="bg-emerald-light-600 dark:bg-emerald-dark border-b border-emerald-light-500 dark:border-emerald-dark-600 sticky top-0 z-30 transition-colors duration-300">
 
     {{-- 1. CORRECTION ICI : On définit l'équipe cible intelligemment --}}
     @php
@@ -13,15 +13,13 @@
             <div class="flex">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}"
-                        class="text-xl font-bold tracking-tighter text-gray-900 dark:text-white transition-colors">
-                        <span class="text-indigo-600 dark:text-indigo-500">Shou</span>Cloud
+                        class="text-xl font-bold tracking-tighter text-white transition-colors">
+                        <span class="text-emerald-200 dark:text-emerald-400">Shou</span>Cloud
                     </a>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    {{-- Dashboard Link Removed as per user request --}}
                 </div>
             </div>
 
@@ -43,7 +41,7 @@
                             @else
                                 <span class="inline-flex rounded-md">
                                     <button type="button"
-                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-950 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-slate-900 active:bg-gray-50 dark:active:bg-slate-900 transition ease-in-out duration-150">
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-ivory dark:bg-emerald-dark hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-ivory-200 dark:focus:bg-emerald-dark-500 active:bg-ivory-200 dark:active:bg-emerald-dark-500 transition ease-in-out duration-150">
                                         {{ $user->name }}
                                         <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
                                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -64,11 +62,7 @@
                                 {{ __('Mon Profil') }}
                             </x-dropdown-link>
 
-                            @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                <x-dropdown-link href="{{ route('api-tokens.index') }}">
-                                    {{ __('Tokens API') }}
-                                </x-dropdown-link>
-                            @endif
+                            {{-- API Tokens Link Removed --}}
 
                             <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
@@ -136,9 +130,7 @@
     <div :class="{'block': open, 'hidden': ! open}"
         class="hidden sm:hidden bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            {{-- Mobile Dashboard Link Removed --}}
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-700">

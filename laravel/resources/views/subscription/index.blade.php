@@ -36,13 +36,13 @@
                 document.getElementById('swap-price-input').value = price;
                 document.getElementById('swap-form').submit();
             }
-         }" class="bg-white dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100 h-full">
+         }" class="bg-ivory dark:bg-emerald-dark font-sans text-gray-900 dark:text-gray-100 h-full">
 
         {{-- HERO SECTION --}}
         <div class="relative overflow-hidden pt-16 pb-12 lg:pt-24 lg:pb-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                 <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
-                    Boostez votre <span class="text-indigo-600 dark:text-indigo-400">fidélisation client</span>.
+                    Boostez votre <span class="text-emerald-600 dark:text-emerald-400">fidélisation client</span>.
                 </h1>
                 <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-400">
                     Des outils puissants pour collecter des avis, engager vos clients et automatiser votre marketing.
@@ -75,7 +75,7 @@
                 {{-- Comparison Link --}}
                 <div class="mt-6">
                     <a href="#compare" 
-                       class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 flex items-center justify-center gap-1 transition-colors">
+                       class="text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 flex items-center justify-center gap-1 transition-colors">
                         Voir le comparatif complet
                         <svg class="h-4 w-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -113,12 +113,12 @@
 
                     @if ($plan['popular'])
                          {{-- POPULAR CARD (Highlighted) --}}
-                        <div class="h-full relative p-8 bg-white dark:bg-gray-800 rounded-3xl border-2 border-indigo-600 shadow-2xl z-10 scale-105 flex flex-col">
+                        <div class="h-full relative p-8 bg-white dark:bg-gray-800 rounded-3xl border-2 border-emerald-600 shadow-2xl z-10 scale-105 flex flex-col">
                             <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2">
-                                <span class="bg-indigo-600 text-white text-[10px] font-bold uppercase py-1 px-3 rounded-bl-xl rounded-tr-xl shadow-sm">Populaire</span>
+                                <span class="bg-emerald-600 text-white text-[10px] font-bold uppercase py-1 px-3 rounded-bl-xl rounded-tr-xl shadow-sm">Populaire</span>
                             </div>
                             <div class="mb-4">
-                                <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">{{ $plan['name'] }}</h3>
+                                <h3 class="text-xl font-bold text-emerald-600 dark:text-emerald-400">{{ $plan['name'] }}</h3>
                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 min-h-[40px]">{{ $plan['description'] }}</p>
                             </div>
                             <div class="mb-6 flex items-baseline gap-1">
@@ -139,12 +139,12 @@
                             @elseif ($isSubscribed)
                                 <button 
                                     @click="openConfirmModal('{{ $plan['name'] }}', '{{ $key }}')"
-                                    class="w-full block text-center bg-indigo-600 text-white font-semibold py-4 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all mb-8">
+                                    class="w-full block text-center bg-emerald-600 text-white font-semibold py-4 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all mb-8">
                                     {{ __('Changer pour ' . $plan['name']) }}
                                 </button>
                             @else
                                 <a :href="'/subscribe/' + (annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly)"
-                                    class="w-full block text-center bg-indigo-600 text-white font-semibold py-4 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all mb-8">
+                                    class="w-full block text-center bg-emerald-600 text-white font-semibold py-4 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all mb-8">
                                     {{ __('Choisir ' . $plan['name']) }}
                                 </a>
                             @endif
@@ -163,7 +163,7 @@
                                         @php $feature = $plan['features'][$i]; @endphp
                                         <li class="flex items-start gap-3 {{ !$feature['included'] ? 'text-gray-400 dark:text-gray-600' : '' }}">
                                             @if ($feature['included'])
-                                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                 </svg>
                                             @else
@@ -286,7 +286,7 @@
                                 <th class="py-4 px-6 bg-transparent w-1/4"></th>
                                 <th class="py-4 px-6 text-center text-lg font-bold w-1/4">Starter</th>
                                 <th
-                                    class="py-4 px-6 text-center text-lg font-bold text-indigo-600 dark:text-indigo-400 w-1/4 bg-white dark:bg-gray-800 rounded-t-xl border-x-2 border-t-2 border-indigo-600 border-b-0 shadow-lg">
+                                    class="py-4 px-6 text-center text-lg font-bold text-emerald-600 dark:text-emerald-400 w-1/4 bg-white dark:bg-gray-800 rounded-t-xl border-x-2 border-t-2 border-emerald-600 border-b-0 shadow-lg">
                                     Smart
                                 </th>
                                 <th class="py-4 px-6 text-center text-lg font-bold w-1/4">Pro</th>
@@ -300,7 +300,7 @@
                                 <td class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">Avis &
                                     Réputation</td>
                                 <td></td>
-                                <td class="bg-white dark:bg-gray-800 border-x-2 border-indigo-600"></td>
+                                <td class="bg-white dark:bg-gray-800 border-x-2 border-emerald-600"></td>
                                 <td></td>
                             </tr>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
@@ -311,7 +311,7 @@
                                             d="M5 13l4 4L19 7"></path>
                                     </svg></td>
                                 <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
                                     <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
@@ -331,7 +331,7 @@
                                             d="M5 13l4 4L19 7"></path>
                                     </svg></td>
                                 <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
                                     <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
@@ -351,7 +351,7 @@
                                             d="M5 13l4 4L19 7"></path>
                                     </svg></td>
                                 <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
                                     <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
@@ -367,7 +367,7 @@
                                 <td class="py-4 px-6 text-sm font-medium">Réponses Automatisées (IA)</td>
                                 <td class="text-center py-4 text-gray-300">-</td>
                                 <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-gray-300">
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-gray-300">
                                     -</td>
                                 <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
@@ -382,14 +382,14 @@
                                 <td class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
                                     Fidélisation & Wallet</td>
                                 <td></td>
-                                <td class="bg-white dark:bg-gray-800 border-x-2 border-indigo-600"></td>
+                                <td class="bg-white dark:bg-gray-800 border-x-2 border-emerald-600"></td>
                                 <td></td>
                             </tr>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td class="py-4 px-6 text-sm font-medium">Cartes de Fidélité Digitales</td>
                                 <td class="text-center py-4 text-gray-300">-</td>
                                 <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
                                     <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
@@ -405,7 +405,7 @@
                                 <td class="py-4 px-6 text-sm font-medium">Notifications Push (Geo-fencing)</td>
                                 <td class="text-center py-4 text-gray-300">-</td>
                                 <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-green-500">
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
                                     <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
@@ -421,9 +421,9 @@
                                 <td class="py-4 px-6 text-sm font-medium">CRM Client</td>
                                 <td class="text-center py-4 text-gray-300">Basic</td>
                                 <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 font-bold text-indigo-600">
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 font-bold text-emerald-600">
                                     Avancé</td>
-                                <td class="text-center py-4 font-bold text-indigo-600">Expert</td>
+                                <td class="text-center py-4 font-bold text-emerald-600">Expert</td>
                             </tr>
 
                             {{-- SECTION: MARKETING AUTOMATION --}}
@@ -432,14 +432,14 @@
                                 <td class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
                                     Marketing & Automation</td>
                                 <td></td>
-                                <td class="bg-white dark:bg-gray-800 border-x-2 border-indigo-600"></td>
+                                <td class="bg-white dark:bg-gray-800 border-x-2 border-emerald-600"></td>
                                 <td></td>
                             </tr>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td class="py-4 px-6 text-sm font-medium">Campagnes SMS Marketing</td>
                                 <td class="text-center py-4 text-gray-300">-</td>
                                 <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 text-gray-300">
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-gray-300">
                                     -</td>
                                 <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
@@ -451,7 +451,7 @@
                                 <td class="py-4 px-6 text-sm font-medium">Support Client</td>
                                 <td class="text-center py-4 text-sm">Email 48h</td>
                                 <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-indigo-600 border-b-2 rounded-b-xl text-sm font-bold">
+                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 border-b-2 rounded-b-xl text-sm font-bold">
                                     Chat & Email 24h</td>
                                 <td class="text-center py-4 text-sm font-bold">Dédié + Téléphone</td>
                             </tr>
@@ -493,8 +493,8 @@
                     
                     <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
-                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg class="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                                 </svg>
                             </div>
@@ -508,7 +508,7 @@
                                     </p>
                                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
                                         Le nouveau tarif sera de 
-                                        <span class="font-bold text-indigo-600 dark:text-indigo-400 text-lg">
+                                        <span class="font-bold text-emerald-600 dark:text-emerald-400 text-lg">
                                             <span x-text="confirmModal.annual ? Math.round(confirmModal.price / 12) : confirmModal.price"></span>€<span class="text-sm text-gray-500 dark:text-gray-400">/mois</span>
                                         </span>
                                         <span x-show="confirmModal.annual" class="hidden text-xs text-gray-400" :class="{ 'inline': confirmModal.annual }"> (facturé annuellement)</span>.
@@ -535,7 +535,7 @@
                     <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                         <button type="button" 
                                 @click="submitSwap()"
-                                class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto">
+                                class="inline-flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto">
                             Confirmer le changement
                         </button>
                         <button type="button" 
