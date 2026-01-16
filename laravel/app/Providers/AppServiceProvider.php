@@ -31,5 +31,46 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
             URL::forceRootUrl(Config::get('app.url'));
         }
+
+        // Dynamic Password Policy for Registration View
+        \Illuminate\Support\Facades\View::composer('auth.register', function ($view) {
+            $rulesProvider = new class {
+                use \App\Actions\Fortify\PasswordValidationRules;
+                public function getRules()
+                {
+                    return $this->passwordRules();
+                }
+            };
+
+            $rules = $rulesProvider->getRules();
+            $passwordRule = null;
+
+            foreach ($rules as $rule) {
+                if ($rule instanceof \Illuminate\Validation\Rules\Password) {
+                    $passwordRule = $rule;
+                    break;
+                }
+            }
+
+            $policy = [
+                'min' => 8,
+                'mixedCase' => false,
+                'numbers' => false,
+                'symbols' => false,
+            ];
+
+            if ($passwordRule) {
+                $reflection = new \ReflectionClass($passwordRule);
+                foreach (['min', 'mixedCase', 'numbers', 'symbols'] as $prop) {
+                    if ($reflection->hasProperty($prop)) {
+                        $property = $reflection->getProperty($prop);
+                        $property->setAccessible(true);
+                        $policy[$prop] = $property->getValue($passwordRule);
+                    }
+                }
+            }
+
+            $view->with('passwordPolicy', $policy);
+        });
     }
 }
