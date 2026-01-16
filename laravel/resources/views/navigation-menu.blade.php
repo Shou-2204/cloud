@@ -1,5 +1,5 @@
 <nav x-data="{ open: false }"
-    class="bg-ivory dark:bg-emerald-dark border-b border-gray-200 dark:border-emerald-dark-600 sticky top-0 z-30 transition-colors duration-300">
+    class="bg-emerald-light-600 dark:bg-emerald-dark border-b border-emerald-light-500 dark:border-emerald-dark-600 sticky top-0 z-30 transition-colors duration-300">
 
     {{-- 1. CORRECTION ICI : On définit l'équipe cible intelligemment --}}
     @php
@@ -13,13 +13,14 @@
             <div class="flex">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}"
-                        class="text-xl font-bold tracking-tighter text-gray-900 dark:text-white transition-colors">
-                        <span class="text-emerald-600 dark:text-emerald-400">Shou</span>Cloud
+                        class="text-xl font-bold tracking-tighter text-white transition-colors">
+                        <span class="text-emerald-200 dark:text-emerald-400">Shou</span>Cloud
                     </a>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')"
+                        class="text-white hover:text-emerald-100 dark:text-gray-200 dark:hover:text-white">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>

@@ -64,18 +64,19 @@
 
             {{-- CARTE PRINCIPALE : STATUTS & BIENVENUE --}}
             <div
-                class="mx-4 sm:mx-0 bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-2xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                class="mx-4 sm:mx-0 bg-ivory-100 dark:bg-emerald-dark-500 overflow-hidden shadow-xl rounded-2xl border border-gray-200 dark:border-emerald-dark-400 transition-colors duration-300">
 
-                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                <div
+                    class="p-6 lg:p-8 bg-ivory-100 dark:bg-emerald-dark-500 border-b border-gray-200 dark:border-emerald-dark-400">
                     <div class="flex items-center space-x-4">
                         <div class="flex-shrink-0">
-                            <img class="h-12 w-12 rounded-full object-cover border-2 border-indigo-500"
+                            <img class="h-12 w-12 rounded-full object-cover border-2 border-emerald-500"
                                 src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}">
                         </div>
                         <div>
                             <h1 class="text-2xl font-medium text-gray-900 dark:text-white">
                                 Bienvenue, <span
-                                    class="text-indigo-600 dark:text-indigo-400 font-bold">{{ Auth::user()->name }}</span>
+                                    class="text-emerald-600 dark:text-emerald-400 font-bold">{{ Auth::user()->name }}</span>
                                 !
                             </h1>
                             <p class="text-sm text-gray-500 dark:text-gray-400">Ravi de vous revoir sur votre instance
@@ -84,13 +85,13 @@
                     </div>
                 </div>
 
-                <div class="bg-gray-50 dark:bg-gray-800/50 grid grid-cols-1 md:grid-cols-2 gap-6 p-6 lg:p-8">
+                <div class="bg-ivory-50 dark:bg-emerald-dark-600/50 grid grid-cols-1 md:grid-cols-2 gap-6 p-6 lg:p-8">
 
                     {{-- Bloc Équipe Actuelle --}}
                     <div
-                        class="flex items-center space-x-4 p-5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm transition-transform hover:scale-[1.02] duration-300">
+                        class="flex items-center space-x-4 p-5 rounded-xl bg-white dark:bg-emerald-dark-600 border border-gray-200 dark:border-emerald-dark-500 shadow-sm transition-transform hover:scale-[1.02] duration-300">
                         <div
-                            class="p-3 bg-indigo-100 dark:bg-indigo-900/40 rounded-lg text-indigo-600 dark:text-indigo-400">
+                            class="p-3 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg text-emerald-600 dark:text-emerald-400">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -108,7 +109,7 @@
 
                     {{-- Bloc Statut Compte --}}
                     <div
-                        class="flex items-center space-x-4 p-5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm transition-transform hover:scale-[1.02] duration-300">
+                        class="flex items-center space-x-4 p-5 rounded-xl bg-white dark:bg-emerald-dark-600 border border-gray-200 dark:border-emerald-dark-500 shadow-sm transition-transform hover:scale-[1.02] duration-300">
                         <div
                             class="p-3 bg-green-100 dark:bg-green-900/40 rounded-lg text-green-600 dark:text-green-400">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -119,9 +120,11 @@
                         </div>
                         <div>
                             <div class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                {{ __('Statut du Compte') }}</div>
+                                {{ __('Statut du Compte') }}
+                            </div>
                             <div class="text-lg font-bold text-gray-900 dark:text-white leading-none">
-                                {{ __('Vérifié') }}</div>
+                                {{ __('Vérifié') }}
+                            </div>
                         </div>
                     </div>
 
@@ -129,20 +132,20 @@
 
                 {{-- FOOTER CARTE : Actions rapides --}}
                 <div
-                    class="px-6 py-4 bg-gray-50 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+                    class="px-6 py-4 bg-gray-50 dark:bg-emerald-dark-600/80 border-t border-gray-200 dark:border-emerald-dark-400 flex justify-end">
                     @if(!Auth::user()->currentTeam)
                         <a href="{{ route('onboarding') }}"
-                            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 focus:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                            class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-500 focus:bg-emerald-500 active:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                             {{ __('Créer une équipe') }}
                         </a>
                     @elseif(Auth::user()->currentTeam->subscribed())
                         <a href="{{ route('subscription.show', Auth::user()->currentTeam) }}"
-                            class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150">
+                            class="inline-flex items-center px-4 py-2 bg-white dark:bg-emerald-dark-500 border border-gray-300 dark:border-emerald-dark-400 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-emerald-dark-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150">
                             {{ __('Gérer mon abonnement') }} &rarr;
                         </a>
                     @else
                         <a href="{{ route('subscription.index') }}"
-                            class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 shadow-lg shadow-indigo-500/30">
+                            class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:from-emerald-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 shadow-lg shadow-emerald-500/30">
                             {{ __('Passer Premium') }}
                         </a>
                     @endif
