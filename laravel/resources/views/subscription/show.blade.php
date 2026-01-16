@@ -28,74 +28,66 @@
                             </p>
                         </header>
 
-                        <div class="mt-6 space-y-4">
+                        <div class="mt-6">
+                            {{-- NEW LAYOUT: Header with Plan Name + Status/Button --}}
                             <div
-                                class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                class="flex items-center justify-between p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
                                 <div>
-                                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Offre</div>
-                                    <div class="text-xl font-bold text-indigo-600 dark:text-indigo-400">Premium Team
+                                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Votre Offre
                                     </div>
-                                </div>
-                                <div>
-                                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400 text-right">Statut
+                                    <div class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">
+                                        {{ $planName }}
                                     </div>
-                                    <div class="flex items-center justify-end">
-                                        @if ($subscription->onGracePeriod())
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                                {{ __('Annulation programmée') }}
-                                            </span>
-                                        @elseif ($subscription->active())
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                                {{ __('Actif') }}
-                                            </span>
-                                        @else
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                                                {{ __('Inactif') }}
-                                            </span>
+
+                                    {{-- Subtitles / Dates --}}
+                                    @if ($subscription->onGracePeriod())
+                                        <div class="text-sm text-yellow-600 dark:text-yellow-400 mt-2 font-medium">
+                                            Fin de l'abonnement le {{ $subscription->ends_at->format('d/m/Y') }}
+                                        </div>
+                                    @elseif ($subscription->active())
+                                        @php
+                                            $stripeSubscription = $subscription->asStripeSubscription();
+                                            $currentPeriodEnd = $stripeSubscription->current_period_end ?? null;
+                                        @endphp
+                                        @if($currentPeriodEnd)
+                                            <div class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                                Renouvellement le
+                                                {{ \Carbon\Carbon::createFromTimestamp($currentPeriodEnd)->format('d/m/Y') }}
+                                            </div>
                                         @endif
-                                    </div>
+                                    @endif
+                                </div>
+
+                                {{-- ACTION AREA --}}
+                                <div>
+                                    @if ($subscription->onGracePeriod())
+                                        <a href="{{ route('subscription.resume', $team) }}"
+                                            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-bold text-sm text-white uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all">
+                                            {{ __('Réactiver maintenant') }}
+                                        </a>
+                                    @elseif ($subscription->active())
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">
+                                            <span class="w-2 h-2 mr-2 bg-green-500 rounded-full"></span>
+                                            {{ __('Actif') }}
+                                        </span>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800">
+                                            {{ __('Inactif') }}
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 
-                            @if ($subscription->onGracePeriod())
-                                <div class="mt-2">
-                                    <div class="text-sm text-yellow-600 dark:text-yellow-400">
-                                        {{ __('Votre abonnement prendra fin le') }}
-                                        {{ $subscription->ends_at->format('d/m/Y') }}.
-                                    </div>
-                                    <div class="mt-2">
-                                        <a href="{{ route('subscription.index') }}"
-                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 underline text-sm font-medium">
-                                            {{ __('Se réabonner') }}
-                                        </a>
-                                    </div>
-                                </div>
-                            @elseif ($subscription->active())
-                                @php
-                                    $stripeSubscription = $subscription->asStripeSubscription();
-                                    $currentPeriodEnd = $stripeSubscription->current_period_end ?? null;
-                                @endphp
-                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                                    @if($currentPeriodEnd)
-                                        {{ __('Abonné jusqu\'au') }} :
-                                        {{ \Carbon\Carbon::createFromTimestamp($currentPeriodEnd)->format('d/m/Y') }} <span
-                                            class="text-xs text-gray-500">({{ __('Renouvellement automatique') }})</span>
-                                    @else
-                                        {{ __('Actif') }}
-                                    @endif
-                                </div>
-                            @else
-                                <div class="mt-4">
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                                        {{ __('Votre abonnement est inactif. Réabonnez-vous pour accéder à toutes les fonctionnalités.') }}
+                            {{-- Additional messages if needed --}}
+                            @if (!$subscription->active() && !$subscription->onGracePeriod())
+                                <div class="mt-4 text-center">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                        {{ __('Votre abonnement est arrivé à expiration.') }}
                                     </p>
                                     <a href="{{ route('subscription.index') }}"
-                                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                        {{ __('Se réabonner') }}
-                                    </a>
+                                        class="text-indigo-600 font-medium hover:underline">Voir les offres</a>
                                 </div>
                             @endif
                         </div>

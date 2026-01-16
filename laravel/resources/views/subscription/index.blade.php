@@ -15,8 +15,28 @@
     <div x-data="{ 
             annual: true,
             selected: 'smart',
-            plans: {{ Js::from($jsPlans) }}
-         }" class="bg-white dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100">
+            plans: {{ Js::from($jsPlans) }},
+            confirmModal: {
+                open: false,
+                planName: '',
+                planKey: '',
+                price: 0
+            },
+            openConfirmModal(name, key) {
+                this.confirmModal.planKey = key;
+                this.confirmModal.planName = name;
+                this.confirmModal.price = this.annual ? this.plans[key].yearly : this.plans[key].monthly; // Display monthly equivalent or full price? Usually for swap confirmation we show what they will pay if immediate, or just the new rate. Let's show the new rate.
+                // Actually the user pays the difference. Let's just show the new rate per month/year.
+                // Better: Show the raw price like in the card.
+                this.confirmModal.open = true;
+            },
+            submitSwap() {
+                // Set the hidden input value
+                let price = this.annual ? this.plans[this.confirmModal.planKey].yearly : this.plans[this.confirmModal.planKey].monthly;
+                document.getElementById('swap-price-input').value = price;
+                document.getElementById('swap-form').submit();
+            }
+         }" class="bg-white dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100 h-full">
 
         {{-- HERO SECTION --}}
         <div class="relative overflow-hidden pt-16 pb-12 lg:pt-24 lg:pb-20">
@@ -107,10 +127,7 @@
                                 </button>
                             @elseif ($isSubscribed)
                                 <button 
-                                    @click="if(confirm('Voulez-vous vraiment changer pour l\'offre {{ $plan['name'] }} ? Le montant sera ajusté au prorata.')) { 
-                                        document.getElementById('swap-price-input').value = annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly; 
-                                        document.getElementById('swap-form').submit(); 
-                                    }"
+                                    @click="openConfirmModal('{{ $plan['name'] }}', '{{ $key }}')"
                                     class="w-full block text-center bg-indigo-600 text-white font-semibold py-4 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all mb-8">
                                     {{ __('Changer pour ' . $plan['name']) }}
                                 </button>
@@ -181,10 +198,7 @@
                                 </button>
                             @elseif ($isSubscribed)
                                 <button 
-                                    @click="if(confirm('Voulez-vous vraiment changer pour l\'offre {{ $plan['name'] }} ? Le montant sera ajusté au prorata.')) { 
-                                        document.getElementById('swap-price-input').value = annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly; 
-                                        document.getElementById('swap-form').submit(); 
-                                    }"
+                                    @click="openConfirmModal('{{ $plan['name'] }}', '{{ $key }}')"
                                     class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
                                     {{ __('Changer pour ' . $plan['name']) }}
                                 </button>
@@ -437,5 +451,90 @@
             </div>
         </div>
 
+    </div>
+
+    {{-- CUSTOM CONFIRMATION MODAL --}}
+    <div x-show="confirmModal.open" style="display: none;" class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        
+        {{-- Backdrop --}}
+        <div x-show="confirmModal.open" 
+             x-transition:enter="ease-out duration-300" 
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100" 
+             x-transition:leave="ease-in duration-200" 
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                
+                {{-- Modal Panel --}}
+                <div x-show="confirmModal.open" 
+                     @click.away="confirmModal.open = false"
+                     x-transition:enter="ease-out duration-300" 
+                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                     x-transition:leave="ease-in duration-200" 
+                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
+                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-gray-200 dark:border-gray-700">
+                    
+                    <div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg class="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                </svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-100" id="modal-title">
+                                    Changer d'offre
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        Vous êtes sur le point de passer à l'offre <span class="font-bold text-gray-900 dark:text-white" x-text="confirmModal.planName"></span>.
+                                    </p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                        Le nouveau tarif sera de 
+                                        <span class="font-bold text-indigo-600 dark:text-indigo-400 text-lg">
+                                            <span x-text="annual ? Math.round(confirmModal.price / 12) : confirmModal.price"></span>€<span class="text-sm text-gray-500 dark:text-gray-400">/mois</span>
+                                        </span>
+                                        <span x-show="annual" class="hidden text-xs text-gray-400" :class="{ 'inline': annual }"> (facturé annuellement)</span>.
+                                    </p>
+                                    <div class="mt-4 rounded-md bg-yellow-50 dark:bg-yellow-900/30 p-3">
+                                        <div class="flex">
+                                            <div class="flex-shrink-0">
+                                                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <div class="ml-3">
+                                                <h3 class="text-xs font-medium text-yellow-800 dark:text-yellow-200">Ajustement au prorata</h3>
+                                                <div class="mt-1 text-xs text-yellow-700 dark:text-yellow-300">
+                                                    <p>La différence de prix sera calculée immédiatement et votre méthode de paiement sera débitée ou créditée en conséquence.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" 
+                                @click="submitSwap()"
+                                class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto">
+                            Confirmer le changement
+                        </button>
+                        <button type="button" 
+                                @click="confirmModal.open = false"
+                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto">
+                            Annuler
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </x-app-layout>

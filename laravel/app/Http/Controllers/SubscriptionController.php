@@ -184,10 +184,23 @@ class SubscriptionController extends Controller
         $subscription = $team->subscription('default');
         $invoices = $team->invoicesRel; // Using the relationship we just added
 
+        // Determine Plan Name
+        $planName = 'Abonnement Inconnu';
+        if ($subscription) {
+            $stripePrice = $subscription->stripe_price;
+            foreach (config('subscription_plans') as $plan) {
+                if ($plan['stripe_id_monthly'] === $stripePrice || $plan['stripe_id_yearly'] === $stripePrice) {
+                    $planName = $plan['name'];
+                    break;
+                }
+            }
+        }
+
         return view('subscription.show', [
             'team' => $team,
             'subscription' => $subscription,
             'invoices' => $invoices,
+            'planName' => $planName,
         ]);
     }
 
