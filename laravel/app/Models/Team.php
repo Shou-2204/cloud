@@ -80,4 +80,27 @@ class Team extends JetstreamTeam
             'owner_email' => $this->owner->email,
         ];
     }
+
+    /**
+     * Get the name that should be synced to Stripe.
+     */
+    public function stripeName(): ?string
+    {
+        return $this->billing_name ?? $this->name;
+    }
+
+    /**
+     * Get the address that should be synced to Stripe.
+     */
+    public function stripeAddress(): array
+    {
+        return [
+            'line1' => $this->billing_address,
+            'line2' => $this->billing_address_line2,
+            'city' => $this->billing_city,
+            'state' => $this->billing_state,
+            'postal_code' => $this->billing_postal_code,
+            'country' => $this->billing_country,
+        ];
+    }
 }

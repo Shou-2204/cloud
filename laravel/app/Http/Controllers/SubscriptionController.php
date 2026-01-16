@@ -116,20 +116,10 @@ class SubscriptionController extends Controller
             return;
         }
 
-        // 1. Update Customer Details (Name & Address)
-        $team->updateStripeCustomer([
-            'name' => $team->billing_name,
-            'address' => [
-                'line1' => $team->billing_address,
-                'line2' => $team->billing_address_line2,
-                'city' => $team->billing_city,
-                'state' => $team->billing_state,
-                'postal_code' => $team->billing_postal_code,
-                'country' => $team->billing_country,
-            ],
-        ]);
+        // 1. Sync Customer Details (Name & Address) using model defaults
+        $team->syncStripeCustomerDetails();
 
-        // 2. Manage Tax IDs
+        // 2. Manage Tax IDs (remains manual as it's specific)
         $existingTaxIds = $team->taxIds();
         $vatId = $team->vat_id;
 
