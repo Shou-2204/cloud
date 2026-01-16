@@ -16,10 +16,10 @@ trait PasswordValidationRules
         return [
             'required',
             'string',
-            Password::min(12)           // 12 caractères mini
+            Password::min(8)           // 8 caractères mini
                 ->mixedCase()           // Majuscule + Minuscule
                 ->numbers()             // Chiffres
-                ->symbols()             // Symboles
+                //->symbols()             // Symboles
                 ->uncompromised(),      // Vérif fuite de données
             'confirmed',
         ];
