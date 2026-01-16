@@ -15,7 +15,7 @@
     <div x-data="{ 
             annual: true,
             selected: 'smart',
-            plans: {!! json_encode($jsPlans) !!},
+            plans: {{ json_encode($jsPlans) }},
             confirmModal: {
                 open: false,
                 planName: '',
