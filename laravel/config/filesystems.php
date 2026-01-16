@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -64,7 +64,7 @@ return [
                     CURLOPT_SSL_VERIFYHOST => 0, // Désactive la vérif du nom de domaine
                     CURLOPT_SSL_VERIFYPEER => 0, // Désactive la vérif de l'émetteur
                 ],
-             ],
+            ],
         ],
 
         // 2. Disque Privé (Documents Teams, Factures, Backups)
@@ -96,6 +96,7 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
+            'temporary_url' => env('AWS_URL'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
             'report' => false,
