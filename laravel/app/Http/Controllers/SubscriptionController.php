@@ -21,8 +21,14 @@ class SubscriptionController extends Controller
      */
     public function checkout($price)
     {
-        return auth()->user()->currentTeam
-            ->newSubscription('default', $price)
+        $team = auth()->user()->currentTeam;
+
+        if ($team->subscribed('default')) {
+            return redirect()->route('subscription.show', $team)
+                ->with('status', 'Vous avez déjà un abonnement actif pour cette équipe.');
+        }
+
+        return $team->newSubscription('default', $price)
             ->checkout([
                 'success_url' => route('dashboard'),
                 'cancel_url' => route('subscription.index'),

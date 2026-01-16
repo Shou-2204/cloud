@@ -61,6 +61,10 @@
         </div>
 
         {{-- PRICING CARDS (GRID) --}}
+        @php
+            $currentTeam = auth()->user()->currentTeam;
+            $isSubscribed = $currentTeam && $currentTeam->subscribed('default');
+        @endphp
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
             <div class="grid md:grid-cols-3 gap-8 items-start">
 
@@ -80,9 +84,9 @@
                         <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
                     </div>
 
-                    <a :href="'/subscribe/' + (annual ? plans.starter.yearly : plans.starter.monthly)"
+                    <a @if($isSubscribed) href="{{ route('subscription.show', $currentTeam) }}" @else :href="'/subscribe/' + (annual ? plans.starter.yearly : plans.starter.monthly)" @endif
                         class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
-                        Commencer
+                        {{ $isSubscribed ? __('Gérer mon abonnement') : __('Commencer') }}
                     </a>
 
                     <div class="flex-1 space-y-4">
@@ -151,9 +155,9 @@
                         <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
                     </div>
 
-                    <a :href="'/subscribe/' + (annual ? plans.smart.yearly : plans.smart.monthly)"
+                    <a @if($isSubscribed) href="{{ route('subscription.show', $currentTeam) }}" @else :href="'/subscribe/' + (annual ? plans.smart.yearly : plans.smart.monthly)" @endif
                         class="w-full block text-center bg-indigo-600 text-white font-semibold py-4 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all mb-8">
-                        Choisir Smart
+                        {{ $isSubscribed ? __('Gérer mon abonnement') : __('Choisir Smart') }}
                     </a>
 
                     <div class="flex-1 space-y-4">
@@ -211,9 +215,10 @@
                         <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
                     </div>
 
-                    <a :href="'/subscribe/' + (annual ? plans.pro.yearly : plans.pro.monthly)"
+                    <a @if($isSubscribed) href="{{ route('subscription.show', $currentTeam) }}" @else
+                    :href="'/subscribe/' + (annual ? plans.pro.yearly : plans.pro.monthly)" @endif
                         class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
-                        Choisir Pro
+                        {{ $isSubscribed ? __('Gérer mon abonnement') : __('Choisir Pro') }}
                     </a>
 
                     <div class="flex-1 space-y-4">
