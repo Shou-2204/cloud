@@ -157,7 +157,7 @@
                             <div class="md:col-span-2">
                                 <x-label for="billing_country" value="{{ __('Pays') }}" />
                                 <select id="billing_country" name="billing_country"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 rounded-md shadow-sm">
+                                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-[var(--primary-black)] dark:text-gray-300 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 rounded-md shadow-sm">
                                     <option value="FR" @selected(old('billing_country', $team->billing_country) === 'FR')>
                                         France</option>
                                     <option value="BE" @selected(old('billing_country', $team->billing_country) === 'BE')>
@@ -196,7 +196,7 @@
             </div>
 
             {{-- FACTURES --}}
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+            <div class="p-4 sm:p-8 bg-white dark:bg-[var(--gray900)] shadow sm:rounded-lg">
                 <section>
                     <header class="flex items-center justify-between mb-4">
                         <div>
@@ -216,7 +216,7 @@
                     @else
                         <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700/50">
+                                <thead class="bg-gray-50 dark:bg-[var(--primary-black)]">
                                     <tr>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -235,7 +235,8 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                <tbody
+                                    class="bg-white dark:bg-[var(--gray900)] divide-y divide-gray-200 dark:divide-gray-700">
                                     @foreach($invoices as $invoice)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
@@ -277,7 +278,7 @@
 
             {{-- ZONE DE DANGER : DÉSABONNEMENT --}}
             @if (!$subscription->onGracePeriod() && $subscription->active())
-                    <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg border-l-4 border-red-500">
+                    <div class="p-4 sm:p-8 bg-white dark:bg-[var(--gray900)] shadow sm:rounded-lg border-l-4 border-red-500">
                         <div class="max-w-xl">
                             <section>
                                 <header>
@@ -292,7 +293,7 @@
                                 <div class="mt-6">
                                     <button x-data=""
                                         x-on:click.prevent="$dispatch('open-modal', 'confirm-subscription-cancellation')"
-                                        class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                        class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-[var(--gray900)] transition ease-in-out duration-150">
                                         {{ __('Se désabonner') }}
                                     </button>
                                 </div>
