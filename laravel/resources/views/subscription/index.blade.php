@@ -87,17 +87,20 @@
 
         {{-- PRICING CARDS (GRID) --}}
         @php
-            $currentTeam = auth()->user()->currentTeam;
+            $user = auth()->user();
+            $currentTeam = $user ? $user->currentTeam : null;
             $isSubscribed = $currentTeam && $currentTeam->subscribed('default');
         @endphp
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
             <div class="grid md:grid-cols-3 gap-8 items-start">
-
+                
+                @auth
                 {{-- Formulaire caché pour le swap (utilisé par JS ou direct) --}}
                 <form id="swap-form" method="POST" action="{{ route('subscription.swap', $currentTeam) }}" class="hidden">
                     @csrf
                     <input type="hidden" name="price" id="swap-price-input">
                 </form>
+                @endauth
 
                 @foreach ($plans as $key => $plan)
                     @php
@@ -129,25 +132,33 @@
                             </div>
 
                             {{-- BUTTON LOGIC --}}
-                            @if ($isCurrentPlan)
-                                <button disabled class="w-full block text-center bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800 font-semibold py-4 rounded-xl cursor-not-allowed mb-8">
-                                    <span class="flex items-center justify-center gap-2">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                        {{ __('Votre offre actuelle') }}
-                                    </span>
-                                </button>
-                            @elseif ($isSubscribed)
-                                <button 
-                                    @click="openConfirmModal('{{ $plan['name'] }}', '{{ $key }}')"
-                                    class="w-full block text-center bg-emerald-600 text-white font-semibold py-4 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all mb-8">
-                                    {{ __('Changer pour ' . $plan['name']) }}
-                                </button>
+                            @auth
+                                @if ($isCurrentPlan)
+                                    <button disabled class="w-full block text-center bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800 font-semibold py-4 rounded-xl cursor-not-allowed mb-8">
+                                        <span class="flex items-center justify-center gap-2">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            {{ __('Votre offre actuelle') }}
+                                        </span>
+                                    </button>
+                                @elseif ($isSubscribed)
+                                    <button 
+                                        @click="openConfirmModal('{{ $plan['name'] }}', '{{ $key }}')"
+                                        class="w-full block text-center bg-emerald-600 text-white font-semibold py-4 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all mb-8">
+                                        {{ __('Changer pour ' . $plan['name']) }}
+                                    </button>
+                                @else
+                                    <a :href="'/subscribe/' + (annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly)"
+                                        class="w-full block text-center bg-emerald-600 text-white font-semibold py-4 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all mb-8">
+                                        {{ __('Choisir ' . $plan['name']) }}
+                                    </a>
+                                @endif
                             @else
-                                <a :href="'/subscribe/' + (annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly)"
-                                    class="w-full block text-center bg-emerald-600 text-white font-semibold py-4 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all mb-8">
-                                    {{ __('Choisir ' . $plan['name']) }}
+                                {{-- GUEST VIEW --}}
+                                <a href="{{ route('register') }}"
+                                   class="w-full block text-center bg-emerald-600 text-white font-semibold py-4 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all mb-8">
+                                    {{ __('Commencer') }}
                                 </a>
-                            @endif
+                            @endauth
 
                             <div class="flex-1 space-y-4">
                                 @if (isset($plan['features'][0]['highlight']) && $plan['features'][0]['highlight'])
@@ -200,25 +211,34 @@
                             </div>
 
                             {{-- BUTTON LOGIC STANDARD --}}
-                            @if ($isCurrentPlan)
-                                <button disabled class="w-full block text-center bg-gray-100 text-gray-500 border border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700 font-semibold py-3 rounded-xl cursor-not-allowed mb-8">
-                                    <span class="flex items-center justify-center gap-2">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                        {{ __('Votre offre actuelle') }}
-                                    </span>
-                                </button>
-                            @elseif ($isSubscribed)
-                                <button 
-                                    @click="openConfirmModal('{{ $plan['name'] }}', '{{ $key }}')"
-                                    class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
-                                    {{ __('Changer pour ' . $plan['name']) }}
-                                </button>
+                            {{-- BUTTON LOGIC STANDARD --}}
+                            @auth
+                                @if ($isCurrentPlan)
+                                    <button disabled class="w-full block text-center bg-gray-100 text-gray-500 border border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700 font-semibold py-3 rounded-xl cursor-not-allowed mb-8">
+                                        <span class="flex items-center justify-center gap-2">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            {{ __('Votre offre actuelle') }}
+                                        </span>
+                                    </button>
+                                @elseif ($isSubscribed)
+                                    <button 
+                                        @click="openConfirmModal('{{ $plan['name'] }}', '{{ $key }}')"
+                                        class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
+                                        {{ __('Changer pour ' . $plan['name']) }}
+                                    </button>
+                                @else
+                                    <a :href="'/subscribe/' + (annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly)"
+                                        class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
+                                        {{ $key === 'pro' ? __('Choisir Pro') : __('Choisir Starter') }}
+                                    </a>
+                                @endif
                             @else
-                                <a :href="'/subscribe/' + (annual ? plans.{{ $key }}.yearly : plans.{{ $key }}.monthly)"
+                                {{-- GUEST VIEW --}}
+                                <a href="{{ route('register') }}"
                                     class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
-                                    {{ $key === 'pro' ? __('Choisir Pro') : __('Commencer') }}
+                                    {{ __('Commencer') }}
                                 </a>
-                            @endif
+                            @endauth
 
                             <div class="flex-1 space-y-4">
                                  @if (isset($plan['features'][0]['highlight']) && $plan['features'][0]['highlight'])

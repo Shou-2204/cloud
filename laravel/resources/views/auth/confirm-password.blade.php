@@ -5,7 +5,7 @@
         <nav
             class="flex-none w-full py-5 px-8 flex justify-between items-center z-20 transition-colors duration-300 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 shadow-sm dark:shadow-xl">
             <a href="{{ url('/') }}" class="text-xl font-bold tracking-tighter text-gray-900 dark:text-white">
-                <span class="text-indigo-600 dark:text-indigo-500">Shou</span>Cloud
+                <span class="text-emerald-600 dark:text-emerald-500">Shou</span>Cloud
             </a>
             <div class="flex items-center space-x-6">
                 <x-theme-switch />
@@ -15,7 +15,7 @@
         {{-- MAIN CONTENT --}}
         <main class="flex-1 flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8 relative overflow-hidden">
             <div
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 dark:bg-indigo-600/10 blur-[100px] rounded-full -z-10 pointer-events-none">
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 dark:bg-emerald-600/10 blur-[100px] rounded-full -z-10 pointer-events-none">
             </div>
 
             <div

@@ -27,6 +27,7 @@
 
 <body class="font-sans antialiased" x-data="{ 
             theme: localStorage.getItem('theme') || 'system',
+            sidebarOpen: false, /* Add sidebar state here */
             init() {
                 // Apply initial theme
                 this.applyTheme(this.theme);
@@ -61,20 +62,23 @@
         }" x-init="init()">
     <x-banner />
 
-    <div class="min-h-screen bg-ivory dark:bg-emerald-dark">
-        @livewire('navigation-menu')
+    <div class="flex h-screen overflow-hidden bg-ivory dark:bg-emerald-dark">
+        {{-- SIDEBAR --}}
+        <x-app-sidebar />
 
-        @if (isset($header))
-            <header class="bg-ivory-100 dark:bg-emerald-dark-500 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif
+        {{-- MAIN CONTENT WRAPPER --}}
+        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+            {{-- TOPBAR (Navigation Menu) --}}
+            @livewire('navigation-menu')
 
-        <main>
-            {{ $slot }}
-        </main>
+            {{-- MAIN PAGE CONTENT --}}
+            <main class="flex-grow p-4 sm:p-6 lg:p-8">
+                {{ $slot }}
+            </main>
+
+            {{-- FOOTER --}}
+            <x-app-footer />
+        </div>
     </div>
 
     @stack('modals')

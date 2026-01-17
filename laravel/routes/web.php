@@ -43,6 +43,9 @@ Route::post('/subscribe/checkout', [SubscriptionController::class, 'storeBilling
 // Invite Links (Public with conditional redirect)
 Route::get('/invite/{code}', [InviteController::class, 'redirect'])->name('invite.link');
 
+// Sales Conditions (CGV)
+Route::view('/cgv', 'sales-conditions')->name('sales.show');
+
 // ============================================
 // AUTHENTICATED ROUTES
 // ============================================
