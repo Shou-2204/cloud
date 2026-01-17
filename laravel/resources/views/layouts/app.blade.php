@@ -27,13 +27,15 @@
 
 <body class="font-sans antialiased" x-data="{ 
             theme: localStorage.getItem('theme') || 'system',
-            sidebarOpen: false, /* Add sidebar state here */
+            sidebarOpen: false, /* Mobile sidebar state */
+            sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true', /* Desktop collapse state */
             init() {
                 // Apply initial theme
                 this.applyTheme(this.theme);
 
                 // Watch for changes
                 this.$watch('theme', val => this.applyTheme(val));
+                this.$watch('sidebarCollapsed', val => localStorage.setItem('sidebarCollapsed', val));
 
                 // Listen for system preference changes
                 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
@@ -69,7 +71,7 @@
         {{-- MAIN CONTENT WRAPPER --}}
         <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
             {{-- TOPBAR (Navigation Menu) --}}
-            @livewire('navigation-menu')
+            @include('navigation-menu')
 
             {{-- MAIN PAGE CONTENT --}}
             <main class="flex-grow p-4 sm:p-6 lg:p-8">

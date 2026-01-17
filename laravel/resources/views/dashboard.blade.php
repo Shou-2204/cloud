@@ -80,11 +80,27 @@
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Offre</h3>
                             <div class="font-bold text-xl text-gray-900 dark:text-white">
-                                @if(Auth::user()->currentTeam && Auth::user()->currentTeam->subscribed())
-                                    Premium
-                                @else
-                                    Gratuit
-                                @endif
+                                @php
+                                    $planName = 'Gratuit';
+                                    if (Auth::user()->currentTeam && Auth::user()->currentTeam->subscribed()) {
+                                        $subscription = Auth::user()->currentTeam->subscription();
+                                        if ($subscription) {
+                                            $priceId = $subscription->stripe_price;
+                                            $plans = config('subscription_plans');
+                                            foreach ($plans as $plan) {
+                                                if ($plan['stripe_id_monthly'] === $priceId || $plan['stripe_id_yearly'] === $priceId) {
+                                                    $planName = $plan['name'];
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        // Fallback if generic subscription
+                                        if ($planName === 'Gratuit') {
+                                            $planName = 'Premium';
+                                        }
+                                    }
+                                @endphp
+                                {{ $planName }}
                             </div>
                         </div>
                         <div class="mt-4">

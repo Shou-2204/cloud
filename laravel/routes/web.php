@@ -71,7 +71,9 @@ Route::middleware([
 
     // Jetstream Team Routes (explicit registration for reliability)
     Route::prefix('teams')->group(function (): void {
-        Route::get('/create', [\Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'create'])->name('teams.create');
+        Route::get('/create', function () {
+            return redirect()->route('onboarding');
+        })->name('teams.create');
         Route::get('/{team}', [\Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'show'])->name('teams.show');
         Route::put('/{team}', [\Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'update'])->name('teams.update');
     });

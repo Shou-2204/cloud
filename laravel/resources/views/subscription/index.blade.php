@@ -36,7 +36,7 @@
                 document.getElementById('swap-price-input').value = price;
                 document.getElementById('swap-form').submit();
             }
-         }" class="bg-ivory dark:bg-emerald-dark font-sans text-gray-900 dark:text-gray-100 h-full">
+         }" class="bg-ivory dark:bg-emerald-dark font-sans text-gray-900 dark:text-gray-100 min-h-full">
 
         {{-- HERO SECTION --}}
         <div class="relative overflow-hidden pt-16 pb-12 lg:pt-24 lg:pb-20">
