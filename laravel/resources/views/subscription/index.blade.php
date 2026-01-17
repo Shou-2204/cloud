@@ -271,6 +271,31 @@
             </div>
         </div>
 
+        {{-- ENTERPRISE / CUSTOM CTA --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 text-center">
+             <div class="relative bg-white dark:bg-gray-800 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+                
+                <div class="relative z-10 max-w-3xl mx-auto">
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                        Des besoins spécifiques ?
+                    </h3>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                        Pour les grandes entreprises ou les besoins particuliers, nous proposons des solutions sur mesure. 
+                        Contactez-nous pour obtenir un devis personnalisé.
+                    </p>
+                    
+                    <a href="mailto:contact@shoucloud.com" 
+                       class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all transform hover:scale-105 bg-gray-900 dark:bg-white dark:text-gray-900 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 shadow-lg">
+                        Demander un devis
+                        <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </a>
+                </div>
+             </div>
+        </div>
+
         {{-- COMPARISON TABLE SECTION --}}
         <div id="compare" class="bg-gray-50 dark:bg-gray-900/50 py-24 border-t border-gray-200 dark:border-gray-800 scroll-mt-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
