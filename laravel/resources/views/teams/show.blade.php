@@ -87,7 +87,7 @@
                                 </x-section-title>
 
                                 <div class="mt-5 md:mt-0 md:col-span-2">
-                                    <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
+                                    <div class="px-4 py-5 bg-white dark:bg-[var(--gray900)] sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
                                         <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
                                             {{ __('Cette équipe possède un abonnement actif. Pour la supprimer, vous devez d\'abord résilier votre abonnement dans la section Facturation.') }}
                                         </div>

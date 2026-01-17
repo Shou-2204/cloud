@@ -15,7 +15,7 @@
             @endif
 
             {{-- PLAN ACTUEL --}}
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+            <div class="p-4 sm:p-8 bg-white dark:bg-[var(--gray900)] shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     <section>
                         <header>
@@ -31,7 +31,7 @@
                         <div class="mt-6">
                             {{-- NEW LAYOUT: Header with Plan Name + Status/Button --}}
                             <div
-                                class="flex items-center justify-between p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                                class="flex items-center justify-between p-6 bg-gray-50 dark:bg-[var(--primary-black)] rounded-xl">
                                 <div>
                                     <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Votre Offre
                                     </div>
@@ -102,7 +102,7 @@
             </div>
 
             {{-- FACTURATION --}}
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+            <div class="p-4 sm:p-8 bg-white dark:bg-[var(--gray900)] shadow sm:rounded-lg">
                 <section>
                     <header>
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
