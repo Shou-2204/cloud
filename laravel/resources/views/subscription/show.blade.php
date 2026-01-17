@@ -35,7 +35,7 @@
                                 <div>
                                     <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Votre Offre
                                     </div>
-                                    <div class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">
+                                    <div class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
                                         {{ $planName }}
                                     </div>
 
@@ -62,13 +62,13 @@
                                 <div>
                                     @if ($subscription->onGracePeriod())
                                         <a href="{{ route('subscription.resume', $team) }}"
-                                            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-bold text-sm text-white uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all">
+                                            class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-lg font-bold text-sm text-white uppercase tracking-widest hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all">
                                             {{ __('Réactiver maintenant') }}
                                         </a>
                                     @elseif ($subscription->active())
                                         <div class="flex items-center gap-3">
                                             <a href="{{ route('subscription.index') }}"
-                                                class="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">
+                                                class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300">
                                                 {{ __('Changer d\'offre') }}
                                             </a>
                                             <span
@@ -93,7 +93,7 @@
                                         {{ __('Votre abonnement est arrivé à expiration.') }}
                                     </p>
                                     <a href="{{ route('subscription.index') }}"
-                                        class="text-indigo-600 font-medium hover:underline">Voir les offres</a>
+                                        class="text-emerald-600 font-medium hover:underline">Voir les offres</a>
                                 </div>
                             @endif
                         </div>
@@ -157,7 +157,7 @@
                             <div class="md:col-span-2">
                                 <x-label for="billing_country" value="{{ __('Pays') }}" />
                                 <select id="billing_country" name="billing_country"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 dark:focus:border-emerald-600 focus:ring-emerald-500 dark:focus:ring-emerald-600 rounded-md shadow-sm">
                                     <option value="FR" @selected(old('billing_country', $team->billing_country) === 'FR')>
                                         France</option>
                                     <option value="BE" @selected(old('billing_country', $team->billing_country) === 'BE')>
@@ -259,7 +259,7 @@
                                                     Idéalement: route download --}}
                                                     <a href="{{ Storage::disk('s3')->temporaryUrl($invoice->s3_path, now()->addMinutes(10)) }}"
                                                         target="_blank"
-                                                        class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600">
+                                                        class="text-emerald-600 hover:text-emerald-900 dark:text-emerald-400 dark:hover:text-emerald-600">
                                                         {{ __('Télécharger PDF') }}
                                                     </a>
                                                 @else
@@ -311,7 +311,7 @@
                                     </div>
 
                                     <div x-show="show"
-                                        class="mb-6 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:max-w-2xl sm:mx-auto"
+                                        class="mb-6 bg-white dark:bg-emerald-dark-600 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:max-w-2xl sm:mx-auto"
                                         x-trap.inert.noscroll="show" x-transition:enter="ease-out duration-300"
                                         x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                                         x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -333,25 +333,25 @@
                                             <div class="mt-6 space-y-4">
                                                 <label class="flex items-center">
                                                     <input type="radio" name="reason" value="too_expensive"
-                                                        class="form-radio text-indigo-600 dark:bg-gray-700 dark:border-gray-600"
+                                                        class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600"
                                                         required>
                                                     <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Trop cher</span>
                                                 </label>
                                                 <label class="flex items-center">
                                                     <input type="radio" name="reason" value="missing_features"
-                                                        class="form-radio text-indigo-600 dark:bg-gray-700 dark:border-gray-600">
+                                                        class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600">
                                                     <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Fonctionnalités
                                                         manquantes</span>
                                                 </label>
                                                 <label class="flex items-center">
                                                     <input type="radio" name="reason" value="bugs"
-                                                        class="form-radio text-indigo-600 dark:bg-gray-700 dark:border-gray-600">
+                                                        class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600">
                                                     <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Trop de
                                                         bugs</span>
                                                 </label>
                                                 <label class="flex items-center">
                                                     <input type="radio" name="reason" value="other"
-                                                        class="form-radio text-indigo-600 dark:bg-gray-700 dark:border-gray-600">
+                                                        class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600">
                                                     <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Autre</span>
                                                 </label>
                                             </div>
@@ -359,7 +359,7 @@
                                             <div class="mt-4">
                                                 <label class="flex items-center">
                                                     <input type="checkbox" name="contact_allowed"
-                                                        class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                                                        class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-emerald-600 shadow-sm focus:ring-emerald-500">
                                                     <span
                                                         class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Pouvons-nous vous recontacter pour en discuter ?') }}</span>
                                                 </label>

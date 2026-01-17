@@ -138,18 +138,7 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Gérer vos informations</p>
                     </a>
 
-                    <a href="{{ route('api-tokens.index') }}"
-                        class="group bg-white dark:bg-emerald-dark-500 border border-gray-100 dark:border-emerald-dark-600 rounded-2xl p-6 hover:border-emerald-500 dark:hover:border-emerald-500 transition-all duration-300">
-                        <div
-                            class="text-gray-400 dark:text-gray-500 group-hover:text-emerald-500 transition-colors mb-3">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                            </svg>
-                        </div>
-                        <h4 class="font-semibold text-gray-900 dark:text-white">API Tokens</h4>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Clés de sécurité</p>
-                    </a>
+
 
                     {{-- Add more quick links as needed --}}
 

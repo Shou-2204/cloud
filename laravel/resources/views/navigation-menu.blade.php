@@ -19,10 +19,7 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')"
-                        class="text-white hover:text-emerald-100 dark:text-gray-200 dark:hover:text-white">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    {{-- Dashboard Link Removed as per user request --}}
                 </div>
             </div>
 
@@ -65,11 +62,7 @@
                                 {{ __('Mon Profil') }}
                             </x-dropdown-link>
 
-                            @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                <x-dropdown-link href="{{ route('api-tokens.index') }}">
-                                    {{ __('Tokens API') }}
-                                </x-dropdown-link>
-                            @endif
+                            {{-- API Tokens Link Removed --}}
 
                             <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
@@ -137,9 +130,7 @@
     <div :class="{'block': open, 'hidden': ! open}"
         class="hidden sm:hidden bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            {{-- Mobile Dashboard Link Removed --}}
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-700">
