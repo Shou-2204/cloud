@@ -26,11 +26,11 @@
             </div>
 
             {{-- BENTO GRID DASHBOARD --}}
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-fr">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-fr">
 
                 {{-- CARD 1: ACTIVE TEAM (Large) --}}
                 <div
-                    class="md:col-span-2 relative group overflow-hidden bg-white dark:bg-emerald-dark-500 rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-emerald-dark-600 hover:shadow-md transition-all duration-300">
+                    class="md:col-span-3 relative group overflow-hidden bg-white dark:bg-emerald-dark-500 rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-emerald-dark-600 hover:shadow-md transition-all duration-300">
                     <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
                         <svg class="w-32 h-32 text-gray-900 dark:text-white" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -102,7 +102,7 @@
 
                 @if($pendingTeams->isNotEmpty())
                     <div
-                        class="md:col-span-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-3xl p-6 flex items-start gap-4">
+                        class="md:col-span-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-3xl p-6 flex items-start gap-4">
                         <div class="flex-shrink-0">
                             <svg class="h-6 w-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -124,7 +124,7 @@
                 @endif
 
                 {{-- QUICK LINKS GRID --}}
-                <div class="md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                <div class="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                     <a href="{{ route('profile.show') }}"
                         class="group bg-white dark:bg-emerald-dark-500 border border-gray-100 dark:border-emerald-dark-600 rounded-2xl p-6 hover:border-emerald-500 dark:hover:border-emerald-500 transition-all duration-300">
                         <div
