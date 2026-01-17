@@ -18,13 +18,7 @@
                     </button>
                 </div>
 
-                {{-- Logo --}}
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}"
-                        class="text-xl font-bold tracking-tighter text-white transition-colors">
-                        <span class="text-emerald-200 dark:text-emerald-400">Shou</span>Cloud
-                    </a>
-                </div>
+
 
                 {{-- Page Title (Divider + Title) --}}
                 <div class="hidden md:flex ml-6 pl-6 border-l border-emerald-500/30 items-center h-8">

@@ -41,7 +41,7 @@
         <div
             class="p-4 border-b border-gray-100 dark:border-emerald-dark-600 flex flex-col items-center text-center transition-all duration-300">
             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                <img class="rounded-full object-cover border-4 border-emerald-100 dark:border-emerald-900 transition-all duration-300"
+                <img class="h-20 w-20 rounded-full object-cover border-4 border-emerald-100 dark:border-emerald-900 transition-all duration-300"
                     :class="sidebarCollapsed ? 'h-10 w-10 border-2' : 'h-20 w-20 border-4'"
                     src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
             @endif
@@ -51,7 +51,8 @@
                 x-transition:enter-end="opacity-100 transform scale-100">
                 <h3 class="font-bold text-gray-900 dark:text-white text-sm">{{ Auth::user()->name }}</h3>
                 <p class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[12rem] mx-auto">
-                    {{ Auth::user()->email }}</p>
+                    {{ Auth::user()->email }}
+                </p>
             </div>
         </div>
 
@@ -59,9 +60,8 @@
         <nav class="flex-1 overflow-y-auto overflow-x-hidden py-6 px-3 space-y-1">
 
             <a href="{{ route('dashboard') }}"
-                class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative"
-                :class="sidebarCollapsed ? 'justify-center' : ''"
-                class="{{ request()->routeIs('dashboard') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}">
+                class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('dashboard') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
+                :class="sidebarCollapsed ? 'justify-center' : ''">
                 <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('dashboard') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -78,9 +78,8 @@
             </a>
 
             <a href="{{ route('profile.show') }}"
-                class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative"
-                :class="sidebarCollapsed ? 'justify-center' : ''"
-                class="{{ request()->routeIs('profile.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}">
+                class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('profile.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
+                :class="sidebarCollapsed ? 'justify-center' : ''">
                 <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('profile.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -106,9 +105,8 @@
 
                 @if(Auth::user()->currentTeam)
                     <a href="{{ route('teams.show', Auth::user()->currentTeam) }}"
-                        class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative"
-                        :class="sidebarCollapsed ? 'justify-center' : ''"
-                        class="{{ request()->routeIs('teams.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}">
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('teams.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
+                        :class="sidebarCollapsed ? 'justify-center' : ''">
                         <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('teams.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -123,9 +121,8 @@
 
                     @if(Auth::user()->currentTeam->subscribed())
                         <a href="{{ route('subscription.show', Auth::user()->currentTeam) }}"
-                            class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative"
-                            :class="sidebarCollapsed ? 'justify-center' : ''"
-                            class="{{ request()->routeIs('subscription.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}">
+                            class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('subscription.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
+                            :class="sidebarCollapsed ? 'justify-center' : ''">
                             <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('subscription.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
