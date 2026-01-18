@@ -10,6 +10,24 @@
         $seoTitle = $seo['title'] ?? config('app.name', 'Laravel');
         $seoDescription = $seo['description'] ?? 'ShouCloud - Growth Tools for Modern Businesses';
         $seoUrl = url()->current();
+
+        $breadcrumbsData = null;
+        if (isset($seo['breadcrumbs'])) {
+            $items = [];
+            foreach ($seo['breadcrumbs'] as $index => $crumb) {
+                $items[] = [
+                    "@type" => "ListItem",
+                    "position" => $index + 1,
+                    "name" => $crumb['name'],
+                    "item" => $crumb['url']
+                ];
+            }
+            $breadcrumbsData = [
+                "@context" => "https://schema.org",
+                "@type" => "BreadcrumbList",
+                "itemListElement" => $items
+            ];
+        }
     @endphp
 
     <title>{{ $seoTitle }}</title>
@@ -29,7 +47,12 @@
     <meta property="twitter:description" content="{{ $seoDescription }}">
 
     {{-- Structured Data (JSON-LD) --}}
-    {{-- Structured Data (JSON-LD) removed temporarily for debugging --}}
+    {{-- Structured Data (JSON-LD) --}}
+    @if($breadcrumbsData)
+        <script type="application/ld+json">
+            {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+        </script>
+    @endif
 
     @stack('structured-data')
 
