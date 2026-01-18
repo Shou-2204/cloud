@@ -18,7 +18,36 @@
 </head>
 
 <body
-    class="antialiased bg-ivory dark:bg-emerald-dark text-gray-900 dark:text-gray-100 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden">
+    class="antialiased bg-ivory dark:bg-emerald-dark text-gray-900 dark:text-gray-100 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden"
+    x-data="{ 
+        theme: localStorage.getItem('theme') || 'system',
+        init() {
+            this.applyTheme(this.theme);
+            this.$watch('theme', val => this.applyTheme(val));
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (this.theme === 'system') {
+                    this.applyTheme('system');
+                }
+            });
+        },
+        applyTheme(val) {
+            if (val === 'system') {
+                localStorage.removeItem('theme');
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } else {
+                localStorage.setItem('theme', val);
+                if (val === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+        }
+    }" x-init="init()">
 
     <!-- Navigation -->
     @livewire('navigation-menu')

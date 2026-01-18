@@ -50,8 +50,8 @@
     {{-- Structured Data (JSON-LD) --}}
     @if($breadcrumbsData)
         <script type="application/ld+json">
-                                    {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-                                </script>
+                                        {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+                                    </script>
     @endif
 
     @stack('structured-data')
@@ -78,11 +78,34 @@
 </head>
 
 <body class="font-sans antialiased text-gray-900 dark:text-gray-100" x-data="{ 
-            darkMode: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) 
-        }" x-init="$watch('darkMode', val => {
-            localStorage.setItem('theme', val ? 'dark' : 'light');
-            val ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');
-        })">
+            theme: localStorage.getItem('theme') || 'system',
+            init() {
+                this.applyTheme(this.theme);
+                this.$watch('theme', val => this.applyTheme(val));
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                    if (this.theme === 'system') {
+                        this.applyTheme('system');
+                    }
+                });
+            },
+            applyTheme(val) {
+                if (val === 'system') {
+                    localStorage.removeItem('theme');
+                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                } else {
+                    localStorage.setItem('theme', val);
+                    if (val === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+            }
+        }" x-init="init()">
 
 
 
