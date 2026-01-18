@@ -60,12 +60,12 @@
             <!-- LEFT COLUMN: HERO TEXT -->
             <div class="flex-1 text-center lg:text-left z-10">
                 <h1
-                    class="reveal-on-scroll text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 leading-[1.1] mb-6">
-                    Attirez et fidélisez <br /> <span class="text-emerald-600">simplement.</span>
+                    class="reveal-on-scroll text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-[1.1] mb-6">
+                    Attirez et fidélisez <br /> <span class="text-emerald-600 dark:text-emerald-500">simplement.</span>
                 </h1>
 
                 <p
-                    class="reveal-on-scroll delay-100 text-lg text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                    class="reveal-on-scroll delay-100 text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                     Avis Google, cartes de fidélité et messages clients. La solution tout-en-un pour développer votre
                     commerce sans être un expert en informatique.
                 </p>
@@ -74,12 +74,13 @@
                     class="reveal-on-scroll delay-200 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                     {{-- DECOUVRIR -> Page OFFRE (subscription.index) --}}
                     <a href="{{ route('solutions.index') }}"
-                        class="w-full sm:w-auto px-8 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl transition-all shadow-xl shadow-emerald-500/20 transform hover:-translate-y-1">
+                        class="w-full sm:w-auto px-8 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-600 dark:hover:bg-emerald-500 rounded-xl transition-all shadow-xl shadow-emerald-500/20 transform hover:-translate-y-1">
                         Découvrir la solution
                     </a>
 
-                    <div class="text-sm text-gray-500 font-medium sm:ml-4">
-                        <span class="text-emerald-600 font-bold">+500</span> commerçants nous font confiance.
+                    <div class="text-sm text-gray-500 dark:text-gray-400 font-medium sm:ml-4">
+                        <span class="text-emerald-600 dark:text-emerald-500 font-bold">+500</span> commerçants nous font
+                        confiance.
                     </div>
                 </div>
             </div>
@@ -90,9 +91,9 @@
 
                     <!-- CARD 1: GOOGLE REVIEWS -->
                     <a href="{{ route('features') }}"
-                        class="reveal-on-scroll delay-100 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4 block">
+                        class="reveal-on-scroll delay-100 bg-white dark:bg-emerald-dark-500 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-emerald-dark-400 hover-lift flex items-start gap-4 block transition-colors duration-300">
                         <div
-                            class="h-12 w-12 shrink-0 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 animate-float">
+                            class="h-12 w-12 shrink-0 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 animate-float">
                             {{-- G Icon --}}
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -101,8 +102,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-bold text-gray-900 text-lg">Votre Réputation</h3>
-                            <p class="text-sm text-gray-500 leading-snug mt-1">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Votre Réputation</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 leading-snug mt-1">
                                 Obtenez plus d'avis 5 étoiles et suivez la satisfaction de vos clients.
                             </p>
                         </div>
@@ -110,8 +111,8 @@
 
                     <!-- CARD 2: WALLET -->
                     <a href="{{ route('features') }}"
-                        class="reveal-on-scroll delay-200 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4 block">
-                        <div class="h-12 w-12 shrink-0 bg-gray-900 rounded-xl flex items-center justify-center text-white animate-float"
+                        class="reveal-on-scroll delay-200 bg-white dark:bg-emerald-dark-500 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-emerald-dark-400 hover-lift flex items-start gap-4 block transition-colors duration-300">
+                        <div class="h-12 w-12 shrink-0 bg-gray-900 dark:bg-gray-800 rounded-xl flex items-center justify-center text-white animate-float"
                             style="animation-delay: 1s;">
                             {{-- Wallet Icon --}}
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,8 +122,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-bold text-gray-900 text-lg">Carte de Fidélité</h3>
-                            <p class="text-sm text-gray-500 leading-snug mt-1">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Carte de Fidélité</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 leading-snug mt-1">
                                 Une carte moderne dans le téléphone de vos clients (Wallet). Simple et efficace.
                             </p>
                         </div>
@@ -130,8 +131,8 @@
 
                     <!-- CARD 3: MARKETING -->
                     <a href="{{ route('features') }}"
-                        class="reveal-on-scroll delay-300 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4 block">
-                        <div class="h-12 w-12 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 animate-float"
+                        class="reveal-on-scroll delay-300 bg-white dark:bg-emerald-dark-500 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-emerald-dark-400 hover-lift flex items-start gap-4 block transition-colors duration-300">
+                        <div class="h-12 w-12 shrink-0 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 animate-float"
                             style="animation-delay: 2s;">
                             {{-- Megaphone --}}
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,8 +142,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-bold text-gray-900 text-lg">Communication</h3>
-                            <p class="text-sm text-gray-500 leading-snug mt-1">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Communication</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 leading-snug mt-1">
                                 Gardez le contact par SMS et Email. Relancez vos clients automatiquement.
                             </p>
                         </div>
@@ -155,13 +156,17 @@
 
         <!-- FOOTER LINKS SIMPLE -->
         <div
-            class="max-w-7xl mx-auto px-6 w-full mt-10 text-center sm:text-left border-t border-gray-200 pt-6 reveal-on-scroll delay-300">
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400">
+            class="max-w-7xl mx-auto px-6 w-full mt-10 text-center sm:text-left border-t border-gray-200 dark:border-gray-800 pt-6 reveal-on-scroll delay-300">
+            <div
+                class="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400 dark:text-gray-500">
                 <span>&copy; {{ date('Y') }} ShouCloud.</span>
                 <div class="flex gap-4">
-                    <a href="{{ route('terms.show') }}" class="hover:text-emerald-600">CGU</a>
-                    <a href="{{ route('policy.show') }}" class="hover:text-emerald-600">Confidentialité</a>
-                    <a href="{{ route('sales.show') }}" class="hover:text-emerald-600">CGV</a>
+                    <a href="{{ route('terms.show') }}"
+                        class="hover:text-emerald-600 dark:hover:text-emerald-400">CGU</a>
+                    <a href="{{ route('policy.show') }}"
+                        class="hover:text-emerald-600 dark:hover:text-emerald-400">Confidentialité</a>
+                    <a href="{{ route('sales.show') }}"
+                        class="hover:text-emerald-600 dark:hover:text-emerald-400">CGV</a>
                 </div>
             </div>
         </div>
