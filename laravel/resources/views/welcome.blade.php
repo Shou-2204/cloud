@@ -20,7 +20,7 @@
 <body
     class="antialiased bg-ivory dark:bg-emerald-dark text-gray-900 dark:text-gray-100 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden"
     x-data="{ 
-        theme: localStorage.getItem('theme') || 'system',
+        theme: localStorage.getItem('theme') || 'light',
         init() {
             this.applyTheme(this.theme);
             this.$watch('theme', val => this.applyTheme(val));

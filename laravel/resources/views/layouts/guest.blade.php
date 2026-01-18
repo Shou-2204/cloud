@@ -50,8 +50,8 @@
     {{-- Structured Data (JSON-LD) --}}
     @if($breadcrumbsData)
         <script type="application/ld+json">
-                                        {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-                                    </script>
+                                            {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+                                        </script>
     @endif
 
     @stack('structured-data')
@@ -78,7 +78,7 @@
 </head>
 
 <body class="font-sans antialiased text-gray-900 dark:text-gray-100" x-data="{ 
-            theme: localStorage.getItem('theme') || 'system',
+            theme: localStorage.getItem('theme') || 'light',
             init() {
                 this.applyTheme(this.theme);
                 this.$watch('theme', val => this.applyTheme(val));
