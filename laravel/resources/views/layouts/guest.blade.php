@@ -29,24 +29,7 @@
     <meta property="twitter:description" content="{{ $seoDescription }}">
 
     {{-- Structured Data (JSON-LD) --}}
-    @if(isset($seo['breadcrumbs']))
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            @foreach($seo['breadcrumbs'] as $index => $crumb)
-                {
-                  "@type": "ListItem",
-                  "position": {{ $index + 1 }},
-                  "name": "{{ $crumb['name'] }}",
-                  "item": "{{ $crumb['url'] }}"
-                }{{ !$loop->last ? ',' : '' }}
-            @endforeach
-          ]
-        }
-        </script>
-    @endif
+    {{-- Structured Data (JSON-LD) removed temporarily for debugging --}}
 
     @stack('structured-data')
 
