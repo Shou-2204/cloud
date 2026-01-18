@@ -50,8 +50,8 @@
     {{-- Structured Data (JSON-LD) --}}
     @if($breadcrumbsData)
         <script type="application/ld+json">
-                                {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-                            </script>
+                                    {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+                                </script>
     @endif
 
     @stack('structured-data')
@@ -72,11 +72,12 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
+    </script>
 
 
-</head >
+</head>
 
-            <body class="font-sans antialiased text-gray-900 dark:text-gray-100" x-data="{ 
+<body class="font-sans antialiased text-gray-900 dark:text-gray-100" x-data="{ 
             darkMode: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) 
         }" x-init="$watch('darkMode', val => {
             localStorage.setItem('theme', val ? 'dark' : 'light');
@@ -85,18 +86,18 @@
 
 
 
-                <div class="min-h-screen flex flex-col bg-ivory dark:bg-emerald-dark">
-                    @livewire('navigation-menu')
+    <div class="min-h-screen flex flex-col bg-ivory dark:bg-emerald-dark">
+        @livewire('navigation-menu')
 
-                    <main class="flex-grow">
+        <main class="flex-grow">
             {{ $slot }}
-                    </main>
-                    <x-app-footer />
-                </div>
+        </main>
+        <x-app-footer />
+    </div>
 
-                <x-cookie-banner />
+    <x-cookie-banner />
 
-                @livewireScripts
-            </body>
+    @livewireScripts
+</body>
 
-</html >
+</html>
