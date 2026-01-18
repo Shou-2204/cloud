@@ -33,7 +33,17 @@
                     </a>
                 @endguest
 
-
+                {{-- Public Navigation (Desktop) --}}
+                <div class="hidden md:flex items-center space-x-8 ml-10">
+                    <a href="{{ route('solutions.index') }}"
+                        class="text-sm font-medium text-emerald-100 hover:text-white transition">Solutions</a>
+                    <a href="{{ route('subscription.index') }}"
+                        class="text-sm font-medium text-emerald-100 hover:text-white transition">Tarifs</a>
+                    <a href="{{ route('blog.index') }}"
+                        class="text-sm font-medium text-emerald-100 hover:text-white transition">Ressources</a>
+                    <a href="{{ route('about') }}"
+                        class="text-sm font-medium text-emerald-100 hover:text-white transition">À propos</a>
+                </div>
 
                 {{-- Page Title (Divider + Title) --}}
                 <div class="hidden md:flex ml-6 pl-6 border-l border-emerald-500/30 items-center h-8">
