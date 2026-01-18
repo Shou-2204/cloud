@@ -19,9 +19,9 @@ return [
     ],
 
     'google' => [
-    'client_id' => env('GOOGLE_CLIENT_ID'),
-    'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-    'redirect' => env('GOOGLE_REDIRECT_URL'),
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URL'),
     ],
 
     'resend' => [
@@ -52,17 +52,21 @@ return [
         'plans' => [
             'starter' => [
                 'monthly' => env('STRIPE_PRICE_ID_STARTER_MONTHLY'),
-                'yearly'  => env('STRIPE_PRICE_ID_STARTER_YEARLY'),
+                'yearly' => env('STRIPE_PRICE_ID_STARTER_YEARLY'),
             ],
             'smart' => [
                 'monthly' => env('STRIPE_PRICE_ID_SMART_MONTHLY'),
-                'yearly'  => env('STRIPE_PRICE_ID_SMART_YEARLY'),
+                'yearly' => env('STRIPE_PRICE_ID_SMART_YEARLY'),
             ],
             'pro' => [
                 'monthly' => env('STRIPE_PRICE_ID_PRO_MONTHLY'),
-                'yearly'  => env('STRIPE_PRICE_ID_PRO_YEARLY'),
+                'yearly' => env('STRIPE_PRICE_ID_PRO_YEARLY'),
             ],
         ],
+    ],
+
+    'google_analytics' => [
+        'id' => env('GOOGLE_ANALYTICS_ID'),
     ],
 
 ];

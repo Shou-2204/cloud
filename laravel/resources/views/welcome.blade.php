@@ -11,6 +11,8 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
+    <x-google-analytics />
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
