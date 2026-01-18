@@ -41,8 +41,8 @@
         <div
             class="p-4 border-b border-gray-100 dark:border-emerald-dark-600 flex flex-col items-center text-center transition-all duration-300">
             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                <img class="h-20 w-20 rounded-full object-cover border-4 border-emerald-100 dark:border-emerald-900 transition-all duration-300"
-                    :class="sidebarCollapsed ? 'h-10 w-10 border-2' : 'h-20 w-20 border-4'"
+                <img x-show="!sidebarCollapsed"
+                    class="h-20 w-20 rounded-full object-cover border-4 border-emerald-100 dark:border-emerald-900 transition-all duration-300"
                     src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
             @endif
             <div class="mt-4 overflow-hidden whitespace-nowrap" x-show="!sidebarCollapsed"
