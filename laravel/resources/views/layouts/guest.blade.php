@@ -50,8 +50,8 @@
     {{-- Structured Data (JSON-LD) --}}
     @if($breadcrumbsData)
         <script type="application/ld+json">
-                        {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-                    </script>
+                            {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+                        </script>
     @endif
 
     @stack('structured-data')
@@ -91,13 +91,13 @@
             localStorage.setItem('theme', val ? 'dark' : 'light');
             val ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');
         })">
-    
+
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-55KR6GCX"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-55KR6GCX" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+    <div class="min-h-screen flex flex-col bg-ivory dark:bg-emerald-dark">
         @livewire('navigation-menu')
 
         <main class="flex-grow">

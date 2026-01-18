@@ -1,14 +1,14 @@
 <x-guest-layout :seo="$seo">
-    <div class="pt-24 pb-12 bg-white dark:bg-gray-900 min-h-screen">
+    <div class="pt-24 pb-12 bg-ivory dark:bg-emerald-dark min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <x-breadcrumb :crumbs="$seo['breadcrumbs']" />
 
             <div class="text-center mb-16">
                 <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl">
-                    Resources & Insights
+                    Ressources & <span class="text-emerald-600 dark:text-emerald-400">Idées</span>
                 </h1>
                 <p class="mt-4 text-xl text-gray-600 dark:text-gray-300">
-                    Tips and strategies to grow your business.
+                    Conseils et stratégies pour développer votre entreprise.
                 </p>
             </div>
 
@@ -28,8 +28,8 @@
                         </div>
                         <div class="flex-1 p-6 flex flex-col justify-between">
                             <div class="flex-1">
-                                <p class="text-sm font-medium text-indigo-600 dark:text-indigo-400">
-                                    Growth Strategy
+                                <p class="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                                    Stratégie de Croissance
                                 </p>
                                 <a href="{{ route('blog.show', $post->slug) }}" class="block mt-2">
                                     <p class="text-xl font-semibold text-gray-900 dark:text-white">

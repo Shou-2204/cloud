@@ -1,14 +1,14 @@
 <x-guest-layout :seo="$seo">
-    <div class="pt-24 pb-12 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div class="pt-24 pb-12 bg-ivory dark:bg-emerald-dark min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <x-breadcrumb :crumbs="$seo['breadcrumbs']" />
 
             <div class="text-center mb-16">
                 <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl">
-                    Solutions by Industry
+                    Solutions par <span class="text-emerald-600 dark:text-emerald-400">Secteur</span>
                 </h1>
                 <p class="mt-4 text-xl text-gray-600 dark:text-gray-300">
-                    Tailored tools to help your specific business grow.
+                    Des outils sur mesure pour aider votre activité spécifique à se développer.
                 </p>
             </div>
 
