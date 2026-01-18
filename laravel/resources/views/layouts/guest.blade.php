@@ -6,7 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    @php
+        $seoTitle = $seo['title'] ?? config('app.name', 'Laravel');
+        $seoDescription = $seo['description'] ?? 'ShouCloud - Growth Tools for Modern Businesses';
+        $seoUrl = url()->current();
+    @endphp
+
+    <title>{{ $seoTitle }}</title>
+    <meta name="description" content="{{ $seoDescription }}">
+    <link rel="canonical" href="{{ $seoUrl }}">
+
+    {{-- Open Graph / Facebook --}}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ $seoUrl }}">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDescription }}">
+    {{-- <meta property="og:image" content="{{ asset('images/og-image.jpg') }}"> --}}
+
+    {{-- Twitter --}}
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ $seoUrl }}">
+    <meta property="twitter:title" content="{{ $seoTitle }}">
+    <meta property="twitter:description" content="{{ $seoDescription }}">
+    {{-- <meta property="twitter:image" content="{{ asset('images/og-image.jpg') }}"> --}}
+
+    {{-- Structured Data (JSON-LD) --}}
+    @if(isset($seo['breadcrumbs']))
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        @foreach($seo['breadcrumbs'] as $index => $crumb)
+        {
+          "@type": "ListItem",
+          "position": {{ $index + 1 }},
+          "name": "{{ $crumb['name'] }}",
+          "item": "{{ $crumb['url'] }}"
+        }{{ !$loop->last ? ',' : '' }}
+        @endforeach
+      ]
+    }
+    </script>
+    @endif
+    
+    @stack('structured-data')
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />

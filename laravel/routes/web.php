@@ -35,6 +35,25 @@ Route::prefix('auth/google')->group(function (): void {
     Route::get('/callback', [GoogleController::class, 'handleGoogleCallback']);
 });
 
+// Solutions (Siloing)
+Route::name('solutions.')->prefix('solutions')->group(function () {
+    Route::get('/', [App\Http\Controllers\PublicSiteController::class, 'solutions'])->name('index');
+    Route::get('/{slug}', [App\Http\Controllers\PublicSiteController::class, 'solution'])->name('show');
+});
+
+// Blog / Resources
+Route::name('blog.')->prefix('blog')->group(function () {
+    Route::get('/', [App\Http\Controllers\PublicSiteController::class, 'blog'])->name('index');
+    Route::get('/{slug}', [App\Http\Controllers\PublicSiteController::class, 'post'])->name('show');
+});
+
+// Company Pages
+Route::get('/about', [App\Http\Controllers\PublicSiteController::class, 'about'])->name('about');
+Route::get('/contact', [App\Http\Controllers\PublicSiteController::class, 'contact'])->name('contact');
+
+// Legal
+Route::get('/legal/{page}', [App\Http\Controllers\PublicSiteController::class, 'legal'])->name('legal.show');
+
 // Subscription (Public)
 Route::get('/pricing', [SubscriptionController::class, 'index'])->name('subscription.index');
 Route::get('/subscribe/{price}', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
@@ -43,8 +62,10 @@ Route::post('/subscribe/checkout', [SubscriptionController::class, 'storeBilling
 // Invite Links (Public with conditional redirect)
 Route::get('/invite/{code}', [InviteController::class, 'redirect'])->name('invite.link');
 
-// Sales Conditions (CGV)
-Route::view('/cgv', 'sales-conditions')->name('sales.show');
+// Sales Conditions (Legacy Redirect or Keep as is?)
+// Keeping for backward compatibility if needed, else we rely on /legal/terms
+Route::get('/cgv', function () {
+    return redirect()->route('legal.show', 'terms'); })->name('sales.show');
 
 // ============================================
 // AUTHENTICATED ROUTES
