@@ -97,6 +97,18 @@
                 </span>
             </div>
 
+            <!-- Public Navigation -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="{{ route('solutions.index') }}"
+                    class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">Solutions</a>
+                <a href="{{ route('subscription.index') }}"
+                    class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">Tarifs</a>
+                <a href="{{ route('blog.index') }}"
+                    class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">Ressources</a>
+                <a href="{{ route('about') }}"
+                    class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">À propos</a>
+            </div>
+
             <!-- Auth Links -->
             <div class="hidden sm:flex items-center gap-4">
                 @if (Route::has('login'))

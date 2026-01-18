@@ -65,7 +65,22 @@ Route::get('/invite/{code}', [InviteController::class, 'redirect'])->name('invit
 // Sales Conditions (Legacy Redirect or Keep as is?)
 // Keeping for backward compatibility if needed, else we rely on /legal/terms
 Route::get('/cgv', function () {
-    return redirect()->route('legal.show', 'terms'); })->name('sales.show');
+    return redirect()->route('legal.show', 'terms');
+})->name('sales.show');
+
+// Dynamic Robots.txt
+Route::get('/robots.txt', function () {
+    $content = "User-agent: *\n";
+    $content .= "Disallow: /nova/\n";
+    $content .= "Disallow: /admin/\n";
+    $content .= "Disallow: /dashboard\n";
+    $content .= "Disallow: /myteam\n";
+    $content .= "Disallow: /mysubscription\n\n";
+    $content .= "Sitemap: " . url('/sitemap.xml');
+
+    return response($content, 200)
+        ->header('Content-Type', 'text/plain');
+});
 
 // ============================================
 // AUTHENTICATED ROUTES
