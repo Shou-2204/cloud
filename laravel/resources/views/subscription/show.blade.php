@@ -277,111 +277,111 @@
 
             {{-- ZONE DE DANGER : DÉSABONNEMENT --}}
             @if (!$subscription->onGracePeriod() && $subscription->active())
-                    <div class="p-4 sm:p-8 bg-white dark:bg-[var(--gray900)] shadow sm:rounded-lg border-l-4 border-red-500">
-                        <div class="max-w-xl">
-                            <section>
-                                <header>
-                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                        {{ __('Annuler l\'abonnement') }}
-                                    </h2>
-                                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                        {{ __('Arrêter le renouvellement automatique à la fin de la période.') }}
-                                    </p>
-                                </header>
+                <div class="p-4 sm:p-8 bg-white dark:bg-[var(--gray900)] shadow sm:rounded-lg border-l-4 border-red-500">
+                    <div class="max-w-xl">
+                        <section>
+                            <header>
+                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    {{ __('Annuler l\'abonnement') }}
+                                </h2>
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    {{ __('Arrêter le renouvellement automatique à la fin de la période.') }}
+                                </p>
+                            </header>
 
-                                <div class="mt-6">
-                                    <button x-data=""
-                                        x-on:click.prevent="$dispatch('open-modal', 'confirm-subscription-cancellation')"
-                                        class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-[var(--gray900)] transition ease-in-out duration-150">
-                                        {{ __('Se désabonner') }}
-                                    </button>
+                            <div class="mt-6">
+                                <button x-data=""
+                                    x-on:click.prevent="$dispatch('open-modal', 'confirm-subscription-cancellation')"
+                                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-[var(--gray900)] transition ease-in-out duration-150">
+                                    {{ __('Se désabonner') }}
+                                </button>
+                            </div>
+
+                            {{-- Custom Modal (No Livewire Dependency) --}}
+                            <div x-data="{ show: false }"
+                                x-on:open-modal.window="if ($event.detail === 'confirm-subscription-cancellation') show = true"
+                                x-on:close.stop="show = false" x-on:keydown.escape.window="show = false" x-show="show"
+                                class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" style="display: none;">
+
+                                <div x-show="show" class="fixed inset-0 transform transition-all" x-on:click="show = false"
+                                    x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+                                    x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
+                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+                                    <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75"></div>
                                 </div>
 
-                                {{-- Custom Modal (No Livewire Dependency) --}}
-                                <div x-data="{ show: false }"
-                                    x-on:open-modal.window="if ($event.detail === 'confirm-subscription-cancellation') show = true"
-                                    x-on:close.stop="show = false" x-on:keydown.escape.window="show = false" x-show="show"
-                                    class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" style="display: none;">
+                                <div x-show="show"
+                                    class="mb-6 bg-white dark:bg-emerald-dark-600 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:max-w-2xl sm:mx-auto"
+                                    x-trap.inert.noscroll="show" x-transition:enter="ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                                    x-transition:leave="ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 
-                                    <div x-show="show" class="fixed inset-0 transform transition-all" x-on:click="show = false"
-                                        x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-                                        x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
-                                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-                                        <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75"></div>
-                                    </div>
+                                    <form method="POST" action="{{ route('subscription.cancel', $team) }}" class="p-6">
+                                        @csrf
 
-                                    <div x-show="show"
-                                        class="mb-6 bg-white dark:bg-emerald-dark-600 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:max-w-2xl sm:mx-auto"
-                                        x-trap.inert.noscroll="show" x-transition:enter="ease-out duration-300"
-                                        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                                        x-transition:leave="ease-in duration-200"
-                                        x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                                        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                            {{ __('Êtes-vous sûr de vouloir vous désabonner ?') }}
+                                        </h2>
 
-                                        <form method="POST" action="{{ route('subscription.cancel', $team) }}" class="p-6">
-                                            @csrf
+                                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                            {{ __('Aidez-nous à nous améliorer. Pourquoi partez-vous ?') }}
+                                        </p>
 
-                                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                                {{ __('Êtes-vous sûr de vouloir vous désabonner ?') }}
-                                            </h2>
+                                        <div class="mt-6 space-y-4">
+                                            <label class="flex items-center">
+                                                <input type="radio" name="reason" value="too_expensive"
+                                                    class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600"
+                                                    required>
+                                                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Trop cher</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="radio" name="reason" value="missing_features"
+                                                    class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600">
+                                                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Fonctionnalités
+                                                    manquantes</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="radio" name="reason" value="bugs"
+                                                    class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600">
+                                                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Trop de
+                                                    bugs</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="radio" name="reason" value="other"
+                                                    class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600">
+                                                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Autre</span>
+                                            </label>
+                                        </div>
 
-                                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                                {{ __('Aidez-nous à nous améliorer. Pourquoi partez-vous ?') }}
-                                            </p>
+                                        <div class="mt-4">
+                                            <label class="flex items-center">
+                                                <input type="checkbox" name="contact_allowed"
+                                                    class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-emerald-600 shadow-sm focus:ring-emerald-500">
+                                                <span
+                                                    class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Pouvons-nous vous recontacter pour en discuter ?') }}</span>
+                                            </label>
+                                        </div>
 
-                                            <div class="mt-6 space-y-4">
-                                                <label class="flex items-center">
-                                                    <input type="radio" name="reason" value="too_expensive"
-                                                        class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600"
-                                                        required>
-                                                    <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Trop cher</span>
-                                                </label>
-                                                <label class="flex items-center">
-                                                    <input type="radio" name="reason" value="missing_features"
-                                                        class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600">
-                                                    <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Fonctionnalités
-                                                        manquantes</span>
-                                                </label>
-                                                <label class="flex items-center">
-                                                    <input type="radio" name="reason" value="bugs"
-                                                        class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600">
-                                                    <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Trop de
-                                                        bugs</span>
-                                                </label>
-                                                <label class="flex items-center">
-                                                    <input type="radio" name="reason" value="other"
-                                                        class="form-radio text-emerald-600 dark:bg-gray-700 dark:border-gray-600">
-                                                    <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Autre</span>
-                                                </label>
-                                            </div>
+                                        <div class="mt-6 flex justify-end">
+                                            <x-secondary-button type="button" x-on:click="show = false">
+                                                {{ __('Annuler') }}
+                                            </x-secondary-button>
 
-                                            <div class="mt-4">
-                                                <label class="flex items-center">
-                                                    <input type="checkbox" name="contact_allowed"
-                                                        class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-emerald-600 shadow-sm focus:ring-emerald-500">
-                                                    <span
-                                                        class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Pouvons-nous vous recontacter pour en discuter ?') }}</span>
-                                                </label>
-                                            </div>
-
-                                            <div class="mt-6 flex justify-end">
-                                                <x-secondary-button type="button" x-on:click="show = false">
-                                                    {{ __('Annuler') }}
-                                                </x-secondary-button>
-
-                                                <x-danger-button class="ml-3" type="submit">
-                                                    {{ __('Confirmer le désabonnement') }}
-                                                </x-danger-button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                            <x-danger-button class="ml-3" type="submit">
+                                                {{ __('Confirmer le désabonnement') }}
+                                            </x-danger-button>
+                                        </div>
+                                    </form>
                                 </div>
-                        </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             @endif
 
-    </div>
+        </div>
     </div>
 </x-app-layout>
