@@ -47,6 +47,9 @@ Route::name('blog.')->prefix('blog')->group(function () {
     Route::get('/{slug}', [App\Http\Controllers\PublicSiteController::class, 'post'])->name('show');
 });
 
+// Features
+Route::get('/features', [App\Http\Controllers\PublicSiteController::class, 'features'])->name('features');
+
 // Company Pages
 Route::get('/about', [App\Http\Controllers\PublicSiteController::class, 'about'])->name('about');
 Route::get('/contact', [App\Http\Controllers\PublicSiteController::class, 'contact'])->name('contact');

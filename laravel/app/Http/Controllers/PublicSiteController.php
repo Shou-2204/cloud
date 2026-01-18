@@ -61,6 +61,16 @@ class PublicSiteController extends Controller
         return view('public.solutions.show', compact('seo', 'slug', 'data'));
     }
 
+    public function features(): View
+    {
+        $seo = $this->getSeo(
+            'Fonctionnalités - ShouCloud',
+            'Découvrez l\'ensemble des fonctionnalités de ShouCloud : Avis Google, Wallet, Marketing SMS & Email.',
+            [['name' => 'Fonctionnalités', 'url' => route('features')]]
+        );
+        return view('public.features', compact('seo'));
+    }
+
     public function about(): View
     {
         $seo = $this->getSeo(

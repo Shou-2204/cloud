@@ -13,9 +13,9 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($posts as $post)
-                    <div
-                        class="flex flex-col rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden hover:shadow-md transition-shadow">
+                @foreach($posts as $index => $post)
+                    <div class="reveal-on-scroll flex flex-col rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden hover:shadow-md transition-shadow hover-lift"
+                        style="transition-delay: {{ $index * 100 }}ms;">
                         <div class="h-48 bg-gray-200 dark:bg-gray-700 w-full object-cover">
                             <!-- Placeholder for blog image -->
                             <div class="flex items-center justify-center h-full text-gray-400">

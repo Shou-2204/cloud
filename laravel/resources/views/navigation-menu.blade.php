@@ -35,6 +35,8 @@
 
                 {{-- Public Navigation (Desktop) --}}
                 <div class="hidden md:flex items-center space-x-8 ml-10">
+                    <a href="{{ route('features') }}"
+                        class="text-sm font-medium text-emerald-100 hover:text-white transition">Fonctionnalités</a>
                     <a href="{{ route('solutions.index') }}"
                         class="text-sm font-medium text-emerald-100 hover:text-white transition">Solutions</a>
                     <a href="{{ route('subscription.index') }}"

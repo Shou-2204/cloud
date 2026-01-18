@@ -13,71 +13,6 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <style>
-        /* Custom Animations */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-
-            100% {
-                transform: translateY(0px);
-            }
-        }
-
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .delay-100 {
-            transition-delay: 100ms;
-        }
-
-        .delay-200 {
-            transition-delay: 200ms;
-        }
-
-        .delay-300 {
-            transition-delay: 300ms;
-        }
-
-        /* Smooth hover for cards */
-        .hover-lift {
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-        }
-
-        .hover-lift:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.2);
-        }
-    </style>
 </head>
 
 <body
@@ -107,7 +42,7 @@
                 <div
                     class="reveal-on-scroll delay-200 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                     {{-- DECOUVRIR -> Page OFFRE (subscription.index) --}}
-                    <a href="{{ route('subscription.index') }}"
+                    <a href="{{ route('solutions.index') }}"
                         class="w-full sm:w-auto px-8 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl transition-all shadow-xl shadow-emerald-500/20 transform hover:-translate-y-1">
                         Découvrir la solution
                     </a>
@@ -123,8 +58,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
 
                     <!-- CARD 1: GOOGLE REVIEWS -->
-                    <div
-                        class="reveal-on-scroll delay-100 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4">
+                    <a href="{{ route('features') }}"
+                        class="reveal-on-scroll delay-100 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4 block">
                         <div
                             class="h-12 w-12 shrink-0 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 animate-float">
                             {{-- G Icon --}}
@@ -140,11 +75,11 @@
                                 Obtenez plus d'avis 5 étoiles et suivez la satisfaction de vos clients.
                             </p>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- CARD 2: WALLET -->
-                    <div
-                        class="reveal-on-scroll delay-200 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4">
+                    <a href="{{ route('features') }}"
+                        class="reveal-on-scroll delay-200 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4 block">
                         <div class="h-12 w-12 shrink-0 bg-gray-900 rounded-xl flex items-center justify-center text-white animate-float"
                             style="animation-delay: 1s;">
                             {{-- Wallet Icon --}}
@@ -160,11 +95,11 @@
                                 Une carte moderne dans le téléphone de vos clients (Wallet). Simple et efficace.
                             </p>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- CARD 3: MARKETING -->
-                    <div
-                        class="reveal-on-scroll delay-300 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4">
+                    <a href="{{ route('features') }}"
+                        class="reveal-on-scroll delay-300 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4 block">
                         <div class="h-12 w-12 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 animate-float"
                             style="animation-delay: 2s;">
                             {{-- Megaphone --}}
@@ -180,7 +115,7 @@
                                 Gardez le contact par SMS et Email. Relancez vos clients automatiquement.
                             </p>
                         </div>
-                    </div>
+                    </a>
 
                 </div>
             </div>
@@ -204,24 +139,7 @@
 
     <x-cookie-banner />
 
-    <script>
-        // Simple Intersection Observer for scroll reveal
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
 
-            document.querySelectorAll('.reveal-on-scroll').forEach(el => {
-                observer.observe(el);
-            });
-        });
-    </script>
 </body>
 
 </html>
