@@ -12,13 +12,79 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        /* Custom Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .delay-100 {
+            transition-delay: 100ms;
+        }
+
+        .delay-200 {
+            transition-delay: 200ms;
+        }
+
+        .delay-300 {
+            transition-delay: 300ms;
+        }
+
+        /* Smooth hover for cards */
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.2);
+        }
+    </style>
 </head>
 
 <body
     class="antialiased bg-gray-50 text-gray-900 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden">
 
     <!-- HEADER -->
-    <nav class="absolute top-0 left-0 w-full z-50">
+    <nav class="absolute top-0 left-0 w-full z-50 reveal-on-scroll">
         <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
             <!-- Brand -->
             <div class="flex items-center gap-2">
@@ -58,16 +124,18 @@
             <!-- LEFT COLUMN: HERO TEXT -->
             <div class="flex-1 text-center lg:text-left z-10">
                 <h1
-                    class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 leading-[1.1] mb-6">
+                    class="reveal-on-scroll text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 leading-[1.1] mb-6">
                     Attirez et fidélisez <br /> <span class="text-emerald-600">simplement.</span>
                 </h1>
 
-                <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                <p
+                    class="reveal-on-scroll delay-100 text-lg text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                     Avis Google, cartes de fidélité et messages clients. La solution tout-en-un pour développer votre
                     commerce sans être un expert en informatique.
                 </p>
 
-                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <div
+                    class="reveal-on-scroll delay-200 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                     {{-- DECOUVRIR -> Page OFFRE (subscription.index) --}}
                     <a href="{{ route('subscription.index') }}"
                         class="w-full sm:w-auto px-8 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl transition-all shadow-xl shadow-emerald-500/20 transform hover:-translate-y-1">
@@ -86,9 +154,9 @@
 
                     <!-- CARD 1: GOOGLE REVIEWS -->
                     <div
-                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-emerald-200 transition-all flex items-start gap-4">
+                        class="reveal-on-scroll delay-100 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4">
                         <div
-                            class="h-12 w-12 shrink-0 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+                            class="h-12 w-12 shrink-0 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 animate-float">
                             {{-- G Icon --}}
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -106,9 +174,9 @@
 
                     <!-- CARD 2: WALLET -->
                     <div
-                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-emerald-200 transition-all flex items-start gap-4">
-                        <div
-                            class="h-12 w-12 shrink-0 bg-gray-900 rounded-xl flex items-center justify-center text-white">
+                        class="reveal-on-scroll delay-200 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4">
+                        <div class="h-12 w-12 shrink-0 bg-gray-900 rounded-xl flex items-center justify-center text-white animate-float"
+                            style="animation-delay: 1s;">
                             {{-- Wallet Icon --}}
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -126,9 +194,9 @@
 
                     <!-- CARD 3: MARKETING -->
                     <div
-                        class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-emerald-200 transition-all flex items-start gap-4">
-                        <div
-                            class="h-12 w-12 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
+                        class="reveal-on-scroll delay-300 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover-lift flex items-start gap-4">
+                        <div class="h-12 w-12 shrink-0 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 animate-float"
+                            style="animation-delay: 2s;">
                             {{-- Megaphone --}}
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -150,7 +218,8 @@
         </div>
 
         <!-- FOOTER LINKS SIMPLE -->
-        <div class="max-w-7xl mx-auto px-6 w-full mt-10 text-center sm:text-left border-t border-gray-200 pt-6">
+        <div
+            class="max-w-7xl mx-auto px-6 w-full mt-10 text-center sm:text-left border-t border-gray-200 pt-6 reveal-on-scroll delay-300">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400">
                 <span>&copy; {{ date('Y') }} ShouCloud.</span>
                 <div class="flex gap-4">
@@ -162,6 +231,25 @@
         </div>
 
     </main>
+
+    <script>
+        // Simple Intersection Observer for scroll reveal
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 
 </html>
