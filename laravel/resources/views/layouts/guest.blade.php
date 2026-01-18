@@ -50,8 +50,8 @@
     {{-- Structured Data (JSON-LD) --}}
     @if($breadcrumbsData)
         <script type="application/ld+json">
-                {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-            </script>
+                        {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+                    </script>
     @endif
 
     @stack('structured-data')
@@ -70,6 +70,18 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
+
+        // Google Tag Manager (GDPR Compliant)
+        if (localStorage.getItem('cookieconfig') === 'accepted') {
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || []; w[l].push({
+                    'gtm.start':
+                        new Date().getTime(), event: 'gtm.js'
+                }); var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                        'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-55KR6GCX');
+        }
     </script>
 </head>
 
@@ -79,6 +91,11 @@
             localStorage.setItem('theme', val ? 'dark' : 'light');
             val ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');
         })">
+    
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-55KR6GCX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
     <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
         @livewire('navigation-menu')
@@ -88,6 +105,8 @@
         </main>
         <x-app-footer />
     </div>
+
+    <x-cookie-banner />
 
     @livewireScripts
 </body>

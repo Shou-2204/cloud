@@ -83,50 +83,8 @@
 <body
     class="antialiased bg-gray-50 text-gray-900 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden">
 
-    <!-- HEADER -->
-    <nav class="absolute top-0 left-0 w-full z-50 reveal-on-scroll">
-        <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-            <!-- Brand -->
-            <div class="flex items-center gap-2">
-                <div
-                    class="h-8 w-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/20">
-                    S
-                </div>
-                <span class="text-xl font-bold tracking-tight text-gray-900">
-                    <span class="text-emerald-600">Shou</span>Cloud
-                </span>
-            </div>
-
-            <!-- Public Navigation -->
-            <div class="hidden md:flex items-center gap-8">
-                <a href="{{ route('solutions.index') }}"
-                    class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">Solutions</a>
-                <a href="{{ route('subscription.index') }}"
-                    class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">Tarifs</a>
-                <a href="{{ route('blog.index') }}"
-                    class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">Ressources</a>
-                <a href="{{ route('about') }}"
-                    class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">À propos</a>
-            </div>
-
-            <!-- Auth Links -->
-            <div class="hidden sm:flex items-center gap-4">
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}"
-                            class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}"
-                            class="text-sm font-medium text-gray-600 hover:text-emerald-600 transition">Connexion</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
-                                class="text-sm font-bold text-emerald-600 hover:text-emerald-500 transition">Inscription</a>
-                        @endif
-                    @endauth
-                @endif
-            </div>
-        </div>
-    </nav>
+    <!-- Navigation -->
+    @livewire('navigation-menu')
 
     <!-- MAIN CONTENT WRAPPER (Full Height) -->
     <main class="min-h-screen flex flex-col pt-24 pb-10 sm:pt-28">
@@ -243,6 +201,8 @@
         </div>
 
     </main>
+
+    <x-cookie-banner />
 
     <script>
         // Simple Intersection Observer for scroll reveal
