@@ -50,8 +50,8 @@
     {{-- Structured Data (JSON-LD) --}}
     @if($breadcrumbsData)
         <script type="application/ld+json">
-            {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-        </script>
+                {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+            </script>
     @endif
 
     @stack('structured-data')
@@ -80,7 +80,9 @@
             val ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');
         })">
 
-    <div class="min-h-screen flex flex-col">
+    <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+        @livewire('navigation-menu')
+
         <main class="flex-grow">
             {{ $slot }}
         </main>
