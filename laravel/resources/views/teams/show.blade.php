@@ -65,125 +65,149 @@
                 </div>
 
             @else
-                    {{-- >>> AFFICHAGE NORMAL <<< --}} @if (Auth::id() == $team->user_id)
-                        <div class="mt-10 sm:mt-0 mb-10">
-                            @livewire('team-join-requests', ['teamId' => $team->id])
-                        </div>
-                    @endif
+                            {{-- >>> AFFICHAGE NORMAL <<< --}} <div
+                                x-data="{ activeTab: '{{ request()->query('tab') ?? 'general' }}' }">
 
-                        <div x-data="{ activeTab: '{{ request()->query('tab') ?? 'general' }}' }">
+                                <!-- Tab Navigation -->
+                                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                                    <div class="border-b border-gray-200 dark:border-gray-700">
+                                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
 
-                            <!-- Tab Navigation -->
-                            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                                <div class="border-b border-gray-200 dark:border-gray-700">
-                                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                                            <!-- Tab 1: Informations générales -->
+                                            <button @click="activeTab = 'general'"
+                                                :class="activeTab === 'general' 
+                                                            ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400' 
+                                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                                                {{ __('Informations générales') }}
+                                            </button>
 
-                                        <!-- Tab 1: Informations générales -->
-                                        <button @click="activeTab = 'general'"
-                                            :class="activeTab === 'general' 
-                                                ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400' 
-                                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
-                                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                                            {{ __('Informations générales') }}
-                                        </button>
+                                            <!-- Tab 2: Profil Public -->
+                                            <button @click="activeTab = 'public_profile'"
+                                                :class="activeTab === 'public_profile' 
+                                                            ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400' 
+                                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                                                {{ __('Profil public') }}
+                                            </button>
 
-                                        <!-- Tab 2: Profil Public -->
-                                        <button @click="activeTab = 'public_profile'"
-                                            :class="activeTab === 'public_profile' 
-                                                ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400' 
-                                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
-                                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                                            {{ __('Profil public') }}
-                                        </button>
-
-                                        <!-- Tab 3: Gestion des membres -->
-                                        <button @click="activeTab = 'members'"
-                                            :class="activeTab === 'members' 
-                                                ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400' 
-                                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
-                                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                                            {{ __('Gestion des membres') }}
-                                        </button>
-                                    </nav>
+                                            <!-- Tab 3: Gestion des membres -->
+                                            <button @click="activeTab = 'members'"
+                                                :class="activeTab === 'members' 
+                                                            ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400' 
+                                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                                                {{ __('Gestion des membres') }}
+                                            </button>
+                                        </nav>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Tab 1 Content: Informations générales -->
-                            <div x-show="activeTab === 'general'" x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0 translate-y-2"
-                                x-transition:enter-end="opacity-100 translate-y-0">
-                                <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+                                <!-- Tab 1 Content: Informations générales -->
+                                <div x-show="activeTab === 'general'" x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 translate-y-2"
+                                    x-transition:enter-end="opacity-100 translate-y-0">
+                                    <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
 
-                                    <!-- Internal Rename (Nom de l'organisation) -->
-                                    @livewire('teams.update-team-name-form', ['team' => $team])
+                                        <!-- Internal Rename (Nom de l'organisation) -->
+                                        @livewire('teams.update-team-name-form', ['team' => $team])
 
-                                    <!-- Validation Zone (Delete) -->
-                                    @if (Gate::check('delete', $team))
-                                        <x-section-border />
+                                        <!-- Validation Zone (Delete) -->
+                                        @if (Gate::check('delete', $team))
+                                            <x-section-border />
 
-                                        <div class="mt-10 sm:mt-0">
-                                            {{-- Si l'organisation est abonnée, on affiche un message d'explication --}}
-                                            @if ($team->subscribed('default'))
-                                                <div class="md:grid md:grid-cols-3 md:gap-6">
-                                                    <x-section-title>
-                                                        <x-slot name="title">{{ __('Supprimer l\'organisation') }}</x-slot>
-                                                        <x-slot
-                                                            name="description">{{ __('Supprimer définitivement cette organisation.') }}</x-slot>
-                                                    </x-section-title>
+                                            <div class="mt-10 sm:mt-0">
+                                                {{-- Si l'organisation est abonnée, on affiche un message d'explication --}}
+                                                @if ($team->subscribed('default'))
+                                                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                                                        <x-section-title>
+                                                            <x-slot name="title">{{ __('Supprimer l\'organisation') }}</x-slot>
+                                                            <x-slot
+                                                                name="description">{{ __('Supprimer définitivement cette organisation.') }}</x-slot>
+                                                        </x-section-title>
 
-                                                    <div class="mt-5 md:mt-0 md:col-span-2">
-                                                        <div
-                                                            class="px-4 py-5 bg-white dark:bg-[var(--gray900)] sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
-                                                            <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-                                                                {{ __('Cette organisation possède un abonnement actif. Pour la supprimer, vous devez d\'abord résilier votre abonnement dans la section Facturation.') }}
-                                                            </div>
-                                                            <div class="mt-5">
-                                                                @if($team->subscribed())
-                                                                    <a href="{{ route('subscription.show', $team) }}"
-                                                                        class="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-500 focus:outline-none focus:border-emerald-700 focus:ring focus:ring-emerald-200 active:bg-emerald-600 disabled:opacity-25 transition">
-                                                                        {{ __('Gérer l\'abonnement') }}
-                                                                    </a>
-                                                                @else
-                                                                    <a href="{{ route('subscription.index') }}"
-                                                                        class="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-500 focus:outline-none focus:border-emerald-700 focus:ring focus:ring-emerald-200 active:bg-emerald-600 disabled:opacity-25 transition">
-                                                                        {{ __('Souscrire') }}
-                                                                    </a>
-                                                                @endif
+                                                        <div class="mt-5 md:mt-0 md:col-span-2">
+                                                            <div
+                                                                class="px-4 py-5 bg-white dark:bg-[var(--gray900)] sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
+                                                                <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
+                                                                    {{ __('Cette organisation possède un abonnement actif. Pour la supprimer, vous devez d\'abord résilier votre abonnement dans la section Facturation.') }}
+                                                                </div>
+                                                                <div class="mt-5">
+                                                                    @if($team->subscribed())
+                                                                        <a href="{{ route('subscription.show', $team) }}"
+                                                                            class="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-500 focus:outline-none focus:border-emerald-700 focus:ring focus:ring-emerald-200 active:bg-emerald-600 disabled:opacity-25 transition">
+                                                                            {{ __('Gérer l\'abonnement') }}
+                                                                        </a>
+                                                                    @else
+                                                                        <a href="{{ route('subscription.index') }}"
+                                                                            class="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-500 focus:outline-none focus:border-emerald-700 focus:ring focus:ring-emerald-200 active:bg-emerald-600 disabled:opacity-25 transition">
+                                                                            {{ __('Souscrire') }}
+                                                                        </a>
+                                                                    @endif
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            @else
-                                                {{-- Sinon, on affiche le formulaire de suppression normal --}}
-                                                @livewire('teams.delete-team-form', ['team' => $team])
-                                            @endif
-                                        </div>
-                                    @endif
+                                                @else
+                                                    {{-- Sinon, on affiche le formulaire de suppression normal --}}
+                                                    @livewire('teams.delete-team-form', ['team' => $team])
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Tab 2 Content: Profil Public -->
+                                <!-- Tab 2 Content: Profil Public -->
                             <div x-show="activeTab === 'public_profile'" x-cloak
                                 x-transition:enter="transition ease-out duration-300"
                                 x-transition:enter-start="opacity-0 translate-y-2"
                                 x-transition:enter-end="opacity-100 translate-y-0">
                                 <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                                    @livewire('team-profile-settings', ['team' => $team])
+                                    @if ($team->subscribed())
+                                        @livewire('team-profile-settings', ['team' => $team])
+                                    @else
+                                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 text-center">
+                                            <div class="mb-4">
+                                                <div class="mx-auto h-12 w-12 text-emerald-500">
+                                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 max-w-xl mx-auto">
+                                                {{ __('Fonctionnalité Premium') }}
+                                            </h3>
+                                            <p class="mt-4 text-sm text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+                                                {{ __('Le profil public, les avis clients et la gestion avancée de votre page organisation sont réservés aux abonnés.') }}
+                                            </p>
+                                            <div class="mt-6">
+                                                <a href="{{ route('subscription.index') }}" class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-500 focus:outline-none focus:border-emerald-700 focus:ring focus:ring-emerald-200 active:bg-emerald-600 disabled:opacity-25 transition">
+                                                    {{ __('S\'abonner pour débloquer') }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
-                            <!-- Tab 3 Content: Gestion des membres -->
-                            <div x-show="activeTab === 'members'" x-cloak
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0 translate-y-2"
-                                x-transition:enter-end="opacity-100 translate-y-0">
-                                <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                                    @livewire('teams.team-member-manager', ['team' => $team])
-                                </div>
-                            </div>
+                                <!-- Tab 3 Content: Gestion des membres -->
+                                <div x-show="activeTab === 'members'" x-cloak x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 translate-y-2"
+                                    x-transition:enter-end="opacity-100 translate-y-0">
+                                    <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+                                        @if (Auth::id() == $team->user_id)
+                                            <div class="mt-10 sm:mt-0 mb-10">
+                                                @livewire('team-join-requests', ['teamId' => $team->id])
+                                            </div>
+                                            <x-section-border />
+                                        @endif
 
-                        </div>
+                                        @livewire('teams.team-member-manager', ['team' => $team])
+                                    </div>
+                                </div>
+
+                    </div>
                 @endif
-        </div>
+    </div>
     </div>
 </x-app-layout>

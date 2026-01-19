@@ -114,6 +114,11 @@ class Team extends JetstreamTeam
             'id' => $this->id,
             'name' => $this->name,
             'owner_email' => $this->owner->email,
+            'tagline' => $this->tagline,
+            'bio' => $this->bio,
+            'public_uuid' => $this->public_uuid,
+            'email_public' => $this->email_public,
+            'website' => $this->website,
         ];
     }
 
