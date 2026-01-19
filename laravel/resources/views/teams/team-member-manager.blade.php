@@ -5,17 +5,17 @@
         <div class="mt-10 sm:mt-0">
             <x-form-section submit="addTeamMember">
                 <x-slot name="title">
-                    {{ __('Add Team Member') }}
+                    {{ __('Ajouter un membre') }}
                 </x-slot>
 
                 <x-slot name="description">
-                    {{ __('Add a new team member to your team, allowing them to collaborate with you.') }}
+                    {{ __('Ajoutez un membre à votre organisation pour collaborer ensemble.') }}
                 </x-slot>
 
                 <x-slot name="form">
                     <div class="col-span-6">
                         <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-                            {{ __('Please provide the email address of the person you would like to add to this team.') }}
+                            {{ __('Veuillez indiquer l\'adresse e-mail de la personne que vous souhaitez ajouter.') }}
                         </div>
                     </div>
 
@@ -70,8 +70,8 @@
                 </x-slot>
 
                 <x-slot name="actions">
-                    <x-action-message class="me-3" on="saved">{{ __('Added.') }}</x-action-message>
-                    <x-button>{{ __('Add') }}</x-button>
+                    <x-action-message class="me-3" on="saved">{{ __('Ajouté.') }}</x-action-message>
+                    <x-button>{{ __('Ajouter') }}</x-button>
                 </x-slot>
             </x-form-section>
         </div>
@@ -81,8 +81,8 @@
         <x-section-border />
         <div class="mt-10 sm:mt-0">
             <x-action-section>
-                <x-slot name="title">{{ __('Pending Team Invitations') }}</x-slot>
-                <x-slot name="description">{{ __('Invitations sent via email.') }}</x-slot>
+                <x-slot name="title">{{ __('Invitations en attente') }}</x-slot>
+                <x-slot name="description">{{ __('Invitations envoyées par e-mail.') }}</x-slot>
                 <x-slot name="content">
                     <div class="space-y-6">
                         @foreach ($team->teamInvitations as $invitation)
@@ -90,7 +90,7 @@
                                 <div class="text-gray-600 dark:text-gray-400">{{ $invitation->email }}</div>
                                 <div class="flex items-center">
                                     @if (Gate::check('removeTeamMember', $team))
-                                        <button class="cursor-pointer ms-6 text-sm text-red-500 focus:outline-none" wire:click="cancelTeamInvitation({{ $invitation->id }})">{{ __('Cancel') }}</button>
+                                        <button class="cursor-pointer ms-6 text-sm text-red-500 focus:outline-none" wire:click="cancelTeamInvitation({{ $invitation->id }})">{{ __('Annuler') }}</button>
                                     @endif
                                 </div>
                             </div>
@@ -106,11 +106,11 @@
     <div class="mt-10 sm:mt-0">
         <x-action-section>
             <x-slot name="title">
-                {{ __('Team Members') }}
+                {{ __('Membres de l\'organisation') }}
             </x-slot>
 
             <x-slot name="description">
-                {{ __('All of the people that are part of this team.') }}
+                {{ __('Toutes les personnes qui font partie de cette organisation.') }}
             </x-slot>
 
             <x-slot name="content">
@@ -149,11 +149,11 @@
 
                                     @if ($this->user->id === $user->id)
                                         <button class="cursor-pointer ms-6 text-sm text-red-500" wire:click="$toggle('confirmingLeavingTeam')">
-                                            {{ __('Leave') }}
+                                            {{ __('Quitter') }}
                                         </button>
                                     @elseif (Gate::check('removeTeamMember', $team))
                                         <button class="cursor-pointer ms-6 text-sm text-red-500" wire:click="confirmTeamMemberRemoval('{{ $user->id }}')">
-                                            {{ __('Remove') }}
+                                            {{ __('Retirer') }}
                                         </button>
                                     @endif
                                 </div>
@@ -180,26 +180,26 @@
             </div>
         </x-slot>
         <x-slot name="footer">
-            <x-secondary-button wire:click="stopManagingRole">{{ __('Cancel') }}</x-secondary-button>
-            <x-button class="ms-3" wire:click="updateRole">{{ __('Save') }}</x-button>
+            <x-secondary-button wire:click="stopManagingRole">{{ __('Annuler') }}</x-secondary-button>
+            <x-button class="ms-3" wire:click="updateRole">{{ __('Enregistrer') }}</x-button>
         </x-slot>
     </x-dialog-modal>
 
     <x-confirmation-modal wire:model.live="confirmingLeavingTeam">
-        <x-slot name="title">{{ __('Leave Team') }}</x-slot>
-        <x-slot name="content">{{ __('Are you sure?') }}</x-slot>
+        <x-slot name="title">{{ __('Quitter l\'organisation') }}</x-slot>
+        <x-slot name="content">{{ __('Êtes-vous sûr ?') }}</x-slot>
         <x-slot name="footer">
-            <x-secondary-button wire:click="$toggle('confirmingLeavingTeam')">{{ __('Cancel') }}</x-secondary-button>
-            <x-danger-button class="ms-3" wire:click="leaveTeam">{{ __('Leave') }}</x-danger-button>
+            <x-secondary-button wire:click="$toggle('confirmingLeavingTeam')">{{ __('Annuler') }}</x-secondary-button>
+            <x-danger-button class="ms-3" wire:click="leaveTeam">{{ __('Quitter') }}</x-danger-button>
         </x-slot>
     </x-confirmation-modal>
 
     <x-confirmation-modal wire:model.live="confirmingTeamMemberRemoval">
-        <x-slot name="title">{{ __('Remove Team Member') }}</x-slot>
-        <x-slot name="content">{{ __('Are you sure?') }}</x-slot>
+        <x-slot name="title">{{ __('Retirer un membre') }}</x-slot>
+        <x-slot name="content">{{ __('Êtes-vous sûr ?') }}</x-slot>
         <x-slot name="footer">
-            <x-secondary-button wire:click="$toggle('confirmingTeamMemberRemoval')">{{ __('Cancel') }}</x-secondary-button>
-            <x-danger-button class="ms-3" wire:click="removeTeamMember">{{ __('Remove') }}</x-danger-button>
+            <x-secondary-button wire:click="$toggle('confirmingTeamMemberRemoval')">{{ __('Annuler') }}</x-secondary-button>
+            <x-danger-button class="ms-3" wire:click="removeTeamMember">{{ __('Retirer') }}</x-danger-button>
         </x-slot>
     </x-confirmation-modal>
 </div>
