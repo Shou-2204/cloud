@@ -10,24 +10,6 @@
         $seoTitle = $seo['title'] ?? config('app.name', 'Laravel');
         $seoDescription = $seo['description'] ?? 'ShouCloud - Growth Tools for Modern Businesses';
         $seoUrl = url()->current();
-
-        $breadcrumbsData = null;
-        if (isset($seo['breadcrumbs'])) {
-            $items = [];
-            foreach ($seo['breadcrumbs'] as $index => $crumb) {
-                $items[] = [
-                    "@type" => "ListItem",
-                    "position" => $index + 1,
-                    "name" => $crumb['name'],
-                    "item" => $crumb['url']
-                ];
-            }
-            $breadcrumbsData = [
-                "@context" => "https://schema.org",
-                "@type" => "BreadcrumbList",
-                "itemListElement" => $items
-            ];
-        }
     @endphp
 
     <title>{{ $seoTitle }}</title>
@@ -46,14 +28,6 @@
     <meta property="twitter:title" content="{{ $seoTitle }}">
     <meta property="twitter:description" content="{{ $seoDescription }}">
 
-    {{-- Structured Data (JSON-LD) --}}
-    {{-- Structured Data (JSON-LD) --}}
-    @if($breadcrumbsData)
-        <script type="application/ld+json">
-                                                {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-                                            </script>
-    @endif
-
     @stack('structured-data')
 
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -67,19 +41,17 @@
 
     {{-- Script Anti-Flash --}}
     <script>
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia(
+            '(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
     </script>
-
-
 </head>
 
 <body class="font-sans antialiased text-gray-900 dark:text-gray-100" x-data="{ 
             theme: localStorage.getItem('theme') || 'light',
-            sidebarOpen: false,
             init() {
                 this.applyTheme(this.theme);
                 this.$watch('theme', val => this.applyTheme(val));
@@ -108,15 +80,17 @@
             }
         }" x-init="init()">
 
-
-
     <div class="min-h-screen flex flex-col bg-ivory dark:bg-emerald-dark">
-        @livewire('navigation-menu')
+        <!-- No Header/Navigation -->
 
         <main class="flex-grow">
             {{ $slot }}
         </main>
-        <x-app-footer />
+
+        <!-- No Footer -->
+        <div class="py-6 text-center text-xs text-gray-500 underline">
+            <a href="{{ route('welcome') }}">Propulsé par ShouCloud</a>
+        </div>
     </div>
 
     <x-cookie-banner />

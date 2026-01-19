@@ -42,7 +42,7 @@
                     <!-- Current Logo -->
                     <div class="mt-2" x-show="! photoPreview">
                         @if ($team->logo_path)
-                            <img src="{{ Storage::disk('s3')->url($team->logo_path) }}" alt="{{ $team->name }}"
+                            <img src="{{ Storage::disk('minio_public')->url($team->logo_path) }}" alt="{{ $team->name }}"
                                 class="rounded-xl h-20 w-20 object-cover">
                         @else
                             <div
@@ -88,7 +88,7 @@
                     <!-- Current Cover -->
                     <div class="mt-2" x-show="! coverPreview">
                         @if ($team->cover_image_path)
-                            <img src="{{ Storage::disk('s3')->url($team->cover_image_path) }}" alt="Cover"
+                            <img src="{{ Storage::disk('minio_public')->url($team->cover_image_path) }}" alt="Cover"
                                 class="rounded-xl h-32 w-full object-cover">
                         @else
                             <div class="rounded-xl h-32 w-full bg-gradient-to-r from-emerald-500 to-teal-500"></div>

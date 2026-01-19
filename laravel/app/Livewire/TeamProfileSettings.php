@@ -57,13 +57,13 @@ class TeamProfileSettings extends Component
 
         if (isset($this->logo)) {
             $this->team->update([
-                'logo_path' => $this->logo->storePublicly('team-logos', ['disk' => 's3']),
+                'logo_path' => $this->logo->storePublicly('team-logos', ['disk' => 'minio_public']),
             ]);
         }
 
         if (isset($this->cover)) {
             $this->team->update([
-                'cover_image_path' => $this->cover->storePublicly('team-covers', ['disk' => 's3']),
+                'cover_image_path' => $this->cover->storePublicly('team-covers', ['disk' => 'minio_public']),
             ]);
         }
 
@@ -80,7 +80,7 @@ class TeamProfileSettings extends Component
         Gate::forUser($this->team->owner)->authorize('update', $this->team);
 
         if ($this->team->logo_path) {
-            Storage::disk('s3')->delete($this->team->logo_path);
+            Storage::disk('minio_public')->delete($this->team->logo_path);
             $this->team->update(['logo_path' => null]);
         }
 
@@ -95,7 +95,7 @@ class TeamProfileSettings extends Component
         Gate::forUser($this->team->owner)->authorize('update', $this->team);
 
         if ($this->team->cover_image_path) {
-            Storage::disk('s3')->delete($this->team->cover_image_path);
+            Storage::disk('minio_public')->delete($this->team->cover_image_path);
             $this->team->update(['cover_image_path' => null]);
         }
 

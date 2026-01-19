@@ -1,10 +1,10 @@
-<x-guest-layout>
+<x-public-layout>
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-4">
 
         <!-- Header -->
         <div class="text-center mb-8">
             @if($team->logo_path)
-                <img src="{{ Storage::disk('s3')->url($team->logo_path) }}" alt="{{ $team->name }}"
+                <img src="{{ Storage::disk('minio_public')->url($team->logo_path) }}" alt="{{ $team->name }}"
                     class="h-20 w-20 rounded-full mx-auto mb-4 object-cover shadow-lg">
             @endif
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Votre avis compte pour nous</h1>
@@ -125,4 +125,4 @@
             Propulsé par <a href="/" class="hover:text-emerald-500">ShouCloud</a>
         </div>
     </div>
-</x-guest-layout>
+    </x-guest-layout>
