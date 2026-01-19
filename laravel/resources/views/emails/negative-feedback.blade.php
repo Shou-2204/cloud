@@ -1,38 +1,37 @@
 <x-mail::message>
-    # 📣 Nouveau Retour Client
+    # Nouveau Retour Client
 
     Bonjour,
 
-    Vous avez reçu un nouveau retour client via votre page d'avis **{{ $team->name }}**.
+    Vous avez reçu un nouveau retour client via votre page d'avis **{!! $team->name !!}**.
 
     ---
 
-    ## **Note attribuée**
+    ## Note attribuée
 
     @php
         $stars = str_repeat('⭐', $rating);
         $emptyStars = str_repeat('☆', 5 - $rating);
     @endphp
 
-    # {{ $stars }}{{ $emptyStars }}
+    # {!! $stars !!}{!! $emptyStars !!}
     ### {{ $rating }} / 5 étoiles
 
     ---
 
-    ## **Message du client**
+    ## Message du client
 
-    > {{ $feedback }}
+    "{!! $feedback !!}"
 
     ---
 
-    ## **💡 Pourquoi ce message ?**
+    ## Pourquoi ce message ?
 
-    > **Review Gating actif**
-    > Les clients ayant donné une note de 1 à 3 étoiles sont redirigés vers ce formulaire privé plutôt que vers Google.
+    **Review Gating actif** : Les clients ayant donné une note de 1 à 3 étoiles sont redirigés vers ce formulaire privé.
     Cela vous permet d'identifier et résoudre les problèmes avant qu'ils ne deviennent des avis publics négatifs.
 
     ---
 
     Cordialement,<br>
-    L'équipe {{ config('app.name') }}
+    L'équipe {!! config('app.name') !!}
 </x-mail::message>

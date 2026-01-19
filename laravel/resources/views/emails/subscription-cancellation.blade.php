@@ -1,52 +1,52 @@
 <x-mail::message>
-# 🔔     Demande de désabonnement
+# Demande de désabonnement
 
-Bonj    our,
+Bonjour,
 
-Une     demande de désabonnement vient d'être effectuée pour l'organisation **{{ $team->name }}**.
+Une demande de désabonnement vient d'être effectuée pour l'organisation **{!! $team->name !!}**.
 
----    
+---
 
-## *    *📋 Informations**
+## Informations
 
-| |     |
-|:--    -|:---|
-| **    Organisation** | {{ $team->name }} |
-| **    Utilisateur** | {{ $userName }} |
-| **    Email** | {{ $userEmail }} |
+**Organisation** : {!! $team->name !!}
+<br>
+**Utilisateur** : {!! $userName !!}
+<br>
+**Email** : {!! $userEmail !!}
 
----    
+---
 
-## *    *� Raison du départ**
+## Raison du départ
 
-@php    
-$reasonL    abel = match ($reason) {
-    'too_exp    ensive' => '💰 Le service est trop cher',
-    'missing    _features' => '🔧 Fonctionnalités manquantes',
-    'bugs' =    > '🐛 Trop de problèmes techniques',
-    'other'     => '📝 Autre raison',
-    default     => $reason
-};    
-@end    php
+@php
+$reasonLabel = match ($reason) {
+    'too_expensive' => '💰 Le service est trop cher',
+    'missing_features' => '🔧 Fonctionnalités manquantes',
+    'bugs' => '🐛 Trop de problèmes techniques',
+    'other' => '📝 Autre raison',
+    default => $reason
+};
+@endphp
 
-> **    {{ $reasonLabel }}**
+**{!! $reasonLabel !!}**
 
----    
+---
 
-## *    *📞 Contact**
+## Contact
 
-@if(    $contactAllowed)
-    
-    
-<x-mail::button :url="'mailto:' . $userEmail . '?subject=Retour sur votre désabonnement ShouCloud'">
-Contacter {{ $userName }}
+@if($contactAllowed)
+✅ **L'utilisateur souhaite être recontacté.**
+
+<x-mail::button :url="'mailto:' . $userEmail . '?subject=Retour sur votre désabonnement'">
+Contacter {!! $userName !!}
 </x-mail::button>
 @else
 ❌ **L'utilisateur ne souhaite pas être recontacté.**
 @endif
-    
----    
 
-Cord    ialement,<br>
-    
-    mail::message>
+---
+
+Cordialement,<br>
+L'équipe {!! config('app.name') !!}
+</x-mail::message>
