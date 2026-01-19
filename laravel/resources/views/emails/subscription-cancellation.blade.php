@@ -7,17 +7,19 @@ Une demande de désabonnement vient d'être effectuée pour l'organisation **{!!
 
 ---
 
-## Informations
+## 📋 Détails de la demande
 
-**Organisation** : {!! $team->name !!}
-<br>
-**Utilisateur** : {!! $userName !!}
-<br>
-**Email** : {!! $userEmail !!}
+@component('mail::table')
+| Information | Détail |
+|:-------------|:--------|
+| **Organisation** | {!! $team->name !!} |
+| **Utilisateur** | {!! $userName !!} |
+| **Email** | <a href="mailto:{!! $userEmail !!}">{!! $userEmail !!}</a> |
+@endcomponent
 
 ---
 
-## Raison du départ
+## 📝 Raison du départ
 
 @php
 $reasonLabel = match ($reason) {
@@ -29,20 +31,25 @@ $reasonLabel = match ($reason) {
 };
 @endphp
 
-**{!! $reasonLabel !!}**
+<x-mail::panel>
+<strong>{!! $reasonLabel !!}</strong>
+</x-mail::panel>
 
 ---
 
-## Contact
+## 📞 Contact
 
 @if($contactAllowed)
-✅ **L'utilisateur souhaite être recontacté.**
-
-<x-mail::button :url="'mailto:' . $userEmail . '?subject=Retour sur votre désabonnement'">
-Contacter {!! $userName !!}
-</x-mail::button>
+<div style="text-align: center; margin: 20px 0;">
+    <p style="margin-bottom: 15px;">✅ <strong>L'utilisateur accepte d'être recontacté.</strong></p>
+    <x-mail::button :url="'mailto:' . $userEmail . '?subject=Retour sur votre désabonnement'">
+        Contacter {!! $userName !!}
+    </x-mail::button>
+</div>
 @else
-❌ **L'utilisateur ne souhaite pas être recontacté.**
+<div style="background-color: #fee2e2; color: #991b1b; padding: 10px; border-radius: 6px; text-align: center;">
+    ❌ <strong>L'utilisateur ne souhaite pas être recontacté.</strong>
+</div>
 @endif
 
 ---
