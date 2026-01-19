@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 // PUBLIC ROUTES
 // ============================================
 
-Route::get('/', [PageController::class, 'welcome']);
+Route::get('/', [PageController::class, 'welcome'])->name('welcome');
 
 // Google OAuth
 Route::prefix('auth/google')->group(function (): void {
