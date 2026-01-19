@@ -104,20 +104,69 @@
                 </div>
 
                 @if(Auth::user()->currentTeam)
-                    <a href="{{ route('teams.show', Auth::user()->currentTeam) }}" wire:navigate
-                        class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('teams.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
-                        :class="sidebarCollapsed ? 'justify-center' : ''">
-                        <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('teams.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                        <span class="ml-3 whitespace-nowrap transition-opacity duration-200"
-                            x-show="!sidebarCollapsed">Paramètres Organisation</span>
-                        <div x-show="sidebarCollapsed"
-                            class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
-                            Paramètres Organisation</div>
-                    </a>
+                    <!-- Organisation Tree -->
+                    <div x-data="{ open: {{ request()->routeIs('teams.show') ? 'true' : 'false' }} }" class="space-y-1">
+
+                        <!-- Header / Toggle -->
+                        <button @click="open = !open"
+                            class="w-full flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative hover:bg-gray-50 dark:hover:bg-emerald-dark-600 focus:outline-none"
+                            :class="sidebarCollapsed ? 'justify-center' : 'justify-between text-gray-600 dark:text-gray-400'">
+
+                            <div class="flex items-center">
+                                <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('teams.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                                <span class="ml-3 whitespace-nowrap transition-opacity duration-200 font-semibold"
+                                    x-show="!sidebarCollapsed">
+                                    {{ Auth::user()->currentTeam->name }}
+                                </span>
+                            </div>
+
+                            <!-- Rotate Chevron -->
+                            <svg x-show="!sidebarCollapsed"
+                                class="h-4 w-4 transform transition-transform duration-200 text-gray-400"
+                                :class="{'rotate-90': open}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+
+                            <!-- Tooltip Collapsed -->
+                            <div x-show="sidebarCollapsed"
+                                class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                                {{ Auth::user()->currentTeam->name }}
+                            </div>
+                        </button>
+
+                        <!-- Sub-menu Items -->
+                        <div x-show="open && !sidebarCollapsed" x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="opacity-0 transform scale-95"
+                            x-transition:enter-end="opacity-100 transform scale-100" class="space-y-1 pl-11 pr-3">
+
+                            <!-- General Info -->
+                            <a href="{{ route('teams.show') }}" wire:navigate
+                                class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('teams.show') && !request()->query('tab') ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
+                                Informations générales
+                            </a>
+
+                            <!-- Members -->
+                            <!-- Note: We can rely on Alpine state in teams.show to switch tabs, but strict linking might need ?tab=members query param handling in the future. For now, links to main settings. -->
+                            <button @click="window.location.href='{{ route('teams.show') }}'"
+                                class="block w-full text-left py-2 px-3 text-sm rounded-lg transition-colors text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600">
+                                Gestion des membres
+                            </button>
+
+                            <!-- Public Profile Link (External) -->
+                            <a href="{{ route('profile.public', Auth::user()->currentTeam->public_uuid) }}" target="_blank"
+                                class="flex items-center py-2 px-3 text-sm rounded-lg transition-colors text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-900/30">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                                Voir le profil public
+                            </a>
+                        </div>
+                    </div>
 
                     @if(Auth::user()->currentTeam->subscribed())
                         <a href="{{ route('subscription.show', Auth::user()->currentTeam) }}" wire:navigate

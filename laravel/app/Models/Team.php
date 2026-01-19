@@ -36,6 +36,28 @@ class Team extends JetstreamTeam
         'billing_postal_code',
         'billing_country',
         'vat_id',
+        // Public Profile
+        'public_uuid',
+        'tagline',
+        'bio',
+        'logo_path',
+        'cover_image_path',
+        'phone',
+        'email_public',
+        'website',
+        'address',
+        'social_instagram',
+        'social_facebook',
+        'social_tiktok',
+        'social_linkedin',
+        'social_twitter',
+        'google_place_id',
+        'google_business_data',
+        'public_views',
+        'reviews_enabled',
+        'google_review_url',
+        'review_positive_message',
+        'review_negative_message',
     ];
 
     protected $dispatchesEvents = [
@@ -49,6 +71,8 @@ class Team extends JetstreamTeam
         return [
             'personal_team' => 'boolean',
             'auto_approval' => 'boolean',
+            'google_business_data' => 'array',
+            'reviews_enabled' => 'boolean',
         ];
     }
 
@@ -56,8 +80,20 @@ class Team extends JetstreamTeam
     {
         static::creating(function ($team) {
             $team->join_code = strtoupper(Str::random(8));
+            $team->public_uuid = (string) Str::uuid();
         });
     }
+
+    /**
+     * Get the route key for the model.
+     * Use public_uuid for explicit route binding on public pages if needed,
+     * but usually we specify {team:public_uuid} in the route definition.
+     */
+    // public function getRouteKeyName()
+    // {
+    //     return 'public_uuid'; 
+    // } 
+    // Keeping default ID for internal routes, explicit binding for public ones.
 
     public function users(): BelongsToMany
     {

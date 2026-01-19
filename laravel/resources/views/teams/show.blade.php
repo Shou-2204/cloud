@@ -71,9 +71,62 @@
                     </div>
                 @endif
 
-                <div class="mt-10 sm:mt-0">
-                    @livewire('teams.team-member-manager', ['team' => $team])
-                </div>
+        <div x-data="{ activeTab: 'general' }">
+
+        <!-- Tab Navigation -->
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="border-b border-gray-200 dark:border-gray-700">
+                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                    <button @click="activeTab = 'general'"
+                        :class="activeTab === 'general'
+                            ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                        {{ __('Informations générales') }}
+                    </button>
+
+                    <button @click="activeTab = 'members'"
+                        :class="activeTab === 'members'
+                            ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                        {{ __('Gestion des membres') }}
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- General Tab -->
+        <div x-show="activeTab === 'general'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+
+                <!-- Public Profile Settings -->
+                @livewire('team-profile-settings', ['team' => $team])
+
+                <x-section-border />
+
+                <!-- Internal Rename -->
+                @livewire('teams.update-team-name-form', ['team' => $team])
+
+                <x-section-border />
+
+                <!-- Validation Zone -->
+                @if (Gate::check('delete', $team) && ! $team->personal_team)
+                    <div class="mt-10 sm:mt-0">
+                        @livewire('teams.delete-team-form', ['team' => $team])
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <!-- Members Tab -->
+        <div x-show="activeTab === 'members'" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+                @livewire('teams.team-member-manager', ['team' => $team])
+            </div>
+        </div>
+
+    </div>
                 @if (Gate::check('delete', $team))
                     <x-section-border />
 

@@ -65,6 +65,10 @@ Route::post('/subscribe/checkout', [SubscriptionController::class, 'storeBilling
 // Invite Links (Public with conditional redirect)
 Route::get('/invite/{code}', [InviteController::class, 'redirect'])->name('invite.link');
 
+// Public Organisation Profile (Business Card)
+Route::get('/p/{team:public_uuid}', [App\Http\Controllers\PublicProfileController::class, 'show'])->name('profile.public');
+Route::get('/p/{team:public_uuid}/review', [App\Http\Controllers\PublicProfileController::class, 'review'])->name('profile.review');
+
 // Sales Conditions (Legacy Redirect or Keep as is?)
 // Keeping for backward compatibility if needed, else we rely on /legal/terms
 Route::get('/cgv', function () {
