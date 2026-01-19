@@ -199,7 +199,6 @@
                                             <div class="mt-10 sm:mt-0 mb-10">
                                                 @livewire('team-join-requests', ['teamId' => $team->id])
                                             </div>
-                                            <x-section-border />
                                         @endif
 
                                         @livewire('teams.team-member-manager', ['team' => $team])
