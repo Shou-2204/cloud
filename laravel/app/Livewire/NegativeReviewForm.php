@@ -22,7 +22,16 @@ class NegativeReviewForm extends Component
     /**
      * Minimum number of words required for negative feedback.
      */
-    protected const MIN_WORDS = 5;
+    public const MIN_WORDS = 5;
+
+    /**
+     * Listen for rating updates from Alpine.js
+     */
+    #[\Livewire\Attributes\On('set-rating')]
+    public function setRating(int $rating): void
+    {
+        $this->rating = $rating;
+    }
 
     protected function rules(): array
     {

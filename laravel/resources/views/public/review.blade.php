@@ -104,7 +104,7 @@
 
                 <!-- Negative Flow (1-3 Stars) - Using Livewire Component -->
                 <div x-show="rating < 4 && rating > 0"
-                    x-init="$watch('rating', value => { if(value > 0 && value < 4) { $wire.set('rating', value) } })">
+                    x-init="$watch('rating', value => { if(value > 0 && value < 4) { Livewire.dispatch('set-rating', { rating: value }) } })">
                     @livewire('negative-review-form', ['team' => $team], key('negative-review-' . $team->id))
                 </div>
 
