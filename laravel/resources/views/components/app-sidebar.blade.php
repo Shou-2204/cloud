@@ -144,14 +144,14 @@
                             x-transition:enter-end="opacity-100 transform scale-100" class="space-y-1 pl-11 pr-3">
 
                             <!-- General Info -->
-                            <a href="{{ route('teams.show') }}" wire:navigate
+                            <a href="{{ route('teams.show', Auth::user()->currentTeam) }}" wire:navigate
                                 class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('teams.show') && !request()->query('tab') ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
                                 Informations générales
                             </a>
 
                             <!-- Members -->
                             <!-- Note: We can rely on Alpine state in teams.show to switch tabs, but strict linking might need ?tab=members query param handling in the future. For now, links to main settings. -->
-                            <button @click="window.location.href='{{ route('teams.show') }}'"
+                            <button @click="window.location.href='{{ route('teams.show', Auth::user()->currentTeam) }}'"
                                 class="block w-full text-left py-2 px-3 text-sm rounded-lg transition-colors text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600">
                                 Gestion des membres
                             </button>
