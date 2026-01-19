@@ -36,7 +36,7 @@ class NegativeFeedbackReceived extends Mailable implements ShouldQueue
     {
         $stars = str_repeat('⭐', $this->rating);
         return new Envelope(
-            subject: "Avis client ({$stars}) - {$this->team->name}",
+            subject: "📣 Nouveau Retour Client ({$stars}) - {$this->team->name}",
         );
     }
 

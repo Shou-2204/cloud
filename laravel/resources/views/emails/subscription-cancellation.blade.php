@@ -1,28 +1,52 @@
 <x-mail::message>
-    # Nouveau désabonnement
+    # 🔔 Demande de désabonnement
 
-    Une organisation vient de se désabonner de ShouCloud.
+    Bonjour,
 
-    ## Détails
+    Une demande de désabonnement vient d'être effectuée sur ShouCloud.
 
-    | Information | Valeur |
-    |:------------|:-------|
-    | **Organisation** | {{ $team->name }} |
-    | **Email utilisateur** | {{ $userEmail }} |
-    | **Nom utilisateur** | {{ $userName }} |
-    | **Raison** |
-    {{ match ($reason) { 'too_expensive' => 'Trop cher', 'missing_features' => 'Fonctionnalités manquantes', 'bugs' => 'Trop de bugs', 'other' => 'Autre', default => $reason} }}
-    |
-    | **Peut-on le recontacter ?** | {{ $contactAllowed ? '✅ Oui' : '❌ Non' }} |
+    <x-mail::panel>
+        ## Informations de l'organisation
+
+        **Nom :** {{ $team->name }}
+
+        **Email :** {{ $userEmail }}
+
+        **Utilisateur :** {{ $userName }}
+    </x-mail::panel>
+
+    ## Raison du départ
+
+    <x-mail::panel>
+        @php
+            $reasonLabel = match ($reason) {
+                'too_expensive' => '💰 Le service est trop cher',
+                'missing_features' => '🔧 Fonctionnalités manquantes',
+                'bugs' => '🐛 Trop de problèmes techniques',
+                'other' => '📝 Autre raison',
+                default => $reason
+            };
+        @endphp
+
+        {{ $reasonLabel }}
+    </x-mail::panel>
+
+    ## Contact autorisé
 
     @if($contactAllowed)
-        <x-mail::button :url="'mailto:' . $userEmail">
-            Contacter l'utilisateur
+        ✅ **Oui**, l'utilisateur accepte d'être recontacté pour en discuter.
+
+        <x-mail::button :url="'mailto:' . $userEmail . '?subject=Retour sur votre désabonnement ShouCloud'" color="primary">
+            📧 Contacter {{ $userName }}
         </x-mail::button>
+    @else
+        ❌ **Non**, l'utilisateur ne souhaite pas être recontacté.
     @endif
 
     ---
 
-    *Email automatique envoyé par ShouCloud.*
+    *Cet email a été envoyé automatiquement par ShouCloud suite à une demande de désabonnement.*
 
+    Cordialement,<br>
+    L'équipe {{ config('app.name') }}
 </x-mail::message>
