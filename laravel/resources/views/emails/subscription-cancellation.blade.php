@@ -1,56 +1,52 @@
 <x-mail::message>
-    # 🔔 Demande de désabonnement
+# 🔔     Demande de désabonnement
 
-    Bonjour,
+Bonj    our,
 
-    Une demande de désabonnement vient d'être effectuée sur ShouCloud.
+Une     demande de désabonnement vient d'être effectuée pour l'organisation **{{ $team->name }}**.
 
-    ---
+---    
 
-    ## 🏢 Informations de l'organisation
+## *    *📋 Informations**
 
-    | | |
-    |:--|:--|
-    | **Nom** | {{ $team->name }} |
-    | **Email** | {{ $userEmail }} |
-    | **Utilisateur** | {{ $userName }} |
+| |     |
+|:--    -|:---|
+| **    Organisation** | {{ $team->name }} |
+| **    Utilisateur** | {{ $userName }} |
+| **    Email** | {{ $userEmail }} |
 
-    ---
+---    
 
-    ## 📋 Raison du départ
+## *    *� Raison du départ**
 
-    @php
-        $reasonLabel = match ($reason) {
-            'too_expensive' => '💰 Le service est trop cher',
-            'missing_features' => '🔧 Fonctionnalités manquantes',
-            'bugs' => '🐛 Trop de problèmes techniques',
-            'other' => '📝 Autre raison',
-            default => $reason
-        };
-    @endphp
+@php    
+$reasonL    abel = match ($reason) {
+    'too_exp    ensive' => '💰 Le service est trop cher',
+    'missing    _features' => '🔧 Fonctionnalités manquantes',
+    'bugs' =    > '🐛 Trop de problèmes techniques',
+    'other'     => '📝 Autre raison',
+    default     => $reason
+};    
+@end    php
 
-    <x-mail::panel>
-        {{ $reasonLabel }}
-    </x-mail::panel>
+> **    {{ $reasonLabel }}**
 
-    ---
+---    
 
-    ## 📞 Contact autorisé
+## *    *📞 Contact**
 
-    @if($contactAllowed)
-        ✅ **Oui**, l'utilisateur accepte d'être recontacté pour en discuter.
+@if(    $contactAllowed)
+    
+    
+<x-mail::button :url="'mailto:' . $userEmail . '?subject=Retour sur votre désabonnement ShouCloud'">
+Contacter {{ $userName }}
+</x-mail::button>
+@else
+❌ **L'utilisateur ne souhaite pas être recontacté.**
+@endif
+    
+---    
 
-        <x-mail::button :url="'mailto:' . $userEmail . '?subject=Retour sur votre désabonnement ShouCloud'" color="primary">
-            Contacter {{ $userName }}
-        </x-mail::button>
-    @else
-        ❌ **Non**, l'utilisateur ne souhaite pas être recontacté.
-    @endif
-
-    ---
-
-    *Cet email a été envoyé automatiquement par ShouCloud suite à une demande de désabonnement.*
-
-    Cordialement,<br>
-    L'équipe {{ config('app.name') }}
-</x-mail::message>
+Cord    ialement,<br>
+    
+    mail::message>
