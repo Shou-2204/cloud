@@ -67,57 +67,7 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                <!-- Contact Info -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                            </path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        Coordonnées
-                    </h3>
-                    <dl class="space-y-4">
-                        @if($team->address)
-                            <div>
-                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Adresse</dt>
-                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $team->address }}</dd>
-                            </div>
-                        @endif
-                        @if($team->email_public)
-                            <div>
-                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</dt>
-                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    <a href="mailto:{{ $team->email_public }}"
-                                        class="hover:text-emerald-500 transition">{{ $team->email_public }}</a>
-                                </dd>
-                            </div>
-                        @endif
-                        @if($team->phone)
-                            <div>
-                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Téléphone</dt>
-                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    <a href="tel:{{ $team->phone }}"
-                                        class="hover:text-emerald-500 transition">{{ $team->phone }}</a>
-                                </dd>
-                            </div>
-                        @endif
-                        @if($team->website)
-                            <div>
-                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Site Web</dt>
-                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    <a href="{{ $team->website }}" target="_blank" rel="noopener"
-                                        class="text-emerald-600 hover:text-emerald-500 transition">{{ $team->website }}</a>
-                                </dd>
-                            </div>
-                        @endif
-                    </dl>
-                </div>
-
-                <!-- Social Media -->
+                <!-- Social Media (Moved before Contact Info) -->
                 @if($team->social_instagram || $team->social_facebook || $team->social_tiktok || $team->social_linkedin || $team->social_twitter)
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
@@ -199,8 +149,58 @@
                     </div>
                 @endif
 
+                <!-- Contact Info -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Coordonnées
+                    </h3>
+                    <dl class="space-y-4">
+                        @if($team->address)
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Adresse</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $team->address }}</dd>
+                            </div>
+                        @endif
+                        @if($team->email_public)
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+                                    <a href="mailto:{{ $team->email_public }}"
+                                        class="hover:text-emerald-500 transition">{{ $team->email_public }}</a>
+                                </dd>
+                            </div>
+                        @endif
+                        @if($team->phone)
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Téléphone</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+                                    <a href="tel:{{ $team->phone }}"
+                                        class="hover:text-emerald-500 transition">{{ $team->phone }}</a>
+                                </dd>
+                            </div>
+                        @endif
+                        @if($team->website)
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Site Web</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+                                    <a href="{{ $team->website }}" target="_blank" rel="noopener"
+                                        class="text-emerald-600 hover:text-emerald-500 transition">{{ $team->website }}</a>
+                                </dd>
+                            </div>
+                        @endif
+                    </dl>
+                </div>
+
             </div>
         </div>
 
     </div>
-    </x-guest-layout>
+</x-public-layout>

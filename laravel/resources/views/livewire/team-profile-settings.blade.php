@@ -184,6 +184,11 @@
                     <x-input id="social_linkedin" type="url" class="mt-1 block w-full"
                         wire:model="state.social_linkedin" placeholder="https://linkedin.com/in/..." />
                 </div>
+                <div class="col-span-1">
+                    <x-label for="social_twitter" value="X (Twitter)" />
+                    <x-input id="social_twitter" type="url" class="mt-1 block w-full" wire:model="state.social_twitter"
+                        placeholder="https://x.com/..." />
+                </div>
             </div>
         </div>
 
