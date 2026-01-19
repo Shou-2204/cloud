@@ -15,7 +15,7 @@
                         class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-teal-400">{{ Auth::user()->name }}</span>.
                 </h1>
                 <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                    Gérez vos équipes, vos abonnements et accédez à tout votre univers ShouCloud depuis cet espace
+                    Gérez vos organisations, vos abonnements et accédez à tout votre univers ShouCloud depuis cet espace
                     unifié.
                 </p>
             </div>
@@ -33,7 +33,7 @@
                     class="bg-white dark:bg-emerald-dark-500 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-emerald-dark-600 hover:shadow-md transition-all">
                     <div class="flex flex-col h-full justify-between">
                         <div>
-                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Équipe</h3>
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Organisation</h3>
                             <div class="font-bold text-xl text-gray-900 dark:text-white truncate">
                                 {{ Auth::user()->currentTeam ? Auth::user()->currentTeam->name : 'Aucune' }}
                             </div>

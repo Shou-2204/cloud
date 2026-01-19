@@ -34,7 +34,7 @@
                             </h3>
                             <div class="mt-2 text-sm leading-5 text-yellow-700 dark:text-yellow-200">
                                 <p>
-                                    {{ __('Vous avez demandé à rejoindre l\'équipe') }} <span class="font-bold">{{ $team->name }}</span>.
+                                    {{ __('Vous avez demandé à rejoindre l\'organisation') }} <span class="font-bold">{{ $team->name }}</span>.
                                     {{ __('Vous devez attendre la validation par un administrateur.') }}
                                 </p>
                             </div>
@@ -46,7 +46,7 @@
                 <div class="flex items-center justify-center p-6 bg-white dark:bg-gray-800 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
                     <div class="text-center">
                         <div class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                            {{ __('Si vous avez fait une erreur ou ne souhaitez plus rejoindre cette équipe, vous pouvez annuler votre demande.') }}
+                            {{ __('Si vous avez fait une erreur ou ne souhaitez plus rejoindre cette organisation, vous pouvez annuler votre demande.') }}
                         </div>
 
                         {{-- Formulaire utilisant notre route définie dans web.php --}}
@@ -54,7 +54,7 @@
                             @method('DELETE')
                             @csrf
                             <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                {{ __('Annuler ma demande (Quitter l\'équipe)') }}
+                                {{ __('Annuler ma demande (Quitter l\'organisation)') }}
                             </button>
                         </form>
                     </div>
@@ -78,18 +78,18 @@
                     <x-section-border />
 
                     <div class="mt-10 sm:mt-0">
-                        {{-- Si l'équipe est abonnée, on affiche un message d'explication --}}
+                        {{-- Si l'organisation est abonnée, on affiche un message d'explication --}}
                         @if ($team->subscribed('default'))
                             <div class="md:grid md:grid-cols-3 md:gap-6">
                                 <x-section-title>
-                                    <x-slot name="title">{{ __('Supprimer l\'équipe') }}</x-slot>
-                                    <x-slot name="description">{{ __('Supprimer définitivement cette équipe.') }}</x-slot>
+                                    <x-slot name="title">{{ __('Supprimer l\'organisation') }}</x-slot>
+                                    <x-slot name="description">{{ __('Supprimer définitivement cette organisation.') }}</x-slot>
                                 </x-section-title>
 
                                 <div class="mt-5 md:mt-0 md:col-span-2">
                                     <div class="px-4 py-5 bg-white dark:bg-[var(--gray900)] sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
                                         <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-                                            {{ __('Cette équipe possède un abonnement actif. Pour la supprimer, vous devez d\'abord résilier votre abonnement dans la section Facturation.') }}
+                                            {{ __('Cette organisation possède un abonnement actif. Pour la supprimer, vous devez d\'abord résilier votre abonnement dans la section Facturation.') }}
                                         </div>
                                         <div class="mt-5">
                                             @if($team->subscribed())

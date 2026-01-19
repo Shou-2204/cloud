@@ -126,7 +126,7 @@
 
                     @if($approvedMembers->isEmpty())
                         <div class="text-sm text-gray-500 dark:text-gray-400 italic">
-                            {{ __('Aucun membre validé dans cette équipe pour le moment.') }}
+                            {{ __('Aucun membre valid\u00e9 dans cette organisation pour le moment.') }}
                         </div>
                     @else
                         @foreach ($approvedMembers as $user)
