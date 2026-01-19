@@ -1,4 +1,4 @@
-<x-public-layout>
+<x-public-layout :seo="['title' => 'Donnez votre avis - ' . $team->name, 'description' => 'Votre avis compte pour ' . $team->name]">
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-4">
 
         <!-- Header -->
@@ -102,45 +102,24 @@
                     </div>
                 </div>
 
-                <!-- Negative Flow (1-3 Stars) -->
-                <div x-show="rating < 4 && rating > 0">
-                    <div class="text-center">
-                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-orange-100 mb-4">
-                            <span class="text-3xl">🙏</span>
-                        </div>
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Désolé pour cette expérience
-                        </h2>
-                        <p class="text-gray-600 dark:text-gray-300 mb-6">
-                            {{ $team->review_negative_message ?? "Nous sommes navrés que tout ne se soit pas passé comme prévu. Dites-nous ce qui n'a pas été, nous ferons tout pour nous rattraper." }}
-                        </p>
-
-                        <textarea x-model="feedback" rows="4"
-                            class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white mb-4 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
-                            placeholder="Dites-nous en plus..."></textarea>
-
-                        <button @click="submitInternal()"
-                            class="block w-full py-3 px-4 bg-gray-900 dark:bg-gray-700 hover:bg-black text-white rounded-xl font-semibold shadow-lg transition">
-                            Envoyer mon message au gérant
-                        </button>
-                        <button @click="step = 1"
-                            class="mt-4 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 underline">
-                            Modifier ma note
-                        </button>
-                    </div>
+                <!-- Negative Flow (1-3 Stars) - Using Livewire Component -->
+                <div x-show="rating < 4 && rating > 0"
+                    x-init="$watch('rating', value => { if(value > 0 && value < 4) { $wire.set('rating', value) } })">
+                    @livewire('negative-review-form', ['team' => $team], key('negative-review-' . $team->id))
                 </div>
 
             </div>
 
-            <!-- Step 3: Thank You (Internal) -->
+            <!-- Step 3: Thank You (for positive reviews that came back) -->
             <div x-show="step === 3" x-transition x-cloak class="text-center">
                 <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 mb-4">
                     <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
                 </div>
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Message envoyé</h2>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Merci !</h2>
                 <p class="text-gray-600 dark:text-gray-300">
-                    Merci d'avoir pris le temps de nous écrire. Nous allons lire votre message avec attention.
+                    Votre avis compte beaucoup pour nous.
                 </p>
                 <div class="mt-6">
                     <a href="{{ route('profile.public', $team->public_uuid) }}"

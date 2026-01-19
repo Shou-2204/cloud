@@ -51,6 +51,7 @@ class TeamProfileSettings extends Component
             'state.google_review_url' => ['nullable', 'url', 'max:500'],
             'state.review_positive_message' => ['nullable', 'string', 'max:500'],
             'state.review_negative_message' => ['nullable', 'string', 'max:500'],
+            'state.feedback_email' => ['nullable', 'email', 'max:255'],
             'logo' => ['nullable', 'image', 'max:2048'], // 2MB Max
             'cover' => ['nullable', 'image', 'max:4096'], // 4MB Max
         ]);

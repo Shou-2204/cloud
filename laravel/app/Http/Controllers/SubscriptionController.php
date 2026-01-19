@@ -8,11 +8,14 @@ use App\Actions\Billing\SwapSubscription;
 use App\Actions\Billing\SyncStripeBilling;
 use App\Http\Requests\Billing\StoreBillingRequest;
 use App\Http\Requests\Billing\SwapSubscriptionRequest;
+use App\Mail\SubscriptionCancellationNotice;
 use App\Models\Team;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Cashier\Checkout;
 
 /**
@@ -140,11 +143,30 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Redirect to Stripe Billing Portal for cancellation.
+     * Handle subscription cancellation with feedback email.
      */
-    public function cancel(Team $team): mixed
+    public function cancel(Request $request, Team $team): mixed
     {
         $this->authorize('update', $team);
+
+        // Validate cancellation reason
+        $validated = $request->validate([
+            'reason' => ['required', 'string', 'in:too_expensive,missing_features,bugs,other'],
+            'contact_allowed' => ['nullable'],
+        ]);
+
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+
+        // Send cancellation notification email to admin
+        Mail::to(config('app.admin_notification_email'))
+            ->send(new SubscriptionCancellationNotice(
+                team: $team,
+                reason: $validated['reason'],
+                contactAllowed: isset($validated['contact_allowed']),
+                userEmail: $user->email,
+                userName: $user->name,
+            ));
 
         return $team->redirectToBillingPortal(route('subscription.show', $team));
     }

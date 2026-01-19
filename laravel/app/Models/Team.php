@@ -58,6 +58,7 @@ class Team extends JetstreamTeam
         'google_review_url',
         'review_positive_message',
         'review_negative_message',
+        'feedback_email',
     ];
 
     protected $dispatchesEvents = [
