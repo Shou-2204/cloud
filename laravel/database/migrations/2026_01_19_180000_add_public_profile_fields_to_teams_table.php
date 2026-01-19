@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 return new class extends Migration {
     /**
@@ -43,6 +45,13 @@ return new class extends Migration {
             $table->string('google_review_url')->nullable(); // Direct link to G-Business review form
             $table->text('review_positive_message')->nullable(); // "Thanks! Post on Google?"
             $table->text('review_negative_message')->nullable(); // "Sorry! Tell us why."
+        });
+
+        // Backfill UUIDs for existing teams
+        DB::table('teams')->cursor()->each(function ($team) {
+            DB::table('teams')
+                ->where('id', $team->id)
+                ->update(['public_uuid' => (string) Str::uuid()]);
         });
     }
 
