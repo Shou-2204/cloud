@@ -59,7 +59,7 @@
         {{-- NAVIGATION LINKS (MIDDLE) --}}
         <nav class="flex-1 overflow-y-auto overflow-x-hidden py-6 px-3 space-y-1">
 
-            <a href="{{ route('dashboard') }}"
+            <a href="{{ route('dashboard') }}" wire:navigate
                 class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('dashboard') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
                 :class="sidebarCollapsed ? 'justify-center' : ''">
                 <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('dashboard') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
@@ -77,7 +77,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('profile.show') }}"
+            <a href="{{ route('profile.show') }}" wire:navigate
                 class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('profile.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
                 :class="sidebarCollapsed ? 'justify-center' : ''">
                 <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('profile.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
@@ -104,7 +104,7 @@
                 </div>
 
                 @if(Auth::user()->currentTeam)
-                    <a href="{{ route('teams.show', Auth::user()->currentTeam) }}"
+                    <a href="{{ route('teams.show', Auth::user()->currentTeam) }}" wire:navigate
                         class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('teams.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
                         :class="sidebarCollapsed ? 'justify-center' : ''">
                         <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('teams.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
@@ -120,7 +120,7 @@
                     </a>
 
                     @if(Auth::user()->currentTeam->subscribed())
-                        <a href="{{ route('subscription.show', Auth::user()->currentTeam) }}"
+                        <a href="{{ route('subscription.show', Auth::user()->currentTeam) }}" wire:navigate
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('subscription.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
                             :class="sidebarCollapsed ? 'justify-center' : ''">
                             <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('subscription.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
@@ -135,7 +135,7 @@
                                 Mon Abonnement</div>
                         </a>
                     @else
-                        <a href="{{ route('subscription.index') }}"
+                        <a href="{{ route('subscription.index') }}" wire:navigate
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-xl text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 group relative"
                             :class="sidebarCollapsed ? 'justify-center' : ''">
                             <svg class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">

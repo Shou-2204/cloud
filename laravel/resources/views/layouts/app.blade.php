@@ -66,8 +66,8 @@
         }" x-init="init()">
     <x-banner />
 
+    @persist('main-layout')
     <div class="flex h-screen overflow-hidden bg-ivory dark:bg-emerald-dark">
-        {{-- SIDEBAR --}}
         {{-- SIDEBAR --}}
         @auth
             <x-app-sidebar />
@@ -87,6 +87,7 @@
             <x-app-footer />
         </div>
     </div>
+    @endpersist
 
     @stack('modals')
 
