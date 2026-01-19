@@ -1,16 +1,16 @@
 <x-form-section submit="updateTeamName">
     <x-slot name="title">
-        {{ __('Nom de l\'organisation') }}
+        {{ __("Nom de l'organisation") }}
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Les informations concernant l\'organisation et son propriétaire.') }}
+        {{ __("Les informations concernant l'organisation et son propriétaire.") }}
     </x-slot>
 
     <x-slot name="form">
         <!-- Team Owner Information -->
         <div class="col-span-6">
-            <x-label value="{{ __('Propriétaire de l\'organisation') }}" />
+            <x-label value="{{ __("Propriétaire de l'organisation") }}" />
 
             <div class="flex items-center mt-2">
                 <img class="size-12 rounded-full object-cover" src="{{ $team->owner->profile_photo_url }}" alt="{{ $team->owner->name }}">
@@ -24,7 +24,7 @@
 
         <!-- Team Name -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="name" value="{{ __('Nom de l\'organisation') }}" />
+            <x-label for="name" value="{{ __("Nom de l'organisation") }}" />
 
             <x-input id="name"
                         type="text"

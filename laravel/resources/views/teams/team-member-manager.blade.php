@@ -15,7 +15,7 @@
                 <x-slot name="form">
                     <div class="col-span-6">
                         <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-                            {{ __('Veuillez indiquer l\'adresse e-mail de la personne que vous souhaitez ajouter.') }}
+                            {{ __("Veuillez indiquer l'adresse e-mail de la personne que vous souhaitez ajouter.") }}
                         </div>
                     </div>
 
@@ -106,7 +106,7 @@
     <div class="mt-10 sm:mt-0">
         <x-action-section>
             <x-slot name="title">
-                {{ __('Membres de l\'organisation') }}
+                {{ __("Membres de l'organisation") }}
             </x-slot>
 
             <x-slot name="description">
@@ -186,7 +186,7 @@
     </x-dialog-modal>
 
     <x-confirmation-modal wire:model.live="confirmingLeavingTeam">
-        <x-slot name="title">{{ __('Quitter l\'organisation') }}</x-slot>
+        <x-slot name="title">{{ __("Quitter l'organisation") }}</x-slot>
         <x-slot name="content">{{ __('Êtes-vous sûr ?') }}</x-slot>
         <x-slot name="footer">
             <x-secondary-button wire:click="$toggle('confirmingLeavingTeam')">{{ __('Annuler') }}</x-secondary-button>
