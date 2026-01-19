@@ -108,7 +108,8 @@
                     <div x-data="{ open: {{ request()->routeIs('teams.show') ? 'true' : 'false' }} }" class="space-y-1">
 
                         <!-- Header / Toggle -->
-                        <button @click="sidebarCollapsed ? window.location.href = '{{ route('teams.show', Auth::user()->currentTeam) }}' : open = !open"
+                        <a href="{{ route('teams.show', Auth::user()->currentTeam) }}" wire:navigate
+                            @click="if (!sidebarCollapsed) { $event.preventDefault(); open = !open; }"
                             class="w-full flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative hover:bg-gray-50 dark:hover:bg-emerald-dark-600 focus:outline-none"
                             :class="sidebarCollapsed ? 'justify-center' : 'justify-between text-gray-600 dark:text-gray-400'">
 
@@ -136,7 +137,7 @@
                                 class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
                                 {{ Auth::user()->currentTeam->name }}
                             </div>
-                        </button>
+                        </a>
 
                         <!-- Sub-menu Items -->
                         <div x-show="open && !sidebarCollapsed" x-transition:enter="transition ease-out duration-100"
