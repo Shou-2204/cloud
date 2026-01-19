@@ -150,8 +150,6 @@
 
         </div>
 
-        <div class="mt-8 text-center text-sm text-gray-400">
-            Propulsé par <a href="{{ route('welcome') }}" class="hover:text-emerald-500">ShouCloud</a>
-        </div>
+
     </div>
 </x-public-layout>
