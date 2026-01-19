@@ -57,13 +57,13 @@ class TeamProfileSettings extends Component
 
         if (isset($this->logo)) {
             $this->team->update([
-                'logo_path' => $this->logo->storePublicly('team-logos', 's3'),
+                'logo_path' => $this->logo->storePublicly('team-logos', ['disk' => 's3']),
             ]);
         }
 
         if (isset($this->cover)) {
             $this->team->update([
-                'cover_image_path' => $this->cover->storePublicly('team-covers', 's3'),
+                'cover_image_path' => $this->cover->storePublicly('team-covers', ['disk' => 's3']),
             ]);
         }
 
