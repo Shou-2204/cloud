@@ -154,7 +154,7 @@
                                 @endif
                             @else
                                 {{-- GUEST VIEW --}}
-                                <a href="{{ route('register') }}"
+                                <a href="{{ route('register') }}" wire:navigate
                                    class="w-full block text-center bg-emerald-600 text-white font-semibold py-4 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all mb-8">
                                     {{ __('Commencer') }}
                                 </a>
@@ -234,7 +234,7 @@
                                 @endif
                             @else
                                 {{-- GUEST VIEW --}}
-                                <a href="{{ route('register') }}"
+                                <a href="{{ route('register') }}" wire:navigate
                                     class="w-full block text-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mb-8">
                                     {{ __('Commencer') }}
                                 </a>
