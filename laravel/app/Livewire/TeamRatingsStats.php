@@ -15,6 +15,7 @@ use Livewire\Component;
 class TeamRatingsStats extends Component
 {
     public ?Team $team = null;
+    public string $period = '7d'; // Default period
 
     public function mount(): void
     {
@@ -23,15 +24,40 @@ class TeamRatingsStats extends Component
         $this->team = $user->currentTeam;
     }
 
+    public function setPeriod(string $period): void
+    {
+        $this->period = $period;
+
+        // Dispatch event to update chart
+        $this->dispatch('chart-updated', [
+            'labels' => $this->chartData['labels'],
+            'data' => $this->chartData['data'],
+        ]);
+    }
+
     /**
-     * Get stats for a given period.
+     * Get the number of days for current period.
      */
-    protected function getStatsForPeriod(int $days): array
+    protected function getDays(): int
+    {
+        return match ($this->period) {
+            '24h' => 1,
+            '7d' => 7,
+            '30d' => 30,
+            default => 7,
+        };
+    }
+
+    /**
+     * Get stats for current period.
+     */
+    public function getStatsProperty(): array
     {
         if (!$this->team) {
-            return ['count' => 0, 'average' => 0, 'trend' => 0];
+            return ['count' => 0, 'average' => 0, 'trend' => 0, 'positive' => 0, 'negative' => 0];
         }
 
+        $days = $this->getDays();
         $startDate = now()->subDays($days);
         $previousStartDate = now()->subDays($days * 2);
 
@@ -42,8 +68,10 @@ class TeamRatingsStats extends Component
 
         $currentCount = $currentRatings->count();
         $currentAverage = $currentCount > 0 ? $currentRatings->avg('rating') : 0;
+        $positiveCount = $currentRatings->where('rating', '>=', 4)->count();
+        $negativeCount = $currentRatings->where('rating', '<=', 3)->count();
 
-        // Previous period (for trend comparison)
+        // Previous period (for trend)
         $previousRatings = TeamRating::where('team_id', $this->team->id)
             ->where('created_at', '>=', $previousStartDate)
             ->where('created_at', '<', $startDate)
@@ -51,37 +79,69 @@ class TeamRatingsStats extends Component
 
         $previousAverage = $previousRatings->count() > 0 ? $previousRatings->avg('rating') : 0;
 
-        // Calculate trend (-1 = down, 0 = stable, 1 = up)
         $trend = 0;
         if ($previousAverage > 0 && $currentAverage > 0) {
             $diff = $currentAverage - $previousAverage;
-            if ($diff > 0.1) {
+            if ($diff > 0.1)
                 $trend = 1;
-            } elseif ($diff < -0.1) {
+            elseif ($diff < -0.1)
                 $trend = -1;
-            }
         }
 
         return [
             'count' => $currentCount,
             'average' => round($currentAverage, 1),
             'trend' => $trend,
+            'positive' => $positiveCount,
+            'negative' => $negativeCount,
         ];
     }
 
-    public function getStats24hProperty(): array
+    /**
+     * Get chart data for the timeline.
+     */
+    public function getChartDataProperty(): array
     {
-        return $this->getStatsForPeriod(1);
-    }
+        if (!$this->team) {
+            return ['labels' => [], 'data' => []];
+        }
 
-    public function getStats7dProperty(): array
-    {
-        return $this->getStatsForPeriod(7);
-    }
+        $days = $this->getDays();
+        $labels = [];
+        $data = [];
 
-    public function getStats30dProperty(): array
-    {
-        return $this->getStatsForPeriod(30);
+        // For each day/hour in period, calculate average
+        if ($days === 1) {
+            // Hourly for 24h
+            for ($i = 23; $i >= 0; $i--) {
+                $start = now()->subHours($i + 1);
+                $end = now()->subHours($i);
+
+                $ratings = TeamRating::where('team_id', $this->team->id)
+                    ->whereBetween('created_at', [$start, $end])
+                    ->get();
+
+                $labels[] = $end->format('H:i');
+                $data[] = $ratings->count() > 0 ? round($ratings->avg('rating'), 1) : null;
+            }
+        } else {
+            // Daily for 7d/30d
+            for ($i = $days - 1; $i >= 0; $i--) {
+                $date = now()->subDays($i);
+
+                $ratings = TeamRating::where('team_id', $this->team->id)
+                    ->whereDate('created_at', $date->toDateString())
+                    ->get();
+
+                $labels[] = $date->format('d/m');
+                $data[] = $ratings->count() > 0 ? round($ratings->avg('rating'), 1) : null;
+            }
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data,
+        ];
     }
 
     public function getTotalAverageProperty(): float
@@ -99,3 +159,4 @@ class TeamRatingsStats extends Component
         return view('livewire.team-ratings-stats');
     }
 }
+
