@@ -58,8 +58,6 @@ services:
       - "${SESSION_DOMAIN}:host-gateway"
     restart: unless-stopped
 
-
-
 volumes:
   db_data:
   redis_data:
