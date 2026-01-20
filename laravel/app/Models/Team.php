@@ -109,6 +109,11 @@ class Team extends JetstreamTeam
         return $this->hasMany(TeamInvoice::class)->orderByDesc('issued_at');
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(TeamRating::class)->orderByDesc('created_at');
+    }
+
     public function toSearchableArray()
     {
         return [
