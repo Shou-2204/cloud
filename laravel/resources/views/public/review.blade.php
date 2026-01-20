@@ -76,14 +76,7 @@
                     x-init="$watch('rating', value => { if(value > 0 && value < 4) { Livewire.dispatch('set-rating', { rating: value }) } })">
                     @livewire('negative-review-form', ['team' => $team], key('negative-review-' . $team->id))
 
-                    @if($team->google_review_url)
-                        <div class="mt-6 text-center">
-                            <a href="{{ $team->google_review_url }}" target="_blank"
-                                class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 underline">
-                                Je ne souhaite pas de réponse, je veux publier mon avis sur Google.
-                            </a>
-                        </div>
-                    @endif
+
                 </div>
 
             </div>
