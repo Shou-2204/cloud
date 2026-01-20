@@ -2,7 +2,6 @@
 # Expose les ports standards sur l'interface de boucle locale 127.0.0.1
 # Assure la persistance des données de la base MySQL via un volume Docker
 
-
 services:
   mysql:
     image: mysql:8.0
@@ -53,11 +52,41 @@ services:
     container_name: cloud-stripe-1
     env_file:
       - ./laravel/.env
-    entrypoint: ["/bin/sh", "-c"]
-    command: ["stripe listen --forward-to https://$$SESSION_DOMAIN/stripe/webhook --api-key $$STRIPE_SECRET"]
+    entrypoint: [ "/bin/sh", "-c" ]
+    command: [ "stripe listen --forward-to https://$$SESSION_DOMAIN/stripe/webhook --api-key $$STRIPE_SECRET" ]
     extra_hosts:
       - "${SESSION_DOMAIN}:host-gateway"
     restart: unless-stopped
+
+  shlink:
+    image: shlinkio/shlink:stable
+    container_name: cloud-shlink-1
+    restart: unless-stopped
+    environment:
+      - DEFAULT_DOMAIN=localhost:8081
+      - IS_HTTPS_ENABLED=false
+      - GEOLITE_LICENSE_KEY=${GEOLITE_LICENSE_KEY:-}
+      - DB_DRIVER=mysql
+      - DB_USER=root
+      - DB_PASSWORD=${DB_PASSWORD:-root}
+      - DB_HOST=mysql
+      - DB_NAME=shlink
+    ports:
+      - "127.0.0.1:8081:8080"
+    depends_on:
+      - mysql
+
+  shlink-web-client:
+    image: shlinkio/shlink-web-client:stable
+    container_name: cloud-shlink-web-1
+    restart: unless-stopped
+    environment:
+      - SHLINK_SERVER_URL=http://localhost:8081
+      - SHLINK_SERVER_API_KEY=${SHLINK_API_KEY:-}
+    ports:
+      - "127.0.0.1:8082:80"
+    depends_on:
+      - shlink
 
 volumes:
   db_data:
