@@ -37,15 +37,15 @@
     @else
         <!-- Feedback Form -->
         <div class="text-center" x-data="{ 
-                        feedback: '',
-                        minWords: {{ $this::MIN_WORDS }},
-                        get wordCount() { 
-                            return this.feedback.trim().split(/\s+/).filter(w => w.length > 0).length; 
-                        },
-                        get hasEnoughWords() { 
-                            return this.wordCount >= this.minWords; 
-                        }
-                    }">
+                                feedback: '',
+                                minWords: {{ $this::MIN_WORDS }},
+                                get wordCount() { 
+                                    return this.feedback.trim().split(/\s+/).filter(w => w.length > 0).length; 
+                                },
+                                get hasEnoughWords() { 
+                                    return this.wordCount >= this.minWords; 
+                                }
+                            }">
             <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-orange-100 mb-4">
                 <span class="text-3xl">🙏</span>
             </div>
@@ -89,6 +89,15 @@
                     <span wire:loading.remove>Envoyer mon message au gérant</span>
                     <span wire:loading>Envoi en cours...</span>
                 </button>
+
+                @if($team->google_review_url)
+                    <div class="mt-4">
+                        <a href="{{ $team->google_review_url }}" target="_blank" rel="noopener noreferrer"
+                            class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:underline">
+                            Je ne souhaite pas de réponse, je veux publier mon avis sur Google.
+                        </a>
+                    </div>
+                @endif
             </form>
         </div>
     @endif
