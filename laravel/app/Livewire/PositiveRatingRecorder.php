@@ -33,6 +33,7 @@ class PositiveRatingRecorder extends Component
     /**
      * Record a positive rating.
      */
+    #[\Livewire\Attributes\On('record-positive-rating')]
     public function record(int $rating): void
     {
         if ($rating < 4 || $rating > 5) {
