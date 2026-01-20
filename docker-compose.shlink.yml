@@ -9,7 +9,7 @@ services:
       - GEOLITE_LICENSE_KEY=${GEOLITE_LICENSE_KEY:-}
       - DB_DRIVER=mysql
       - DB_USER=root
-      - DB_PASSWORD=${DB_PASSWORD:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-Topuser123}
       - DB_HOST=laravel-mysql-1
       - DB_NAME=shlink
       - SHELL_VERBOSITY=3
