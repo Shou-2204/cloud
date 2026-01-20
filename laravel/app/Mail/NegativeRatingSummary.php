@@ -42,7 +42,7 @@ class NegativeRatingSummary extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.negative-rating-summary',
+            view: 'emails.negative-rating-summary-html',
         );
     }
 }

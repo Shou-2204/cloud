@@ -86,32 +86,27 @@
                     </div>
 
                     {{-- Period selector with loading state --}}
-                    <div class="flex bg-gray-100 dark:bg-emerald-dark-600 rounded-xl p-1 relative">
-                        {{-- Loading overlay --}}
-                        <div wire:loading wire:target="setPeriod"
-                            class="absolute inset-0 bg-gray-100/80 dark:bg-emerald-dark-600/80 rounded-xl flex items-center justify-center z-10">
-                            <svg class="animate-spin h-5 w-5 text-emerald-500" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                                </circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                        </div>
-                        <button wire:click="setPeriod('24h')" wire:loading.class="opacity-50 cursor-wait"
-                            wire:target="setPeriod"
-                            class="px-4 py-2 text-sm font-medium rounded-lg transition-all {{ $period === '24h' ? 'bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
+                    {{-- Period selector with sliding pill animation --}}
+                    <div class="flex bg-gray-100 dark:bg-emerald-dark-600 rounded-xl p-1 relative isolate">
+                        {{-- Sliding Pill --}}
+                        <div class="absolute top-1 bottom-1 bg-white dark:bg-emerald-dark-500 rounded-lg shadow-sm transition-all duration-300 ease-out -z-10"
+                            :class="{
+                                    'left-1 w-[calc(33.33%-0.33rem)]': '{{ $period }}' === '24h',
+                                    'left-[calc(33.33%+0.33rem)] w-[calc(33.33%-0.66rem)]': '{{ $period }}' === '7d',
+                                    'left-[calc(66.66%+0.33rem)] w-[calc(33.33%-0.5rem)]': '{{ $period }}' === '30d'
+                                }"></div>
+
+                        {{-- Buttons --}}
+                        <button wire:click="setPeriod('24h')"
+                            class="flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $period === '24h' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
                             24h
                         </button>
-                        <button wire:click="setPeriod('7d')" wire:loading.class="opacity-50 cursor-wait"
-                            wire:target="setPeriod"
-                            class="px-4 py-2 text-sm font-medium rounded-lg transition-all {{ $period === '7d' ? 'bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
+                        <button wire:click="setPeriod('7d')"
+                            class="flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $period === '7d' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
                             7 jours
                         </button>
-                        <button wire:click="setPeriod('30d')" wire:loading.class="opacity-50 cursor-wait"
-                            wire:target="setPeriod"
-                            class="px-4 py-2 text-sm font-medium rounded-lg transition-all {{ $period === '30d' ? 'bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
+                        <button wire:click="setPeriod('30d')"
+                            class="flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $period === '30d' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
                             30 jours
                         </button>
                     </div>
@@ -142,70 +137,70 @@
 
                 {{-- Chart --}}
                 <div class="relative h-48" x-data="{
-                                    chart: null,
-                                    labels: @js($this->chartData['labels']),
-                                    data: @js($this->chartData['data']),
-                                    init() {
-                                        this.renderChart();
-
-                                        // Listen for Livewire updates
-                                        Livewire.on('chart-updated', (params) => {
-                                            this.labels = params[0].labels;
-                                            this.data = params[0].data;
+                                        chart: null,
+                                        labels: @js($this->chartData['labels']),
+                                        data: @js($this->chartData['data']),
+                                        init() {
                                             this.renderChart();
-                                        });
-                                    },
-                                    renderChart() {
-                                        const ctx = this.$refs.canvas.getContext('2d');
 
-                                        if (this.chart) {
-                                            this.chart.destroy();
-                                        }
+                                            // Listen for Livewire updates
+                                            Livewire.on('chart-updated', (params) => {
+                                                this.labels = params[0].labels;
+                                                this.data = params[0].data;
+                                                this.renderChart();
+                                            });
+                                        },
+                                        renderChart() {
+                                            const ctx = this.$refs.canvas.getContext('2d');
 
-                                        this.chart = new Chart(ctx, {
-                                            type: 'line',
-                                            data: {
-                                                labels: this.labels,
-                                                datasets: [{
-                                                    label: 'Note moyenne',
-                                                    data: this.data,
-                                                    borderColor: 'rgb(16, 185, 129)',
-                                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                                    fill: true,
-                                                    tension: 0.4,
-                                                    pointRadius: 4,
-                                                    pointBackgroundColor: 'rgb(16, 185, 129)',
-                                                    pointBorderColor: '#fff',
-                                                    pointBorderWidth: 2,
-                                                    spanGaps: true,
-                                                }]
-                                            },
-                                            options: {
-                                                responsive: true,
-                                                maintainAspectRatio: false,
-                                                plugins: {
-                                                    legend: { display: false },
-                                                    tooltip: {
-                                                        callbacks: {
-                                                            label: (ctx) => ctx.parsed.y ? ctx.parsed.y + ' ⭐' : 'Aucun avis'
+                                            if (this.chart) {
+                                                this.chart.destroy();
+                                            }
+
+                                            this.chart = new Chart(ctx, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: this.labels,
+                                                    datasets: [{
+                                                        label: 'Note moyenne',
+                                                        data: this.data,
+                                                        borderColor: 'rgb(16, 185, 129)',
+                                                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                                        fill: true,
+                                                        tension: 0.4,
+                                                        pointRadius: 4,
+                                                        pointBackgroundColor: 'rgb(16, 185, 129)',
+                                                        pointBorderColor: '#fff',
+                                                        pointBorderWidth: 2,
+                                                        spanGaps: true,
+                                                    }]
+                                                },
+                                                options: {
+                                                    responsive: true,
+                                                    maintainAspectRatio: false,
+                                                    plugins: {
+                                                        legend: { display: false },
+                                                        tooltip: {
+                                                            callbacks: {
+                                                                label: (ctx) => ctx.parsed.y ? ctx.parsed.y + ' ⭐' : 'Aucun avis'
+                                                            }
+                                                        }
+                                                    },
+                                                    scales: {
+                                                        y: {
+                                                            min: 1,
+                                                            max: 5,
+                                                            ticks: { stepSize: 1 },
+                                                            grid: { color: 'rgba(0,0,0,0.05)' }
+                                                        },
+                                                        x: {
+                                                            grid: { display: false }
                                                         }
                                                     }
-                                                },
-                                                scales: {
-                                                    y: {
-                                                        min: 1,
-                                                        max: 5,
-                                                        ticks: { stepSize: 1 },
-                                                        grid: { color: 'rgba(0,0,0,0.05)' }
-                                                    },
-                                                    x: {
-                                                        grid: { display: false }
-                                                    }
                                                 }
-                                            }
-                                        });
-                                    }
-                                }" x-init="init()" wire:ignore>
+                                            });
+                                        }
+                                    }" x-init="init()" wire:ignore>
                     <canvas x-ref="canvas"></canvas>
                 </div>
             </div>
