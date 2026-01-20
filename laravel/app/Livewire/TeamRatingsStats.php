@@ -62,9 +62,9 @@ class TeamRatingsStats extends Component
             ?? $this->team->email_public
             ?? $this->team->owner->email;
 
-        // Send the summary email
+        // Send the summary email via queue (Horizon)
         \Illuminate\Support\Facades\Mail::to($recipientEmail)
-            ->send(new \App\Mail\NegativeRatingSummary(
+            ->queue(new \App\Mail\NegativeRatingSummary(
                 teamName: $this->team->name,
                 ratings: $negativeRatings,
                 period: $this->period,
