@@ -59,6 +59,7 @@ class Team extends JetstreamTeam
         'review_positive_message',
         'review_negative_message',
         'feedback_email',
+        'digest_frequency',
     ];
 
     protected $dispatchesEvents = [

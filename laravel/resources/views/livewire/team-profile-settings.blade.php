@@ -258,6 +258,22 @@
                     <x-input-error for="state.feedback_email" class="mt-2" />
                 </div>
 
+                <!-- Digest Frequency -->
+                <div class="col-span-6 sm:col-span-4 mb-4">
+                    <x-label for="digest_frequency" value="{{ __('Fréquence des emails récapitulatifs') }}" />
+                    <select id="digest_frequency" wire:model="state.digest_frequency"
+                        class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm">
+                        <option value="daily">Quotidien (8h)</option>
+                        <option value="weekly">Hebdomadaire (Lundi 8h)</option>
+                        <option value="monthly">Mensuel (1er du mois)</option>
+                        <option value="none">Désactivé</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">
+                        {{ __('Recevez un récapitulatif des nouveaux avis par email selon cette fréquence.') }}
+                    </p>
+                    <x-input-error for="state.digest_frequency" class="mt-2" />
+                </div>
+
                 <!-- Messages -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>

@@ -36,6 +36,44 @@ class TeamRatingsStats extends Component
     }
 
     /**
+     * Send negative ratings summary by email.
+     */
+    public function sendNegativeSummary(): void
+    {
+        if (!$this->team) {
+            return;
+        }
+
+        $days = $this->getDays();
+        $startDate = now()->subDays($days);
+
+        $negativeRatings = TeamRating::where('team_id', $this->team->id)
+            ->where('created_at', '>=', $startDate)
+            ->where('rating', '<=', 3)
+            ->orderByDesc('created_at')
+            ->get();
+
+        if ($negativeRatings->isEmpty()) {
+            return;
+        }
+
+        // Determine recipient
+        $recipientEmail = $this->team->feedback_email
+            ?? $this->team->email_public
+            ?? $this->team->owner->email;
+
+        // Send the summary email
+        \Illuminate\Support\Facades\Mail::to($recipientEmail)
+            ->send(new \App\Mail\NegativeRatingSummary(
+                teamName: $this->team->name,
+                ratings: $negativeRatings,
+                period: $this->period,
+            ));
+
+        session()->flash('summary_sent', true);
+    }
+
+    /**
      * Get the number of days for current period.
      */
     protected function getDays(): int

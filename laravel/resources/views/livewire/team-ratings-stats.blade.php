@@ -12,16 +12,50 @@
                 <div
                     class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-gray-100 dark:border-emerald-dark-600">
 
-                    {{-- Main average display --}}
+                    {{-- Main average display with visual stars --}}
                     <div class="flex items-center gap-4">
-                        <div
-                            class="flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 shadow-lg">
-                            <span class="text-4xl">⭐</span>
+                        {{-- Visual star rating --}}
+                        @php
+                            $avg = $this->stats['average'] ?: 0;
+                            $roundedHalf = ceil($avg * 2) / 2; // Round to upper half
+                        @endphp
+                        <div class="flex items-center gap-1">
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= floor($roundedHalf))
+                                    {{-- Full star --}}
+                                    <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                @elseif($i - 0.5 == $roundedHalf)
+                                    {{-- Half star --}}
+                                    <div class="relative w-8 h-8">
+                                        <svg class="absolute w-8 h-8 text-gray-200 dark:text-gray-600" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <div class="absolute overflow-hidden w-4 h-8">
+                                            <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                @else
+                                    {{-- Empty star --}}
+                                    <svg class="w-8 h-8 text-gray-200 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                @endif
+                            @endfor
                         </div>
+
                         <div>
-                            <div class="text-4xl font-extrabold text-gray-900 dark:text-white">
+                            <div class="text-3xl font-extrabold text-gray-900 dark:text-white">
                                 {{ $this->stats['average'] ?: '-' }}
-                                <span class="text-lg font-normal text-gray-400">/5</span>
+                                <span class="text-base font-normal text-gray-400">/5</span>
                             </div>
                             <div class="flex items-center gap-2 mt-1">
                                 <span class="text-sm text-gray-500 dark:text-gray-400">
@@ -30,16 +64,25 @@
                                 @if($this->stats['trend'] === 1)
                                     <span
                                         class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                        ↑ En hausse
+                                        ↑
                                     </span>
                                 @elseif($this->stats['trend'] === -1)
                                     <span
                                         class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                                        ↓ En baisse
+                                        ↓
                                     </span>
                                 @endif
                             </div>
                         </div>
+
+                        {{-- Button to get negative summary --}}
+                        @if($this->stats['negative'] > 0)
+                            <button wire:click="sendNegativeSummary" wire:loading.attr="disabled"
+                                class="ml-4 px-3 py-2 text-xs font-medium rounded-lg bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:hover:bg-orange-900/50 transition-colors">
+                                <span wire:loading.remove wire:target="sendNegativeSummary">📧 Synthèse négatifs</span>
+                                <span wire:loading wire:target="sendNegativeSummary">Envoi...</span>
+                            </button>
+                        @endif
                     </div>
 
                     {{-- Period selector --}}
@@ -59,6 +102,14 @@
                     </div>
                 </div>
 
+                {{-- Flash message --}}
+                @if(session('summary_sent'))
+                    <div
+                        class="mb-4 p-3 rounded-lg bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-sm">
+                        ✅ La synthèse des avis négatifs a été envoyée par email.
+                    </div>
+                @endif
+
                 {{-- Stats cards --}}
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-4 text-center">
@@ -76,82 +127,72 @@
 
                 {{-- Chart --}}
                 <div class="relative h-48" x-data="{
-                            chart: null,
-                            labels: @js($this->chartData['labels']),
-                            data: @js($this->chartData['data']),
-                            init() {
-                                this.renderChart();
-
-                                // Listen for Livewire updates
-                                Livewire.on('chart-updated', (params) => {
-                                    this.labels = params[0].labels;
-                                    this.data = params[0].data;
+                                chart: null,
+                                labels: @js($this->chartData['labels']),
+                                data: @js($this->chartData['data']),
+                                init() {
                                     this.renderChart();
-                                });
-                            },
-                            renderChart() {
-                                const ctx = this.$refs.canvas.getContext('2d');
 
-                                if (this.chart) {
-                                    this.chart.destroy();
-                                }
+                                    // Listen for Livewire updates
+                                    Livewire.on('chart-updated', (params) => {
+                                        this.labels = params[0].labels;
+                                        this.data = params[0].data;
+                                        this.renderChart();
+                                    });
+                                },
+                                renderChart() {
+                                    const ctx = this.$refs.canvas.getContext('2d');
 
-                                this.chart = new Chart(ctx, {
-                                    type: 'line',
-                                    data: {
-                                        labels: this.labels,
-                                        datasets: [{
-                                            label: 'Note moyenne',
-                                            data: this.data,
-                                            borderColor: 'rgb(16, 185, 129)',
-                                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                            fill: true,
-                                            tension: 0.4,
-                                            pointRadius: 4,
-                                            pointBackgroundColor: 'rgb(16, 185, 129)',
-                                            pointBorderColor: '#fff',
-                                            pointBorderWidth: 2,
-                                            spanGaps: true,
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: {
-                                            legend: { display: false },
-                                            tooltip: {
-                                                callbacks: {
-                                                    label: (ctx) => ctx.parsed.y ? ctx.parsed.y + ' ⭐' : 'Aucun avis'
+                                    if (this.chart) {
+                                        this.chart.destroy();
+                                    }
+
+                                    this.chart = new Chart(ctx, {
+                                        type: 'line',
+                                        data: {
+                                            labels: this.labels,
+                                            datasets: [{
+                                                label: 'Note moyenne',
+                                                data: this.data,
+                                                borderColor: 'rgb(16, 185, 129)',
+                                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                                fill: true,
+                                                tension: 0.4,
+                                                pointRadius: 4,
+                                                pointBackgroundColor: 'rgb(16, 185, 129)',
+                                                pointBorderColor: '#fff',
+                                                pointBorderWidth: 2,
+                                                spanGaps: true,
+                                            }]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            maintainAspectRatio: false,
+                                            plugins: {
+                                                legend: { display: false },
+                                                tooltip: {
+                                                    callbacks: {
+                                                        label: (ctx) => ctx.parsed.y ? ctx.parsed.y + ' ⭐' : 'Aucun avis'
+                                                    }
+                                                }
+                                            },
+                                            scales: {
+                                                y: {
+                                                    min: 1,
+                                                    max: 5,
+                                                    ticks: { stepSize: 1 },
+                                                    grid: { color: 'rgba(0,0,0,0.05)' }
+                                                },
+                                                x: {
+                                                    grid: { display: false }
                                                 }
                                             }
-                                        },
-                                        scales: {
-                                            y: {
-                                                min: 1,
-                                                max: 5,
-                                                ticks: { stepSize: 1 },
-                                                grid: { color: 'rgba(0,0,0,0.05)' }
-                                            },
-                                            x: {
-                                                grid: { display: false }
-                                            }
                                         }
-                                    }
-                                });
-                            }
-                        }" x-init="init()" wire:ignore>
+                                    });
+                                }
+                            }" x-init="init()" wire:ignore>
                     <canvas x-ref="canvas"></canvas>
                 </div>
-
-                {{-- Link to review page --}}
-                @if($team->public_uuid)
-                    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-emerald-dark-600 text-center">
-                        <a href="{{ route('profile.review', $team) }}" target="_blank"
-                            class="text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 font-medium">
-                            Voir la page d'avis →
-                        </a>
-                    </div>
-                @endif
             </div>
         </div>
     @endif
