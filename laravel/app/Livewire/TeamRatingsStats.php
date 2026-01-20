@@ -88,6 +88,7 @@ class TeamRatingsStats extends Component
 
     /**
      * Get stats for current period.
+     * Optimized: Uses SQL aggregations instead of loading all records.
      */
     public function getStatsProperty(): array
     {
@@ -99,31 +100,36 @@ class TeamRatingsStats extends Component
         $startDate = now()->subDays($days);
         $previousStartDate = now()->subDays($days * 2);
 
-        // Current period
-        $currentRatings = TeamRating::where('team_id', $this->team->id)
+        // Current period - Single optimized query with SQL aggregations
+        $currentStats = TeamRating::where('team_id', $this->team->id)
             ->where('created_at', '>=', $startDate)
-            ->get();
+            ->selectRaw('
+                COUNT(*) as count,
+                AVG(rating) as average,
+                SUM(CASE WHEN rating >= 4 THEN 1 ELSE 0 END) as positive,
+                SUM(CASE WHEN rating <= 3 THEN 1 ELSE 0 END) as negative
+            ')
+            ->first();
 
-        $currentCount = $currentRatings->count();
-        $currentAverage = $currentCount > 0 ? $currentRatings->avg('rating') : 0;
-        $positiveCount = $currentRatings->where('rating', '>=', 4)->count();
-        $negativeCount = $currentRatings->where('rating', '<=', 3)->count();
+        $currentCount = (int) ($currentStats->count ?? 0);
+        $currentAverage = (float) ($currentStats->average ?? 0);
+        $positiveCount = (int) ($currentStats->positive ?? 0);
+        $negativeCount = (int) ($currentStats->negative ?? 0);
 
-        // Previous period (for trend)
-        $previousRatings = TeamRating::where('team_id', $this->team->id)
+        // Previous period - Single optimized query for trend
+        $previousAverage = (float) TeamRating::where('team_id', $this->team->id)
             ->where('created_at', '>=', $previousStartDate)
             ->where('created_at', '<', $startDate)
-            ->get();
-
-        $previousAverage = $previousRatings->count() > 0 ? $previousRatings->avg('rating') : 0;
+            ->avg('rating') ?? 0;
 
         $trend = 0;
         if ($previousAverage > 0 && $currentAverage > 0) {
             $diff = $currentAverage - $previousAverage;
-            if ($diff > 0.1)
+            if ($diff > 0.1) {
                 $trend = 1;
-            elseif ($diff < -0.1)
+            } elseif ($diff < -0.1) {
                 $trend = -1;
+            }
         }
 
         return [
@@ -137,6 +143,7 @@ class TeamRatingsStats extends Component
 
     /**
      * Get chart data for the timeline.
+     * Optimized: Uses a single GROUP BY query instead of N+1 queries.
      */
     public function getChartDataProperty(): array
     {
@@ -148,31 +155,35 @@ class TeamRatingsStats extends Component
         $labels = [];
         $data = [];
 
-        // For each day/hour in period, calculate average
         if ($days === 1) {
-            // Hourly for 24h
+            // Hourly for 24h - Single query grouped by hour
+            $startTime = now()->subHours(24);
+            $ratingsGrouped = TeamRating::where('team_id', $this->team->id)
+                ->where('created_at', '>=', $startTime)
+                ->selectRaw('DATE_FORMAT(created_at, "%Y-%m-%d %H:00:00") as hour_slot, AVG(rating) as avg_rating')
+                ->groupBy('hour_slot')
+                ->pluck('avg_rating', 'hour_slot');
+
             for ($i = 23; $i >= 0; $i--) {
-                $start = now()->subHours($i + 1);
-                $end = now()->subHours($i);
-
-                $ratings = TeamRating::where('team_id', $this->team->id)
-                    ->whereBetween('created_at', [$start, $end])
-                    ->get();
-
-                $labels[] = $end->format('H:i');
-                $data[] = $ratings->count() > 0 ? round($ratings->avg('rating'), 1) : null;
+                $slotTime = now()->subHours($i);
+                $slotKey = $slotTime->format('Y-m-d H:00:00');
+                $labels[] = $slotTime->format('H:i');
+                $data[] = isset($ratingsGrouped[$slotKey]) ? round((float) $ratingsGrouped[$slotKey], 1) : null;
             }
         } else {
-            // Daily for 7d/30d
+            // Daily for 7d/30d - Single query grouped by date
+            $startDate = now()->subDays($days);
+            $ratingsGrouped = TeamRating::where('team_id', $this->team->id)
+                ->where('created_at', '>=', $startDate)
+                ->selectRaw('DATE(created_at) as date, AVG(rating) as avg_rating')
+                ->groupBy('date')
+                ->pluck('avg_rating', 'date');
+
             for ($i = $days - 1; $i >= 0; $i--) {
                 $date = now()->subDays($i);
-
-                $ratings = TeamRating::where('team_id', $this->team->id)
-                    ->whereDate('created_at', $date->toDateString())
-                    ->get();
-
+                $dateKey = $date->toDateString();
                 $labels[] = $date->format('d/m');
-                $data[] = $ratings->count() > 0 ? round($ratings->avg('rating'), 1) : null;
+                $data[] = isset($ratingsGrouped[$dateKey]) ? round((float) $ratingsGrouped[$dateKey], 1) : null;
             }
         }
 
@@ -182,14 +193,19 @@ class TeamRatingsStats extends Component
         ];
     }
 
+    /**
+     * Get total average rating for the team.
+     * Optimized: Uses SQL AVG directly instead of loading all records.
+     */
     public function getTotalAverageProperty(): float
     {
         if (!$this->team) {
             return 0;
         }
 
-        $ratings = TeamRating::where('team_id', $this->team->id)->get();
-        return $ratings->count() > 0 ? round($ratings->avg('rating'), 1) : 0;
+        $average = TeamRating::where('team_id', $this->team->id)->avg('rating');
+
+        return $average ? round((float) $average, 1) : 0;
     }
 
     public function render()
