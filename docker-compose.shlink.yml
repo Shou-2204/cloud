@@ -10,13 +10,13 @@ services:
       - DB_DRIVER=mysql
       - DB_USER=root
       - DB_PASSWORD=${DB_PASSWORD:-Topuser123}
-      - DB_HOST=laravel-mysql-1
+      - DB_HOST=mysql
       - DB_NAME=shlink
       - SHELL_VERBOSITY=3
     ports:
       - "127.0.0.1:8081:8080"
     networks:
-      - laravel_default
+      - cloud_default
 
   shlink-web-client:
     image: shlinkio/shlink-web-client:stable
@@ -28,8 +28,8 @@ services:
     ports:
       - "127.0.0.1:8082:80"
     networks:
-      - laravel_default
+      - cloud_default
 
 networks:
-  laravel_default:
+  cloud_default:
     external: true
