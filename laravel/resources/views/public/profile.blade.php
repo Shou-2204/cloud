@@ -38,7 +38,7 @@
                     <!-- Actions -->
                     <div class="mt-6 sm:mt-0 flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-3">
                         @if($team->reviews_enabled)
-                            <a href="{{ route('profile.review', $team->public_uuid) }}"
+                            <a href="{{ route('profile.survey', $team->public_uuid) }}"
                                 class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 w-full sm:w-auto">
                                 <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

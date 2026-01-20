@@ -1,4 +1,4 @@
-<x-public-layout :seo="['title' => 'Donnez votre avis - ' . $team->name, 'description' => 'Votre avis compte pour ' . $team->name]">
+<x-public-layout :seo="['title' => 'Enquête de satisfaction - ' . $team->name, 'description' => 'Votre avis compte pour ' . $team->name]">
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-4">
 
         <!-- Header -->
@@ -7,7 +7,7 @@
                 <img src="{{ Storage::disk('minio_public')->url($team->logo_path) }}" alt="{{ $team->name }}"
                     class="h-20 w-20 rounded-full mx-auto mb-4 object-cover shadow-lg">
             @endif
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Votre avis compte pour nous</h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Enquête de satisfaction</h1>
             <p class="text-gray-500 dark:text-gray-400 mt-2">{{ $team->name }}</p>
         </div>
 
@@ -21,10 +21,12 @@
                 // Here we would submit via Livewire or API
                 this.step = 3; 
             },
-            validateRating() {
-                if (this.rating > 0) {
+            setRating(value) {
+                this.rating = value;
+                // Petit délai pour l'animation visuelle avant de changer d'étape
+                setTimeout(() => {
                     this.step = 2;
-                }
+                }, 300);
             }
         }" class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md w-full transition-all duration-300">
 
@@ -36,7 +38,7 @@
                 <div class="flex flex-col items-center mb-8">
                     <div class="flex justify-center space-x-2">
                         <template x-for="star in 5">
-                            <button @click="rating = star" @mouseenter="hoverRating = star"
+                            <button @click="setRating(star)" @mouseenter="hoverRating = star"
                                 @mouseleave="hoverRating = 0"
                                 class="focus:outline-none transform transition duration-200" :class="{
                                     'hover:scale-125': hoverRating === star,
@@ -54,17 +56,8 @@
                         </template>
                     </div>
 
-                    <!-- Validation Button -->
-                    <div x-show="rating > 0" x-transition class="mt-8 text-center">
-                        <div class="mb-4 text-lg font-medium text-emerald-600 dark:text-emerald-400">
-                            <span x-text="rating"></span>/5 <span class="mx-2">-</span>
-                            <span
-                                x-text="rating >= 4 ? 'Excellent !' : (rating >= 3 ? 'Bien' : 'Peut mieux faire')"></span>
-                        </div>
-                        <button @click="validateRating()"
-                            class="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full font-bold shadow-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
-                            Valider ma note
-                        </button>
+                    <!-- Validation Button Removed -->
+                    <div x-show="rating > 0" x-transition class="mt-8 text-center" style="display: none;">
                     </div>
                 </div>
             </div>
@@ -73,39 +66,17 @@
             <div x-show="step === 2" x-transition x-cloak>
 
                 <!-- Positive Flow (4-5 Stars) -->
-                <div x-show="rating >= 4">
-                    <div class="text-center">
-                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
-                            <span class="text-3xl">🎉</span>
-                        </div>
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Merci beaucoup !</h2>
-                        <p class="text-gray-600 dark:text-gray-300 mb-6">
-                            {{ $team->review_positive_message ?? "Nous sommes ravis que cela vous ait plu ! Pourriez-vous nous laisser un petit mot sur Google ? Cela nous aide énormément." }}
-                        </p>
-
-                        @if($team->google_review_url)
-                            <a href="{{ $team->google_review_url }}" target="_blank"
-                                class="block w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold shadow-lg transition transform hover:-translate-y-0.5">
-                                Laisser un avis sur Google
-                            </a>
-                        @else
-                            <button
-                                class="block w-full py-3 px-4 bg-gray-200 dark:bg-gray-700 text-gray-500 rounded-xl font-semibold cursor-not-allowed">
-                                Lien Google non configuré
-                            </button>
-                        @endif
-
-                        <button @click="step = 1"
-                            class="mt-4 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 underline">
-                            Modifier ma note
-                        </button>
-                    </div>
+                <div x-show="rating >= 4"
+                    x-init="$watch('rating', value => { if(value >= 4) { Livewire.dispatch('record-positive-rating', { rating: value }) } })">
+                    @livewire('positive-rating-recorder', ['team' => $team], key('positive-rating-' . $team->id))
                 </div>
 
                 <!-- Negative Flow (1-3 Stars) - Using Livewire Component -->
                 <div x-show="rating < 4 && rating > 0"
                     x-init="$watch('rating', value => { if(value > 0 && value < 4) { Livewire.dispatch('set-rating', { rating: value }) } })">
                     @livewire('negative-review-form', ['team' => $team], key('negative-review-' . $team->id))
+
+
                 </div>
 
             </div>

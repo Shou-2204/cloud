@@ -59,6 +59,7 @@ class Team extends JetstreamTeam
         'review_positive_message',
         'review_negative_message',
         'feedback_email',
+        'digest_frequency',
     ];
 
     protected $dispatchesEvents = [
@@ -107,6 +108,11 @@ class Team extends JetstreamTeam
     public function invoicesRel()
     {
         return $this->hasMany(TeamInvoice::class)->orderByDesc('issued_at');
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(TeamRating::class)->orderByDesc('created_at');
     }
 
     public function toSearchableArray()

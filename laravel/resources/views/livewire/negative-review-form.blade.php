@@ -16,24 +16,42 @@
                     au profil</a>
             </div>
         </div>
+    @elseif($rateLimited)
+        <!-- Rate Limited Message -->
+        <div class="text-center" x-transition>
+            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-orange-100 mb-4">
+                <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Message déjà envoyé</h2>
+            <p class="text-gray-600 dark:text-gray-300">
+                Vous avez déjà envoyé un message récemment. Veuillez patienter avant d'en envoyer un autre.
+            </p>
+            <div class="mt-6">
+                <a href="{{ route('profile.public', $team->public_uuid) }}" class="text-emerald-600 hover:underline">Retour
+                    au profil</a>
+            </div>
+        </div>
     @else
         <!-- Feedback Form -->
         <div class="text-center" x-data="{ 
-                feedback: '',
-                minWords: {{ $this::MIN_WORDS }},
-                get wordCount() { 
-                    return this.feedback.trim().split(/\s+/).filter(w => w.length > 0).length; 
-                },
-                get hasEnoughWords() { 
-                    return this.wordCount >= this.minWords; 
-                }
-            }">
+                                feedback: '',
+                                minWords: {{ $this::MIN_WORDS }},
+                                get wordCount() { 
+                                    return this.feedback.trim().split(/\s+/).filter(w => w.length > 0).length; 
+                                },
+                                get hasEnoughWords() { 
+                                    return this.wordCount >= this.minWords; 
+                                }
+                            }">
             <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-orange-100 mb-4">
                 <span class="text-3xl">🙏</span>
             </div>
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Désolé pour cette expérience</h2>
             <p class="text-gray-600 dark:text-gray-300 mb-6">
-                {{ $team->review_negative_message ?? "Nous sommes navrés que tout ne se soit pas passé comme prévu. Dites-nous ce qui n'a pas été, nous ferons tout pour nous rattraper." }}
+                {{ $team->review_negative_message ?? "Dites-nous ce qui n'a pas été. Notre direction lit chaque message." }}
             </p>
 
             <form wire:submit="submit">
@@ -71,6 +89,15 @@
                     <span wire:loading.remove>Envoyer mon message au gérant</span>
                     <span wire:loading>Envoi en cours...</span>
                 </button>
+
+                @if($team->google_review_url)
+                    <div class="mt-4">
+                        <a href="{{ $team->google_review_url }}" target="_blank" rel="noopener noreferrer"
+                            class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:underline">
+                            Je ne souhaite pas de réponse, je veux publier mon avis sur Google.
+                        </a>
+                    </div>
+                @endif
             </form>
         </div>
     @endif

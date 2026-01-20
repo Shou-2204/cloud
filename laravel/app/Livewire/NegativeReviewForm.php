@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Mail\NegativeFeedbackReceived;
 use App\Models\Team;
-use Illuminate\Support\Facades\Mail;
+use App\Models\TeamRating;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 /**
  * Handles negative feedback submission from public review page.
+ * Saves to database for daily digest instead of sending instant emails.
  */
 class NegativeReviewForm extends Component
 {
@@ -18,11 +19,23 @@ class NegativeReviewForm extends Component
     public int $rating = 0;
     public string $feedback = '';
     public bool $submitted = false;
+    public bool $rateLimited = false;
 
     /**
      * Minimum number of words required for negative feedback.
      */
     public const MIN_WORDS = 5;
+
+    /**
+     * Rate limit: seconds before another submission is allowed (1 hour).
+     */
+    public const RATE_LIMIT_SECONDS = 3600;
+
+    public function mount(): void
+    {
+        // Check if already rate limited on component load
+        $this->rateLimited = $this->isRateLimited();
+    }
 
     /**
      * Listen for rating updates from Alpine.js
@@ -66,10 +79,52 @@ class NegativeReviewForm extends Component
     }
 
     /**
+     * Rate limit key based on IP + session.
+     * Allows multiple users on same network (WiFi) to submit independently.
+     */
+    protected function getRateLimitKey(): string
+    {
+        $ip = request()->ip();
+        $sessionId = session()->getId();
+        return "review_limit:{$this->team->id}:{$ip}:{$sessionId}";
+    }
+
+    /**
+     * Generate a hash for spam tracking (anonymized).
+     */
+    protected function getSessionHash(): string
+    {
+        return hash('sha256', request()->ip() . '|' . session()->getId());
+    }
+
+    /**
+     * Check if current IP is rate limited for this team.
+     */
+    protected function isRateLimited(): bool
+    {
+        return Cache::has($this->getRateLimitKey());
+    }
+
+    /**
+     * Apply rate limit for current IP.
+     */
+    protected function applyRateLimit(): void
+    {
+        Cache::put($this->getRateLimitKey(), true, self::RATE_LIMIT_SECONDS);
+    }
+
+    /**
      * Submit the negative feedback.
      */
     public function submit(): void
     {
+        // Check rate limit first
+        if ($this->isRateLimited()) {
+            $this->rateLimited = true;
+            $this->addError('feedback', 'Vous avez déjà envoyé un message récemment. Veuillez patienter avant de réessayer.');
+            return;
+        }
+
         $this->validate();
 
         // Check minimum word count
@@ -78,18 +133,16 @@ class NegativeReviewForm extends Component
             return;
         }
 
-        // Determine recipient email
-        $recipientEmail = $this->team->feedback_email
-            ?? $this->team->email_public
-            ?? $this->team->owner->email;
+        // Apply rate limit before saving
+        $this->applyRateLimit();
 
-        // Send the email
-        Mail::to($recipientEmail)
-            ->send(new NegativeFeedbackReceived(
-                team: $this->team,
-                rating: $this->rating,
-                feedback: $this->feedback,
-            ));
+        // Save to database (email sent via daily digest)
+        TeamRating::create([
+            'team_id' => $this->team->id,
+            'rating' => $this->rating,
+            'feedback' => $this->feedback,
+            'session_hash' => $this->getSessionHash(),
+        ]);
 
         $this->submitted = true;
     }
@@ -99,3 +152,4 @@ class NegativeReviewForm extends Component
         return view('livewire.negative-review-form');
     }
 }
+

@@ -137,6 +137,10 @@
                 </div>
 
             </div>
+
+            {{-- RATING STATS (for subscribed teams) --}}
+            @livewire('team-ratings-stats')
+
         </div>
     </div>
 </x-app-layout>

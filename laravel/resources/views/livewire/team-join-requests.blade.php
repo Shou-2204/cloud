@@ -1,7 +1,4 @@
 <div>
-    {{-- AJOUT DE LA BORDURE ICI (Liée au composant) --}}
-    <x-section-border />
-
     <div class="mt-10 sm:mt-0">
         <x-action-section>
             <x-slot name="title">
