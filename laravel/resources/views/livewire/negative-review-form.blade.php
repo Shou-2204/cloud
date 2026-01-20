@@ -37,21 +37,21 @@
     @else
         <!-- Feedback Form -->
         <div class="text-center" x-data="{ 
-                    feedback: '',
-                    minWords: {{ $this::MIN_WORDS }},
-                    get wordCount() { 
-                        return this.feedback.trim().split(/\s+/).filter(w => w.length > 0).length; 
-                    },
-                    get hasEnoughWords() { 
-                        return this.wordCount >= this.minWords; 
-                    }
-                }">
+                        feedback: '',
+                        minWords: {{ $this::MIN_WORDS }},
+                        get wordCount() { 
+                            return this.feedback.trim().split(/\s+/).filter(w => w.length > 0).length; 
+                        },
+                        get hasEnoughWords() { 
+                            return this.wordCount >= this.minWords; 
+                        }
+                    }">
             <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-orange-100 mb-4">
                 <span class="text-3xl">🙏</span>
             </div>
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Désolé pour cette expérience</h2>
             <p class="text-gray-600 dark:text-gray-300 mb-6">
-                {{ $team->review_negative_message ?? "Nous sommes navrés que tout ne se soit pas passé comme prévu. Dites-nous ce qui n'a pas été, nous ferons tout pour nous rattraper." }}
+                {{ $team->review_negative_message ?? "Dites-nous ce qui n'a pas été. Notre direction lit chaque message." }}
             </p>
 
             <form wire:submit="submit">
