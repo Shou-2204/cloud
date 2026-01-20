@@ -6,7 +6,7 @@
             </h2>
 
             <div
-                class="bg-white dark:bg-emerald-dark-500 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-emerald-dark-600">
+                class="bg-white dark:bg-emerald-dark-500 rounded-3xl p-4 sm:p-6 shadow-sm border border-gray-100 dark:border-emerald-dark-600">
 
                 {{-- Header with average and period selector --}}
                 <div
@@ -23,20 +23,21 @@
                             @for($i = 1; $i <= 5; $i++)
                                 @if($i <= floor($roundedHalf))
                                     {{-- Full star --}}
-                                    <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg class="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path
                                             d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                     </svg>
                                 @elseif($i - 0.5 == $roundedHalf)
                                     {{-- Half star --}}
-                                    <div class="relative w-8 h-8">
-                                        <svg class="absolute w-8 h-8 text-gray-200 dark:text-gray-600" fill="currentColor"
-                                            viewBox="0 0 20 20">
+                                    <div class="relative w-6 h-6 sm:w-8 sm:h-8">
+                                        <svg class="absolute w-6 h-6 sm:w-8 sm:h-8 text-gray-200 dark:text-gray-600"
+                                            fill="currentColor" viewBox="0 0 20 20">
                                             <path
                                                 d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
-                                        <div class="absolute overflow-hidden w-4 h-8">
-                                            <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <div class="absolute overflow-hidden w-3 h-6 sm:w-4 sm:h-8">
+                                            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400" fill="currentColor"
+                                                viewBox="0 0 20 20">
                                                 <path
                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg>
@@ -44,7 +45,8 @@
                                     </div>
                                 @else
                                     {{-- Empty star --}}
-                                    <svg class="w-8 h-8 text-gray-200 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-200 dark:text-gray-600" fill="currentColor"
+                                        viewBox="0 0 20 20">
                                         <path
                                             d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                     </svg>
@@ -53,7 +55,7 @@
                         </div>
 
                         <div>
-                            <div class="text-3xl font-extrabold text-gray-900 dark:text-white">
+                            <div class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
                                 {{ $this->stats['average'] ?: '-' }}
                                 <span class="text-base font-normal text-gray-400">/5</span>
                             </div>
@@ -85,29 +87,34 @@
                         @endif
                     </div>
 
-                    {{-- Period selector with loading state --}}
-                    {{-- Period selector with sliding pill animation --}}
-                    <div class="flex bg-gray-100 dark:bg-emerald-dark-600 rounded-xl p-1 relative isolate">
+                    {{-- Period selector --}}
+                    <div class="flex bg-gray-100 dark:bg-emerald-dark-600 rounded-xl p-1 relative isolate"
+                        x-data="{ activePeriod: '{{ $period }}' }" wire:ignore>
                         {{-- Sliding Pill --}}
                         <div class="absolute top-1 bottom-1 bg-white dark:bg-emerald-dark-500 rounded-lg shadow-sm transition-all duration-300 ease-out -z-10"
                             :class="{
-                                    'left-1 w-[calc(33.33%-0.33rem)]': '{{ $period }}' === '24h',
-                                    'left-[calc(33.33%+0.33rem)] w-[calc(33.33%-0.66rem)]': '{{ $period }}' === '7d',
-                                    'left-[calc(66.66%+0.33rem)] w-[calc(33.33%-0.5rem)]': '{{ $period }}' === '30d'
-                                }"></div>
+                                            'left-1 w-[calc(33.33%-0.33rem)]': activePeriod === '24h',
+                                            'left-[calc(33.33%+0.33rem)] w-[calc(33.33%-0.66rem)]': activePeriod === '7d',
+                                            'left-[calc(66.66%+0.33rem)] w-[calc(33.33%-0.5rem)]': activePeriod === '30d'
+                                        }"></div>
 
                         {{-- Buttons --}}
-                        <button wire:click="setPeriod('24h')"
-                            class="flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $period === '24h' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
+                        <button wire:click="setPeriod('24h')" @click="activePeriod = '24h'"
+                            class="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors relative z-10"
+                            :class="activePeriod === '24h' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'">
                             24h
                         </button>
-                        <button wire:click="setPeriod('7d')"
-                            class="flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $period === '7d' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
-                            7 jours
+                        <button wire:click="setPeriod('7d')" @click="activePeriod = '7d'"
+                            class="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors relative z-10"
+                            :class="activePeriod === '7d' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'">
+                            <span class="hidden sm:inline">7 jours</span>
+                            <span class="sm:hidden">7j</span>
                         </button>
-                        <button wire:click="setPeriod('30d')"
-                            class="flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $period === '30d' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
-                            30 jours
+                        <button wire:click="setPeriod('30d')" @click="activePeriod = '30d'"
+                            class="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors relative z-10"
+                            :class="activePeriod === '30d' ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'">
+                            <span class="hidden sm:inline">30 jours</span>
+                            <span class="sm:hidden">30j</span>
                         </button>
                     </div>
                 </div>
@@ -136,71 +143,71 @@
                 </div>
 
                 {{-- Chart --}}
-                <div class="relative h-48" x-data="{
-                                        chart: null,
-                                        labels: @js($this->chartData['labels']),
-                                        data: @js($this->chartData['data']),
-                                        init() {
-                                            this.renderChart();
+                <div class="relative h-40 sm:h-48" x-data="{
+                                                chart: null,
+                                                labels: @js($this->chartData['labels']),
+                                                data: @js($this->chartData['data']),
+                                                init() {
+                                                    this.renderChart();
 
-                                            // Listen for Livewire updates
-                                            Livewire.on('chart-updated', (params) => {
-                                                this.labels = params[0].labels;
-                                                this.data = params[0].data;
-                                                this.renderChart();
-                                            });
-                                        },
-                                        renderChart() {
-                                            const ctx = this.$refs.canvas.getContext('2d');
-
-                                            if (this.chart) {
-                                                this.chart.destroy();
-                                            }
-
-                                            this.chart = new Chart(ctx, {
-                                                type: 'line',
-                                                data: {
-                                                    labels: this.labels,
-                                                    datasets: [{
-                                                        label: 'Note moyenne',
-                                                        data: this.data,
-                                                        borderColor: 'rgb(16, 185, 129)',
-                                                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                                        fill: true,
-                                                        tension: 0.4,
-                                                        pointRadius: 4,
-                                                        pointBackgroundColor: 'rgb(16, 185, 129)',
-                                                        pointBorderColor: '#fff',
-                                                        pointBorderWidth: 2,
-                                                        spanGaps: true,
-                                                    }]
+                                                    // Listen for Livewire updates
+                                                    Livewire.on('chart-updated', (params) => {
+                                                        this.labels = params[0].labels;
+                                                        this.data = params[0].data;
+                                                        this.renderChart();
+                                                    });
                                                 },
-                                                options: {
-                                                    responsive: true,
-                                                    maintainAspectRatio: false,
-                                                    plugins: {
-                                                        legend: { display: false },
-                                                        tooltip: {
-                                                            callbacks: {
-                                                                label: (ctx) => ctx.parsed.y ? ctx.parsed.y + ' ⭐' : 'Aucun avis'
+                                                renderChart() {
+                                                    const ctx = this.$refs.canvas.getContext('2d');
+
+                                                    if (this.chart) {
+                                                        this.chart.destroy();
+                                                    }
+
+                                                    this.chart = new Chart(ctx, {
+                                                        type: 'line',
+                                                        data: {
+                                                            labels: this.labels,
+                                                            datasets: [{
+                                                                label: 'Note moyenne',
+                                                                data: this.data,
+                                                                borderColor: 'rgb(16, 185, 129)',
+                                                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                                                fill: true,
+                                                                tension: 0.4,
+                                                                pointRadius: 4,
+                                                                pointBackgroundColor: 'rgb(16, 185, 129)',
+                                                                pointBorderColor: '#fff',
+                                                                pointBorderWidth: 2,
+                                                                spanGaps: true,
+                                                            }]
+                                                        },
+                                                        options: {
+                                                            responsive: true,
+                                                            maintainAspectRatio: false,
+                                                            plugins: {
+                                                                legend: { display: false },
+                                                                tooltip: {
+                                                                    callbacks: {
+                                                                        label: (ctx) => ctx.parsed.y ? ctx.parsed.y + ' ⭐' : 'Aucun avis'
+                                                                    }
+                                                                }
+                                                            },
+                                                            scales: {
+                                                                y: {
+                                                                    min: 1,
+                                                                    max: 5,
+                                                                    ticks: { stepSize: 1 },
+                                                                    grid: { color: 'rgba(0,0,0,0.05)' }
+                                                                },
+                                                                x: {
+                                                                    grid: { display: false }
+                                                                }
                                                             }
                                                         }
-                                                    },
-                                                    scales: {
-                                                        y: {
-                                                            min: 1,
-                                                            max: 5,
-                                                            ticks: { stepSize: 1 },
-                                                            grid: { color: 'rgba(0,0,0,0.05)' }
-                                                        },
-                                                        x: {
-                                                            grid: { display: false }
-                                                        }
-                                                    }
+                                                    });
                                                 }
-                                            });
-                                        }
-                                    }" x-init="init()" wire:ignore>
+                                            }" x-init="init()" wire:ignore>
                     <canvas x-ref="canvas"></canvas>
                 </div>
             </div>
