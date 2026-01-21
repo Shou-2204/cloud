@@ -35,6 +35,10 @@ Route::prefix('auth/google')->group(function (): void {
     Route::get('/callback', [GoogleController::class, 'handleGoogleCallback']);
 });
 
+// Magic Link Auth
+Route::post('/login/magic-link', [App\Http\Controllers\Auth\MagicLinkController::class, 'store'])->name('login.magic-link');
+Route::get('/login/magic-link/{user}', [App\Http\Controllers\Auth\MagicLinkController::class, 'verify'])->name('login.magic-link.verify')->middleware('signed');
+
 // Solutions (Siloing)
 Route::name('solutions.')->prefix('solutions')->group(function () {
     Route::get('/', [App\Http\Controllers\PublicSiteController::class, 'solutions'])->name('index');
