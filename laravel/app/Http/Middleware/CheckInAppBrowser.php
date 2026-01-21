@@ -10,6 +10,11 @@ class CheckInAppBrowser
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip check for public profile pages (/p/*)
+        if ($request->is('p/*')) {
+            return $next($request);
+        }
+
         $userAgent = $request->header('User-Agent');
 
         // Regex pour détecter les navigateurs in-app (Facebook, Messenger, Instagram, LinkedIn, etc.)
