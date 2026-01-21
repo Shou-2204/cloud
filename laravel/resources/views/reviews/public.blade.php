@@ -20,33 +20,37 @@
 
             @if($team && $team->subscribed())
                 @if($error === 'google_place_id_missing')
-                    <div class="bg-white dark:bg-emerald-dark-500 rounded-2xl p-12 shadow-sm border border-gray-100 dark:border-emerald-dark-600 text-center">
+                    <div class="bg-white dark:bg-emerald-dark-500 rounded-2xl p-8 sm:p-12 shadow-sm border border-gray-100 dark:border-emerald-dark-600 text-center max-w-2xl mx-auto">
                         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">Configurez Google Place ID</h3>
-                        <p class="mt-2 text-gray-500 dark:text-gray-400 mb-6">
+                        <p class="mt-2 text-gray-500 dark:text-gray-400 max-w-md mx-auto">
                             Pour afficher vos avis Google, renseignez votre Google Place ID dans les paramètres de votre organisation.
                         </p>
-                        <a href="{{ route('teams.show', $team) }}"
-                            class="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors">
-                            Configurer
-                        </a>
+                        <div class="mt-6">
+                            <a href="{{ route('teams.show', $team) }}"
+                                class="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors">
+                                Configurer
+                            </a>
+                        </div>
                     </div>
                 @elseif($error === 'google_api_key_missing')
-                    <div class="bg-white dark:bg-emerald-dark-500 rounded-2xl p-12 shadow-sm border border-gray-100 dark:border-emerald-dark-600 text-center">
+                    <div class="bg-white dark:bg-emerald-dark-500 rounded-2xl p-8 sm:p-12 shadow-sm border border-gray-100 dark:border-emerald-dark-600 text-center max-w-2xl mx-auto">
                         <svg class="mx-auto h-12 w-12 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                         </svg>
                         <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">Clé API Google requise</h3>
-                        <p class="mt-2 text-gray-500 dark:text-gray-400 mb-6">
+                        <p class="mt-2 text-gray-500 dark:text-gray-400 max-w-md mx-auto">
                             Pour récupérer vos avis Google, renseignez votre clé API Google Places dans les paramètres de votre organisation.
                         </p>
-                        <a href="{{ route('teams.show', $team) }}"
-                            class="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors">
-                            Configurer
-                        </a>
+                        <div class="mt-6">
+                            <a href="{{ route('teams.show', $team) }}"
+                                class="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors">
+                                Configurer
+                            </a>
+                        </div>
                     </div>
                 @elseif($error)
                     <div class="bg-red-50 dark:bg-red-900/20 rounded-2xl p-6 border border-red-200 dark:border-red-800">
