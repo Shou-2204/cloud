@@ -50,7 +50,7 @@ class NegativeReviewForm extends Component
     {
         return [
             'rating' => ['required', 'integer', 'min:1', 'max:3'],
-            'feedback' => ['required', 'string', 'min:20'],
+            'feedback' => ['required', 'string', 'min:20', 'max:1000'],
         ];
     }
 
@@ -58,7 +58,8 @@ class NegativeReviewForm extends Component
     {
         return [
             'feedback.required' => 'Veuillez nous expliquer ce qui n\'a pas été.',
-            'feedback.min' => 'Veuillez détailler un peu plus votre retour (minimum :min caractères).',
+            'feedback.min' => 'Veuillez détailler un peu plus votre retour.',
+            'feedback.max' => 'Votre message est trop long (maximum :max caractères).',
         ];
     }
 
