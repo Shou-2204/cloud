@@ -37,7 +37,7 @@
                         <button @click="mode = 'magic'"
                             :class="mode === 'magic' ? 'bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
                             class="px-4 py-2 text-sm font-medium rounded-md transition-all">
-                            Sans mot de passe
+                            Magic Link
                         </button>
                     </div>
                 </div>
