@@ -42,7 +42,7 @@
 
                                         {{-- Comment --}}
                                         <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                                            "{{ $rating->comment }}"
+                                            "{{ $rating->feedback }}"
                                         </p>
 
                                         {{-- Date --}}

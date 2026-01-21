@@ -32,8 +32,8 @@ class ReviewController extends Controller
         if ($team && $team->subscribed()) {
             $negativeRatings = TeamRating::where('team_id', $team->id)
                 ->where('rating', '<=', 3)
-                ->whereNotNull('comment')
-                ->where('comment', '!=', '')
+                ->whereNotNull('feedback')
+                ->where('feedback', '!=', '')
                 ->orderByDesc('created_at')
                 ->paginate(15);
         }
