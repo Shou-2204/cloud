@@ -135,8 +135,10 @@ class SubscriptionController extends Controller
         // Dispatch job for async processing
         \App\Jobs\UpdateSubscriptionJob::dispatch($team, $request->validated('price'));
 
-        return redirect()->route('subscription.index')
-            ->with('status', 'Le changement de votre abonnement est en cours de traitement. La mise à jour sera effective dans quelques instants.');
+        $request->session()->flash('flash.banner', 'Votre demande va être traitée dans quelques instants. Un récapitulatif vous sera envoyé par email dès que la modification sera effective.');
+        $request->session()->flash('flash.bannerStyle', 'success');
+
+        return redirect()->route('subscription.index');
     }
 
     /**
