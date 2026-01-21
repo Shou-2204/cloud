@@ -93,10 +93,10 @@
                         {{-- Sliding Pill --}}
                         <div class="absolute top-1 bottom-1 bg-white dark:bg-emerald-dark-500 rounded-lg shadow-sm transition-all duration-300 ease-out -z-10"
                             :class="{
-                                            'left-1 w-[calc(33.33%-0.33rem)]': activePeriod === '24h',
-                                            'left-[calc(33.33%+0.33rem)] w-[calc(33.33%-0.66rem)]': activePeriod === '7d',
-                                            'left-[calc(66.66%+0.33rem)] w-[calc(33.33%-0.5rem)]': activePeriod === '30d'
-                                        }"></div>
+                                                'left-1 w-[calc(33.33%-0.33rem)]': activePeriod === '24h',
+                                                'left-[calc(33.33%+0.33rem)] w-[calc(33.33%-0.66rem)]': activePeriod === '7d',
+                                                'left-[calc(66.66%+0.33rem)] w-[calc(33.33%-0.5rem)]': activePeriod === '30d'
+                                            }"></div>
 
                         {{-- Buttons --}}
                         <button wire:click="setPeriod('24h')" @click="activePeriod = '24h'"
@@ -144,78 +144,130 @@
 
                 {{-- Chart --}}
                 <div class="relative h-40 sm:h-48" x-data="{
-                                                chart: null,
-                                                labels: @js($this->chartData['labels']),
-                                                data: @js($this->chartData['data']),
-                                                init() {
-                                                    this.renderChart();
-
-                                                    // Listen for Livewire updates
-                                                    Livewire.on('chart-updated', (params) => {
-                                                        this.labels = params[0].labels;
-                                                        this.data = params[0].data;
+                                                    chart: null,
+                                                    labels: @js($this->chartData['labels']),
+                                                    data: @js($this->chartData['data']),
+                                                    init() {
                                                         this.renderChart();
-                                                    });
-                                                },
-                                                renderChart() {
-                                                    const ctx = this.$refs.canvas.getContext('2d');
 
-                                                    if (this.chart) {
-                                                        this.chart.destroy();
-                                                    }
+                                                        // Listen for Livewire updates
+                                                        Livewire.on('chart-updated', (params) => {
+                                                            this.labels = params[0].labels;
+                                                            this.data = params[0].data;
+                                                            this.updateChart();
+                                                        });
+                                                    },
+                                                    updateChart() {
+                                                        if (this.chart) {
+                                                            this.chart.updateSeries([{
+                                                                data: this.data
+                                                            }]);
+                                                            this.chart.updateOptions({
+                                                                xaxis: {
+                                                                    categories: this.labels
+                                                                }
+                                                            });
+                                                        }
+                                                    },
+                                                    renderChart() {
+                                                        if (this.chart) {
+                                                            this.chart.destroy();
+                                                        }
 
-                                                    this.chart = new Chart(ctx, {
-                                                        type: 'line',
-                                                        data: {
-                                                            labels: this.labels,
-                                                            datasets: [{
-                                                                label: 'Note moyenne',
-                                                                data: this.data,
-                                                                borderColor: 'rgb(16, 185, 129)',
-                                                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                                                fill: true,
-                                                                tension: 0.4,
-                                                                pointRadius: 4,
-                                                                pointBackgroundColor: 'rgb(16, 185, 129)',
-                                                                pointBorderColor: '#fff',
-                                                                pointBorderWidth: 2,
-                                                                spanGaps: true,
-                                                            }]
-                                                        },
-                                                        options: {
-                                                            responsive: true,
-                                                            maintainAspectRatio: false,
-                                                            plugins: {
-                                                                legend: { display: false },
-                                                                tooltip: {
-                                                                    callbacks: {
-                                                                        label: (ctx) => ctx.parsed.y ? ctx.parsed.y + ' ⭐' : 'Aucun avis'
-                                                                    }
+                                                        const options = {
+                                                            series: [{
+                                                                name: 'Note moyenne',
+                                                                data: this.data
+                                                            }],
+                                                            chart: {
+                                                                type: 'area',
+                                                                height: '100%',
+                                                                fontFamily: 'inherit',
+                                                                toolbar: {
+                                                                    show: false
+                                                                },
+                                                                animations: {
+                                                                    enabled: true
                                                                 }
                                                             },
-                                                            scales: {
-                                                                y: {
-                                                                    min: 1,
-                                                                    max: 5,
-                                                                    ticks: { stepSize: 1 },
-                                                                    grid: { color: 'rgba(0,0,0,0.05)' }
-                                                                },
-                                                                x: {
-                                                                    grid: { display: false }
+                                                            dataLabels: {
+                                                                enabled: false
+                                                            },
+                                                            stroke: {
+                                                                curve: 'smooth',
+                                                                width: 2,
+                                                                colors: ['#10B981'] // emerald-500
+                                                            },
+                                                            fill: {
+                                                                type: 'gradient',
+                                                                gradient: {
+                                                                    shadeIntensity: 1,
+                                                                    opacityFrom: 0.4,
+                                                                    opacityTo: 0.05,
+                                                                    stops: [0, 100],
+                                                                    colorStops: [
+                                                                        {
+                                                                            offset: 0,
+                                                                            color: '#10B981',
+                                                                            opacity: 0.2
+                                                                        },
+                                                                        {
+                                                                            offset: 100,
+                                                                            color: '#10B981',
+                                                                            opacity: 0
+                                                                        }
+                                                                    ]
                                                                 }
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            }" x-init="init()" wire:ignore>
-                    <canvas x-ref="canvas"></canvas>
+                                                            },
+                                                            xaxis: {
+                                                                categories: this.labels,
+                                                                labels: {
+                                                                    show: false
+                                                                },
+                                                                axisBorder: {
+                                                                    show: false
+                                                                },
+                                                                axisTicks: {
+                                                                    show: false
+                                                                },
+                                                                tooltip: {
+                                                                    enabled: false
+                                                                }
+                                                            },
+                                                            yaxis: {
+                                                                min: 1,
+                                                                max: 5,
+                                                                tickAmount: 4,
+                                                                labels: {
+                                                                    style: {
+                                                                        colors: '#9CA3AF',
+                                                                        fontSize: '10px'
+                                                                    },
+                                                                    formatter: (value) => value.toFixed(0)
+                                                                }
+                                                            },
+                                                            grid: {
+                                                                show: true,
+                                                                borderColor: 'rgba(0,0,0,0.05)',
+                                                                strokeDashArray: 4,
+                                                                padding: {
+                                                                    top: 0,
+                                                                    right: 0,
+                                                                    bottom: 0,
+                                                                    left: 10
+                                                                }
+                                                            },
+                                                            theme: {
+                                                                mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+                                                            },
+                                                            tooltip: {
+                                                                y: {
+                                                                    formatter: function (val) {
+                                                                        return val + " ⭐" } } } }; this.chart=new
+                    ApexCharts(this.$refs.chart, options); this.chart.render(); } }" x-init="init()" wire:ignore>
+                    <div x-ref="chart" class="w-full h-full"></div>
                 </div>
             </div>
         </div>
     @endif
 </div>
-
-{{-- Include Chart.js --}}
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-@endpush

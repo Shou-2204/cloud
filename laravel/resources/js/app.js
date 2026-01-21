@@ -1,4 +1,7 @@
 import './bootstrap';
+import ApexCharts from 'apexcharts';
+
+window.ApexCharts = ApexCharts;
 
 // Global Scroll Animation Observer
 document.addEventListener('DOMContentLoaded', () => {
