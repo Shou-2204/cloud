@@ -174,100 +174,81 @@
                                                             this.chart.destroy();
                                                         }
 
-                                                        const options = {
-                                                            series: [{
-                                                                name: 'Note moyenne',
-                                                                data: this.data
-                                                            }],
-                                                            chart: {
-                                                                type: 'area',
-                                                                height: '100%',
-                                                                fontFamily: 'inherit',
-                                                                toolbar: {
-                                                                    show: false
-                                                                },
-                                                                animations: {
-                                                                    enabled: true
-                                                                }
+                                                    const options = {
+                                                        series: [{
+                                                            name: 'Note moyenne',
+                                                            data: this.data
+                                                        }],
+                                                        chart: {
+                                                            type: 'bar',
+                                                            height: '100%',
+                                                            fontFamily: 'inherit',
+                                                            toolbar: {
+                                                                show: false
                                                             },
-                                                            dataLabels: {
-                                                                enabled: false
+                                                            animations: {
+                                                                enabled: true
+                                                            }
+                                                        },
+                                                        plotOptions: {
+                                                            bar: {
+                                                                borderRadius: 4,
+                                                                columnWidth: '60%',
+                                                            }
+                                                        },
+                                                        dataLabels: {
+                                                            enabled: false
+                                                        },
+                                                        colors: ['#10B981'], // emerald-500
+                                                        xaxis: {
+                                                            categories: this.labels,
+                                                            labels: {
+                                                                show: false
                                                             },
-                                                            stroke: {
-                                                                curve: 'smooth',
-                                                                width: 2,
-                                                                colors: ['#10B981'] // emerald-500
+                                                            axisBorder: {
+                                                                show: false
                                                             },
-                                                            fill: {
-                                                                type: 'gradient',
-                                                                gradient: {
-                                                                    shadeIntensity: 1,
-                                                                    opacityFrom: 0.4,
-                                                                    opacityTo: 0.05,
-                                                                    stops: [0, 100],
-                                                                    colorStops: [
-                                                                        {
-                                                                            offset: 0,
-                                                                            color: '#10B981',
-                                                                            opacity: 0.2
-                                                                        },
-                                                                        {
-                                                                            offset: 100,
-                                                                            color: '#10B981',
-                                                                            opacity: 0
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            },
-                                                            xaxis: {
-                                                                categories: this.labels,
-                                                                labels: {
-                                                                    show: false
-                                                                },
-                                                                axisBorder: {
-                                                                    show: false
-                                                                },
-                                                                axisTicks: {
-                                                                    show: false
-                                                                },
-                                                                tooltip: {
-                                                                    enabled: false
-                                                                }
-                                                            },
-                                                            yaxis: {
-                                                                min: 1,
-                                                                max: 5,
-                                                                tickAmount: 4,
-                                                                labels: {
-                                                                    style: {
-                                                                        colors: '#9CA3AF',
-                                                                        fontSize: '10px'
-                                                                    },
-                                                                    formatter: (value) => value.toFixed(0)
-                                                                }
-                                                            },
-                                                            grid: {
-                                                                show: true,
-                                                                borderColor: 'rgba(0,0,0,0.05)',
-                                                                strokeDashArray: 4,
-                                                                padding: {
-                                                                    top: 0,
-                                                                    right: 0,
-                                                                    bottom: 0,
-                                                                    left: 10
-                                                                }
-                                                            },
-                                                            theme: {
-                                                                mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+                                                            axisTicks: {
+                                                                show: false
                                                             },
                                                             tooltip: {
-                                                                y: {
-                                                                    formatter: function (val) {
-                                                                        return val + ' ⭐'
-                                                                    }
+                                                                enabled: false
+                                                            }
+                                                        },
+                                                        yaxis: {
+                                                            min: 0, 
+                                                            max: 5,
+                                                            tickAmount: 5,
+                                                            labels: {
+                                                                style: {
+                                                                    colors: '#9CA3AF',
+                                                                    fontSize: '10px'
+                                                                },
+                                                                formatter: (value) => value.toFixed(0)
+                                                            }
+                                                        },
+                                                        grid: {
+                                                            show: true,
+                                                            borderColor: 'rgba(0,0,0,0.05)',
+                                                            strokeDashArray: 4,
+                                                            padding: {
+                                                                top: 0,
+                                                                right: 0,
+                                                                bottom: 0,
+                                                                left: 10
+                                                            }
+                                                        },
+                                                        theme: {
+                                                            mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+                                                        },
+                                                        tooltip: {
+                                                            y: {
+                                                                formatter: function (val) {
+                                                                    return val + ' ⭐'
                                                                 }
                                                             }
-                                                        };
+                                                        }
+                                                    };
 
                                                     this.chart = new ApexCharts(this.$refs.chart, options);
                                                     this.chart.render();
