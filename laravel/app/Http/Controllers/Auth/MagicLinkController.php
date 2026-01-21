@@ -25,21 +25,17 @@ class MagicLinkController extends Controller
 
         $user = User::where('email', $data['email'])->firstOrFail();
 
-        // Force APP_URL for the signature to ensure the link uses the correct domain
-        // defined in .env, not the current request's localhost.
-        URL::forceRootUrl(config('app.url'));
-
-        $url = URL::temporarySignedRoute(
+        // Generate Relative Signed URL (signature valid for path only)
+        // This prevents host/scheme mismatches (http vs https, localhost vs 127.0.0.1)
+        $relativePath = URL::temporarySignedRoute(
             'login.magic-link.verify',
             now()->addMinutes(15),
-            ['user' => $user->id]
+            ['user' => $user->id],
+            absolute: false
         );
 
-        // Reset forced root URL to avoid affecting other parts of the request (optional but safer)
-        // Note: Check if forceRootUrl(null) works or if we should leave it. 
-        // In this specific flow, we are returning back API/Redirect, so it's likely fine.
-        // However, restoring local referencing for subsequent logic is polite.
-        URL::forceRootUrl(null);
+        // Construct full URL manually using APP_URL
+        $url = rtrim(config('app.url'), '/') . $relativePath;
 
         // Send Email
         Mail::to($user)->send(new MagicLinkLogin($url));
