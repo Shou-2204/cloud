@@ -37,16 +37,15 @@ class ReviewController extends Controller
         $error = null;
 
         if ($team && $team->subscribed()) {
-            if ($team->google_place_id && $team->google_api_key) {
+            if (!$this->googlePlacesService->isConfigured()) {
+                $error = 'service_not_configured';
+            } elseif ($team->google_place_id) {
                 $googleData = $this->googlePlacesService->getPlaceReviews(
-                    $team->google_place_id,
-                    $team->google_api_key
+                    $team->google_place_id
                 );
                 $error = $googleData['error'] ?? null;
-            } elseif (!$team->google_place_id) {
-                $error = 'google_place_id_missing';
             } else {
-                $error = 'google_api_key_missing';
+                $error = 'google_place_id_missing';
             }
         }
 

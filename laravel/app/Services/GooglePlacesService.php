@@ -9,23 +9,47 @@ use Illuminate\Support\Facades\Http;
 
 class GooglePlacesService
 {
+    private ?string $apiKey;
+
+    public function __construct()
+    {
+        $this->apiKey = config('services.google.places_api_key');
+    }
+
+    /**
+     * Check if the service is configured.
+     */
+    public function isConfigured(): bool
+    {
+        return !empty($this->apiKey);
+    }
+
     /**
      * Get reviews for a Google Place.
      *
      * @param string $placeId Google Place ID
-     * @param string $apiKey Google API Key
      * @return array{reviews: array, rating: float|null, total_reviews: int|null, error: string|null}
      */
-    public function getPlaceReviews(string $placeId, string $apiKey): array
+    public function getPlaceReviews(string $placeId): array
     {
+        if (!$this->isConfigured()) {
+            return [
+                'reviews' => [],
+                'rating' => null,
+                'total_reviews' => null,
+                'name' => null,
+                'error' => 'service_not_configured',
+            ];
+        }
+
         $cacheKey = "google_reviews_{$placeId}";
 
-        return Cache::remember($cacheKey, now()->addHour(), function () use ($placeId, $apiKey) {
+        return Cache::remember($cacheKey, now()->addHour(), function () use ($placeId) {
             try {
                 $response = Http::get('https://maps.googleapis.com/maps/api/place/details/json', [
                     'place_id' => $placeId,
                     'fields' => 'reviews,rating,user_ratings_total,name',
-                    'key' => $apiKey,
+                    'key' => $this->apiKey,
                     'language' => 'fr',
                 ]);
 

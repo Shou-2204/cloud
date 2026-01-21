@@ -22,6 +22,7 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URL'),
+        'places_api_key' => env('GOOGLE_PLACES_API_KEY'),
     ],
 
     'resend' => [

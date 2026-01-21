@@ -22,13 +22,11 @@ class UpdateTeamName implements UpdatesTeamNames
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'google_place_id' => ['nullable', 'string', 'max:255'],
-            'google_api_key' => ['nullable', 'string', 'max:255'],
         ])->validateWithBag('updateTeamName');
 
         $team->forceFill([
             'name' => $input['name'],
             'google_place_id' => $input['google_place_id'] ?? null,
-            'google_api_key' => $input['google_api_key'] ?? null,
         ])->save();
     }
 }

@@ -53,15 +53,6 @@
                     </p>
                     <x-input-error for="google_place_id" class="mt-2" />
                 </div>
-                <div class="col-span-1">
-                    <x-label for="google_api_key" value="{{ __('Clé API Google Places') }}" />
-                    <x-input id="google_api_key" type="password" class="mt-1 block w-full" wire:model="state.google_api_key"
-                        placeholder="AIza..." :disabled="! Gate::check('update', $team)" />
-                    <p class="text-xs text-gray-500 mt-1">
-                        Créez une clé dans la <a href="https://console.cloud.google.com/apis/credentials" target="_blank" class="text-emerald-600 hover:underline">Google Cloud Console</a>.
-                    </p>
-                    <x-input-error for="google_api_key" class="mt-2" />
-                </div>
             </div>
         </div>
     </x-slot>
