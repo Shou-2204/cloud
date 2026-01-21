@@ -54,9 +54,9 @@ class StaticPage extends Model
             ],
             [
                 'id' => md5('/mysubscription'),
-                'title' => 'Mon Abonnement',
+                'title' => 'Mon offre',
                 'url' => '/mysubscription',
-                'content' => 'Gérer mon offre, changer de plan, factures, Starter, Smart, Pro, Upgrade',
+                'content' => 'Gérer mon offre, changer de plan, factures, Starter, Smart, Pro, Upgrade, abonnement',
                 'category' => 'Facturation',
                 'permission' => 'public',
             ],
@@ -67,7 +67,31 @@ class StaticPage extends Model
                 'content' => 'Abonnements, factures, offres, business, pro, prix',
                 'category' => 'Général',
                 'permission' => 'public',
-            ]
+            ],
+            [
+                'id' => md5('/reviews/stats'),
+                'title' => 'Mes données',
+                'url' => '/reviews/stats',
+                'content' => 'Statistiques des avis, graphiques, notes moyennes, évolution, analytics',
+                'category' => 'Avis',
+                'permission' => 'subscribed',
+            ],
+            [
+                'id' => md5('/reviews/public'),
+                'title' => 'Mes avis publics',
+                'url' => '/reviews/public',
+                'content' => 'Avis Google My Business, avis publics, Google reviews, notation',
+                'category' => 'Avis',
+                'permission' => 'subscribed',
+            ],
+            [
+                'id' => md5('/reviews/private'),
+                'title' => 'Mes feedbacks privés',
+                'url' => '/reviews/private',
+                'content' => 'Avis négatifs, feedbacks clients, retours privés, commentaires',
+                'category' => 'Avis',
+                'permission' => 'subscribed',
+            ],
         ];
     }
 
