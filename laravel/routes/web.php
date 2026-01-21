@@ -37,7 +37,7 @@ Route::prefix('auth/google')->group(function (): void {
 
 // Magic Link Auth
 Route::post('/login/magic-link', [App\Http\Controllers\Auth\MagicLinkController::class, 'store'])->name('login.magic-link');
-Route::get('/login/magic-link/{user}', [App\Http\Controllers\Auth\MagicLinkController::class, 'verify'])->name('login.magic-link.verify')->middleware('signed');
+Route::get('/login/magic-link/{user}', [App\Http\Controllers\Auth\MagicLinkController::class, 'verify'])->name('login.magic-link.verify');
 
 // Solutions (Siloing)
 Route::name('solutions.')->prefix('solutions')->group(function () {

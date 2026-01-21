@@ -10,7 +10,9 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MagicLinkLogin extends Mailable
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class MagicLinkLogin extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -28,7 +30,7 @@ class MagicLinkLogin extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.auth.magic-link-login',
+            view: 'emails.auth.magic-link-login',
         );
     }
 }

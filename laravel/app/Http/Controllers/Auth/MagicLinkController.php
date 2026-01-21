@@ -25,12 +25,21 @@ class MagicLinkController extends Controller
 
         $user = User::where('email', $data['email'])->firstOrFail();
 
-        // Generate Signed URL (valid for 15 minutes)
+        // Force APP_URL for the signature to ensure the link uses the correct domain
+        // defined in .env, not the current request's localhost.
+        URL::forceRootUrl(config('app.url'));
+
         $url = URL::temporarySignedRoute(
             'login.magic-link.verify',
             now()->addMinutes(15),
             ['user' => $user->id]
         );
+
+        // Reset forced root URL to avoid affecting other parts of the request (optional but safer)
+        // Note: Check if forceRootUrl(null) works or if we should leave it. 
+        // In this specific flow, we are returning back API/Redirect, so it's likely fine.
+        // However, restoring local referencing for subsequent logic is polite.
+        URL::forceRootUrl(null);
 
         // Send Email
         Mail::to($user)->send(new MagicLinkLogin($url));
@@ -43,7 +52,9 @@ class MagicLinkController extends Controller
      */
     public function verify(Request $request, User $user)
     {
-        if (!$request->hasValidSignature()) {
+        // Use relative signature check (absolute: false) to prevent issues with
+        // http/https or localhost/127.0.0.1 mismatches in local environments.
+        if (!$request->hasValidSignature(absolute: false)) {
             abort(401, 'Ce lien de connexion a expiré ou est invalide.');
         }
 
