@@ -60,6 +60,11 @@
             display: inline-block;
         }
 
+        .header img {
+            height: 48px;
+            width: auto;
+        }
+
         .body {
             background-color: #ffffff;
             border-radius: 8px;
@@ -92,6 +97,11 @@
             text-align: center;
         }
 
+        .footer a {
+            color: #9ca3af;
+            text-decoration: underline;
+        }
+
         h1 {
             color: #111827;
             font-size: 24px;
@@ -105,6 +115,14 @@
             font-size: 18px;
             font-weight: bold;
             margin-top: 24px;
+            text-align: left;
+        }
+
+        h3 {
+            color: #111827;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 16px;
             text-align: left;
         }
 
@@ -135,22 +153,6 @@
             font-weight: 600;
         }
 
-        .button-red {
-            background-color: #ef4444;
-            border-bottom: 8px solid #ef4444;
-            border-left: 18px solid #ef4444;
-            border-right: 18px solid #ef4444;
-            border-top: 8px solid #ef4444;
-        }
-
-        .button-green {
-            background-color: #10b981;
-            border-bottom: 8px solid #10b981;
-            border-left: 18px solid #10b981;
-            border-right: 18px solid #10b981;
-            border-top: 8px solid #10b981;
-        }
-
         .panel {
             border-left: #4f46e5 solid 4px;
             background-color: #eef2ff;
@@ -162,6 +164,69 @@
             color: #4b5563;
             margin: 0;
         }
+
+        .table table {
+            width: 100%;
+        }
+
+        .stats-grid {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .stats-item {
+            text-align: center;
+            padding: 12px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .stats-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #111827;
+            display: block;
+        }
+
+        .stats-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Utilities */
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .mt-4 {
+            margin-top: 16px;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        .text-sm {
+            font-size: 14px;
+        }
+
+        .text-red {
+            color: #ef4444;
+        }
+
+        .text-green {
+            color: #10b981;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -170,7 +235,14 @@
         <tr>
             <td align="center">
                 <table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-                    {{ $header ?? '' }}
+                    <!-- Header -->
+                    <tr>
+                        <td class="header">
+                            <a href="{{ config('app.url') }}">
+                                {{ config('app.name') }}
+                            </a>
+                        </td>
+                    </tr>
 
                     <!-- Body -->
                     <tr>
@@ -179,16 +251,24 @@
                                 role="presentation">
                                 <tr>
                                     <td class="content-cell">
-                                        {{ Illuminate\Mail\Markdown::parse($slot) }}
-
-                                        {{ $subcopy ?? '' }}
+                                        @yield('content')
                                     </td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
 
-                    {{ $footer ?? '' }}
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer">
+                            <p>&copy; {{ date('Y') }} {{ config('app.name') }}. Tous droits réservés.</p>
+                            @isset($unsubscribe)
+                                <p style="margin-top: 12px;">
+                                    <a href="{{ $unsubscribe }}">Se désabonner</a>
+                                </p>
+                            @endisset
+                        </td>
+                    </tr>
                 </table>
             </td>
         </tr>

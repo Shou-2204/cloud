@@ -1,42 +1,74 @@
-@component('mail::message')
-# Résumé des avis du jour
+@extends('emails.layout')
 
-Bonjour,
+@section('content')
+    <h1>Résumé Quotidien • {{ $teamName }}</h1>
 
-Voici le récapitulatif des avis reçus pour **{{ $teamName }}** :
+    <p>Voici le bilan des avis reçus au cours des dernières 24 heures.</p>
 
----
+    <!-- Stats Grid -->
+    <table class="stats-grid" cellpadding="0" cellspacing="0" role="presentation">
+        <tr>
+            <td width="33%" style="padding-right: 8px;">
+                <div class="stats-item">
+                    <span class="stats-value">{{ number_format($averageRating, 1) }}/5</span>
+                    <span class="stats-label">Moyenne</span>
+                </div>
+            </td>
+            <td width="33%" style="padding: 0 4px;">
+                <div class="stats-item">
+                    <span class="stats-value text-green">{{ $positiveCount }}</span>
+                    <span class="stats-label">Positifs</span>
+                </div>
+            </td>
+            <td width="33%" style="padding-left: 8px;">
+                <div class="stats-item">
+                    <span class="stats-value text-red">{{ $negativeCount }}</span>
+                    <span class="stats-label">Négatifs</span>
+                </div>
+            </td>
+        </tr>
+    </table>
 
-## 📈 Statistiques
+    @if($negativeFeedbacks->isNotEmpty())
+        <h2>💬 Retours à traiter</h2>
+        <p>Vous avez reçu des commentaires nécessitant votre attention :</p>
 
-@component('mail::table')
-| Métrique | Valeur |
-|:---------|:-------|
-| **Total des avis** | {{ $ratings->count() }} |
-| **Note moyenne** | {{ number_format($averageRating, 1) }} / 5 ⭐ |
-| **Avis positifs (4-5★)** | {{ $positiveCount }} |
-| **Avis négatifs (1-3★)** | {{ $negativeCount }} |
-@endcomponent
+        @foreach($negativeFeedbacks as $feedback)
+            <div class="panel">
+                <div class="panel-content">
+                    <p>
+                        <strong class="text-red">{{ $feedback->rating }}★/5</strong>
+                        @if($feedback->created_at)
+                            <span class="text-sm" style="color: #6b7280; margin-left: 8px;">
+                                {{ $feedback->created_at->format('H:i') }}
+                            </span>
+                        @endif
+                    </p>
+                    <p style="margin-top: 8px; font-style: italic;">
+                        "{{ $feedback->feedback }}"
+                    </p>
+                </div>
+            </div>
+        @endforeach
+    @else
+        @if($negativeCount > 0)
+            <div class="panel">
+                <div class="panel-content">
+                    <p>Vous avez reçu {{ $negativeCount }} note(s) négative(s) sans commentaire écrit.</p>
+                </div>
+            </div>
+        @else
+            <div class="panel" style="background-color: #f0fdf4; border-left-color: #10b981;">
+                <div class="panel-content">
+                    <p class="text-green">Aucun retour négatif aujourd'hui. Bravo à toute l'équipe ! 👏</p>
+                </div>
+            </div>
+        @endif
+    @endif
 
----
-
-@if($negativeFeedbacks->isNotEmpty())
-    ## ⚠️ Retours négatifs à traiter
-
-    @foreach($negativeFeedbacks as $feedback)
-        ### {{ $feedback->rating }} ⭐ - {{ $feedback->created_at->format('d/m/Y H:i') }}
-
-        > {{ $feedback->feedback }}
-
-        ---
-
-    @endforeach
-@else
-    ## ✅ Aucun retour négatif
-
-    Félicitations ! Aucun avis négatif n'a été reçu.
-@endif
-
-Merci,<br>
-{{ config('app.name') }}
-@endcomponent
+    <div style="text-align: center; margin-top: 32px;">
+        <a href="{{ route('dashboard') }}" class="button" target="_blank">
+            Accéder au Dashboard
+        </a>
+    </div>
+@endsection
