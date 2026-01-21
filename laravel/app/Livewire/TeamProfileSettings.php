@@ -47,6 +47,8 @@ class TeamProfileSettings extends Component
             'state.social_tiktok' => ['nullable', 'url', 'max:255'],
             'state.social_linkedin' => ['nullable', 'url', 'max:255'],
             'state.social_twitter' => ['nullable', 'url', 'max:255'],
+            'state.google_place_id' => ['nullable', 'string', 'max:255'],
+            'state.google_api_key' => ['nullable', 'string', 'max:255'],
             'state.reviews_enabled' => ['boolean'],
             'state.google_review_url' => ['nullable', 'url', 'max:500'],
             'state.review_positive_message' => ['nullable', 'string', 'max:500'],

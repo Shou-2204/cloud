@@ -192,6 +192,39 @@
             </div>
         </div>
 
+        <!-- Google Integration -->
+        <div class="col-span-6 border-t border-gray-100 dark:border-gray-700 pt-6 mt-2">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">{{ __('Intégration Google') }}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                Ces informations permettent de récupérer et afficher vos avis Google My Business.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="col-span-1">
+                    <x-label for="google_place_id" value="{{ __('Google Place ID') }}" />
+                    <x-input id="google_place_id" type="text" class="mt-1 block w-full"
+                        wire:model="state.google_place_id" placeholder="ChIJ..." />
+                    <p class="text-xs text-gray-500 mt-1">
+                        <a href="https://developers.google.com/maps/documentation/places/web-service/place-id"
+                            target="_blank" class="text-emerald-600 hover:underline">
+                            Comment trouver votre Place ID ?
+                        </a>
+                    </p>
+                    <x-input-error for="state.google_place_id" class="mt-2" />
+                </div>
+                <div class="col-span-1">
+                    <x-label for="google_api_key" value="{{ __('Clé API Google Places') }}" />
+                    <x-input id="google_api_key" type="password" class="mt-1 block w-full"
+                        wire:model="state.google_api_key" placeholder="AIza..." />
+                    <p class="text-xs text-gray-500 mt-1">
+                        Créez une clé dans la <a href="https://console.cloud.google.com/apis/credentials"
+                            target="_blank" class="text-emerald-600 hover:underline">Google Cloud Console</a> avec l'API
+                        Places activée.
+                    </p>
+                    <x-input-error for="state.google_api_key" class="mt-2" />
+                </div>
+            </div>
+        </div>
+
         <!-- Reviews & Gating -->
         <div class="col-span-6 border-t border-gray-100 dark:border-gray-700 pt-6 mt-2">
             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
