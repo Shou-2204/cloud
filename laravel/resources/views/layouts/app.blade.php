@@ -64,8 +64,6 @@
                 }
             }
         }" x-init="init()">
-    <x-banner />
-
     <div class="flex h-screen overflow-hidden bg-ivory dark:bg-emerald-dark">
         {{-- SIDEBAR --}}
         @auth
@@ -76,6 +74,8 @@
         <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
             {{-- TOPBAR (Navigation Menu) --}}
             @include('navigation-menu')
+
+            <x-banner />
 
             {{-- MAIN PAGE CONTENT --}}
             <main class="flex-grow p-4 sm:p-6 lg:p-8">
