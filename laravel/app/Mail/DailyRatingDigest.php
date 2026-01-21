@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -14,7 +15,7 @@ use Illuminate\Support\Collection;
 /**
  * Daily digest email summarizing ratings received.
  */
-class DailyRatingDigest extends Mailable
+class DailyRatingDigest extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
