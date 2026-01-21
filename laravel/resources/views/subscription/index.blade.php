@@ -140,6 +140,10 @@
                                             {{ __('Votre offre actuelle') }}
                                         </span>
                                     </button>
+                                @elseif (session('intended_price') && (session('intended_price') === $plan['stripe_id_monthly'] || session('intended_price') === $plan['stripe_id_yearly']))
+                                    <button disabled class="w-full block text-center bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800 font-semibold py-4 rounded-xl cursor-wait mb-8 animate-pulse">
+                                        {{ __('Activation en cours...') }}
+                                    </button>
                                 @elseif ($isSubscribed)
                                     <button 
                                         @click="openConfirmModal('{{ $plan['name'] }}', '{{ $key }}')"
@@ -219,6 +223,10 @@
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                             {{ __('Votre offre actuelle') }}
                                         </span>
+                                    </button>
+                                @elseif (session('intended_price') && (session('intended_price') === $plan['stripe_id_monthly'] || session('intended_price') === $plan['stripe_id_yearly']))
+                                    <button disabled class="w-full block text-center bg-gray-100 text-gray-700 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 font-semibold py-3 rounded-xl cursor-wait mb-8 animate-pulse">
+                                        {{ __('Activation en cours...') }}
                                     </button>
                                 @elseif ($isSubscribed)
                                     <button 

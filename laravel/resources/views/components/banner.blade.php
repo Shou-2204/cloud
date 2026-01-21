@@ -7,7 +7,7 @@
     x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-200"
     x-transition:leave-start="opacity-100 transform translate-y-0"
     x-transition:leave-end="opacity-0 transform -translate-y-2"
-    class="max-w-7xl mx-auto py-2 px-3 sm:px-6 lg:px-8 rounded shadow-lg mt-4">
+    class="w-full max-w-7xl mx-auto py-2 px-3 sm:px-6 lg:px-8 rounded shadow-lg mt-4 mb-4">
     <div class="flex items-center justify-between flex-wrap">
         <div class="w-0 flex-1 flex items-center min-w-0">
             <span class="flex p-2 rounded-lg"

@@ -137,6 +137,7 @@ class SubscriptionController extends Controller
 
         $request->session()->flash('flash.banner', 'Votre demande va être traitée dans quelques instants. Un récapitulatif vous sera envoyé par email dès que la modification sera effective.');
         $request->session()->flash('flash.bannerStyle', 'success');
+        $request->session()->flash('intended_price', $request->validated('price'));
 
         return redirect()->route('subscription.index');
     }
