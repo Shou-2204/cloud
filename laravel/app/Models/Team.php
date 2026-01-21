@@ -52,6 +52,7 @@ class Team extends JetstreamTeam
         'social_linkedin',
         'social_twitter',
         'google_place_id',
+        'google_api_key',
         'google_business_data',
         'public_views',
         'reviews_enabled',

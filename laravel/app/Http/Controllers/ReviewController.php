@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\TeamRating;
+use App\Services\GooglePlacesService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ReviewController extends Controller
 {
+    public function __construct(
+        private GooglePlacesService $googlePlacesService
+    ) {
+    }
+
     /**
      * Display the statistics page with ratings chart.
      */
@@ -19,9 +25,42 @@ class ReviewController extends Controller
     }
 
     /**
-     * Display negative feedbacks (rating <= 3).
+     * Display public reviews from Google My Business.
      */
-    public function negative(): View
+    public function publicReviews(): View
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $team = $user->currentTeam;
+
+        $googleData = null;
+        $error = null;
+
+        if ($team && $team->subscribed()) {
+            if ($team->google_place_id && $team->google_api_key) {
+                $googleData = $this->googlePlacesService->getPlaceReviews(
+                    $team->google_place_id,
+                    $team->google_api_key
+                );
+                $error = $googleData['error'] ?? null;
+            } elseif (!$team->google_place_id) {
+                $error = 'google_place_id_missing';
+            } else {
+                $error = 'google_api_key_missing';
+            }
+        }
+
+        return view('reviews.public', [
+            'team' => $team,
+            'googleData' => $googleData,
+            'error' => $error,
+        ]);
+    }
+
+    /**
+     * Display private feedbacks (rating <= 3).
+     */
+    public function privateFeedbacks(): View
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
@@ -38,9 +77,10 @@ class ReviewController extends Controller
                 ->paginate(15);
         }
 
-        return view('reviews.negative', [
+        return view('reviews.private', [
             'ratings' => $negativeRatings,
             'team' => $team,
         ]);
     }
 }
+

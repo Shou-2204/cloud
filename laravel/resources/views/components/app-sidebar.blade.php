@@ -170,20 +170,6 @@
                     </div>
 
                     @if(Auth::user()->currentTeam->subscribed())
-                        <a href="{{ route('subscription.show', Auth::user()->currentTeam) }}" wire:navigate
-                            class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('subscription.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
-                            :class="sidebarCollapsed ? 'justify-center' : ''">
-                            <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('subscription.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                            </svg>
-                            <span class="ml-3 whitespace-nowrap transition-opacity duration-200" x-show="!sidebarCollapsed">Mon
-                                Abonnement</span>
-                            <div x-show="sidebarCollapsed"
-                                class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
-                                Mon Abonnement</div>
-                        </a>
 
                         {{-- Avis Section (for subscribed teams) --}}
                         <div x-data="{ openAvis: {{ request()->routeIs('reviews.*') ? 'true' : 'false' }} }" class="mt-1">
@@ -216,9 +202,13 @@
                                     class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('reviews.stats') ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
                                     Mes données
                                 </a>
-                                <a href="{{ route('reviews.negative') }}" wire:navigate
-                                    class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('reviews.negative') ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
-                                    Feedbacks Négatifs
+                                <a href="{{ route('reviews.public') }}" wire:navigate
+                                    class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('reviews.public') ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
+                                    Mes avis publics
+                                </a>
+                                <a href="{{ route('reviews.private') }}" wire:navigate
+                                    class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('reviews.private') ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
+                                    Mes feedbacks privés
                                 </a>
                             </div>
                         </div>
@@ -252,8 +242,25 @@
 
         </nav>
 
-        {{-- LOGOUT & BRANDING (BOTTOM) --}}
+        {{-- SUBSCRIPTION & LOGOUT (BOTTOM) --}}
         <div class="p-4 border-t border-gray-100 dark:border-emerald-dark-600 bg-gray-50 dark:bg-emerald-dark-600/30">
+
+            {{-- MON OFFRE (Subscription) --}}
+            @if(Auth::user()->currentTeam && Auth::user()->currentTeam->subscribed())
+                <a href="{{ route('subscription.show', Auth::user()->currentTeam) }}" wire:navigate
+                    class="flex items-center mb-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative {{ request()->routeIs('subscription.show') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
+                    :class="sidebarCollapsed ? 'justify-center' : ''">
+                    <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('subscription.show') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    <span class="ml-3 whitespace-nowrap transition-opacity duration-200" x-show="!sidebarCollapsed">Mon offre</span>
+                    <div x-show="sidebarCollapsed"
+                        class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                        Mon offre</div>
+                </a>
+            @endif
 
             {{-- LOGOUT --}}
             <form method="POST" action="{{ route('logout') }}" x-data class="mb-4">

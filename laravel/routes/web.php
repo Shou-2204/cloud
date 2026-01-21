@@ -139,6 +139,7 @@ Route::middleware([
     // Reviews Section (for subscribed teams)
     Route::prefix('reviews')->name('reviews.')->group(function (): void {
         Route::get('/stats', [App\Http\Controllers\ReviewController::class, 'stats'])->name('stats');
-        Route::get('/negative', [App\Http\Controllers\ReviewController::class, 'negative'])->name('negative');
+        Route::get('/public', [App\Http\Controllers\ReviewController::class, 'publicReviews'])->name('public');
+        Route::get('/private', [App\Http\Controllers\ReviewController::class, 'privateFeedbacks'])->name('private');
     });
 });
