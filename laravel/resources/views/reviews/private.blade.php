@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white dark:text-gray-100 leading-tight">
-            {{ __('Mes feedbacks privés') }}
+            {{ __('Mes retours clients') }}
         </h2>
     </x-slot>
 
@@ -11,7 +11,7 @@
             {{-- Header --}}
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                    Mes feedbacks privés
+                    Mes retours clients
                 </h1>
                 <p class="mt-1 text-gray-500 dark:text-gray-400">
                     Avis négatifs avec commentaires de vos clients (via votre page publique)

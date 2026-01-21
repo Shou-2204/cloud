@@ -21,7 +21,19 @@ class ReviewController extends Controller
      */
     public function stats(): View
     {
-        return view('reviews.stats');
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $team = $user->currentTeam;
+
+        $googleData = null;
+
+        if ($team && $team->subscribed() && $team->google_place_id) {
+            $googleData = $this->googlePlacesService->getPlaceReviews($team->google_place_id);
+        }
+
+        return view('reviews.stats', [
+            'googleData' => $googleData,
+        ]);
     }
 
     /**

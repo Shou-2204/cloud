@@ -208,7 +208,7 @@
                                 </a>
                                 <a href="{{ route('reviews.private') }}" wire:navigate
                                     class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('reviews.private') ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
-                                    Mes feedbacks privés
+                                    Mes retours clients
                                 </a>
                             </div>
                         </div>
@@ -255,7 +255,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                     </svg>
-                    <span class="ml-3 whitespace-nowrap transition-opacity duration-200" x-show="!sidebarCollapsed">Mon offre</span>
+                    <span class="ml-3 whitespace-nowrap transition-opacity duration-200" x-show="!sidebarCollapsed">Mon
+                        offre</span>
                     <div x-show="sidebarCollapsed"
                         class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
                         Mon offre</div>
