@@ -97,7 +97,7 @@ class GooglePlacesService
             ];
 
             // Only cache successful results
-            Cache::put($cacheKey, $result, now()->addHour());
+            Cache::put($cacheKey, $result, now()->addHours(6));
 
             return $result;
 
