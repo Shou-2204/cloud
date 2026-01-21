@@ -145,7 +145,7 @@
         .button {
             -webkit-text-size-adjust: none;
             border-radius: 6px;
-            color: #fff;
+            color: #ffffff !important;
             display: inline-block;
             overflow: hidden;
             text-decoration: none;

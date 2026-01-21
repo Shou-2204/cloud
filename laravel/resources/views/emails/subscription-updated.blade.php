@@ -24,7 +24,7 @@
     </p>
 
     <div style="text-align: center; margin-top: 32px;">
-        <a href="{{ route('subscription.show', $team) }}" class="button" target="_blank">
+        <a href="{{ route('subscription.show', $team) }}" class="button" target="_blank" style="color: #ffffff !important;">
             Gérer mon abonnement
         </a>
     </div>
