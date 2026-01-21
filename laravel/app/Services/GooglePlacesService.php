@@ -44,59 +44,71 @@ class GooglePlacesService
 
         $cacheKey = "google_reviews_{$placeId}";
 
-        return Cache::remember($cacheKey, now()->addHour(), function () use ($placeId) {
-            try {
-                // Places API (New) endpoint
-                $url = "https://places.googleapis.com/v1/places/{$placeId}";
+        // Return cached data if available
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
 
-                $response = Http::withHeaders([
-                    'X-Goog-Api-Key' => $this->apiKey,
-                    'X-Goog-FieldMask' => 'id,displayName,rating,userRatingCount,reviews',
-                    'Accept-Language' => 'fr',
-                ])->get($url);
+        try {
+            // Places API (New) endpoint
+            $url = "https://places.googleapis.com/v1/places/{$placeId}";
 
-                if (!$response->successful()) {
-                    return [
-                        'reviews' => [],
-                        'rating' => null,
-                        'total_reviews' => null,
-                        'name' => null,
-                        'error' => 'Erreur de connexion à l\'API Google',
-                    ];
-                }
+            $response = Http::withHeaders([
+                'X-Goog-Api-Key' => $this->apiKey,
+                'X-Goog-FieldMask' => 'id,displayName,rating,userRatingCount,reviews',
+                'Accept-Language' => 'fr',
+            ])->get($url);
 
-                $data = $response->json();
+            if (!$response->successful()) {
+                $errorBody = $response->json();
+                $errorMessage = $errorBody['error']['message'] ?? $response->reason();
 
-                // Mapping new API response to our structure
-                $reviews = collect($data['reviews'] ?? [])->map(function ($review) {
-                    return [
-                        'author_name' => $review['authorAttribution']['displayName'] ?? 'Anonyme',
-                        'author_url' => $review['authorAttribution']['uri'] ?? null,
-                        'profile_photo_url' => $review['authorAttribution']['photoUri'] ?? null,
-                        'rating' => $review['rating'] ?? 0,
-                        'relative_time_description' => $review['relativePublishTimeDescription'] ?? '',
-                        'text' => $review['text']['text'] ?? ($review['originalText']['text'] ?? ''),
-                        'time' => strtotime($review['publishTime'] ?? 'now'),
-                    ];
-                })->toArray();
-
-                return [
-                    'reviews' => $reviews,
-                    'rating' => $data['rating'] ?? null,
-                    'total_reviews' => $data['userRatingCount'] ?? null,
-                    'name' => $data['displayName']['text'] ?? null,
-                    'error' => null,
-                ];
-            } catch (\Exception $e) {
                 return [
                     'reviews' => [],
                     'rating' => null,
                     'total_reviews' => null,
                     'name' => null,
-                    'error' => 'Erreur: ' . $e->getMessage(),
+                    'error' => 'Erreur Google API: ' . $errorMessage,
                 ];
             }
-        });
+
+            $data = $response->json();
+
+            // Mapping new API response to our structure
+            $reviews = collect($data['reviews'] ?? [])->map(function ($review) {
+                return [
+                    'author_name' => $review['authorAttribution']['displayName'] ?? 'Anonyme',
+                    'author_url' => $review['authorAttribution']['uri'] ?? null,
+                    'profile_photo_url' => $review['authorAttribution']['photoUri'] ?? null,
+                    'rating' => $review['rating'] ?? 0,
+                    'relative_time_description' => $review['relativePublishTimeDescription'] ?? '',
+                    'text' => $review['text']['text'] ?? ($review['originalText']['text'] ?? ''),
+                    'time' => strtotime($review['publishTime'] ?? 'now'),
+                ];
+            })->toArray();
+
+            $result = [
+                'reviews' => $reviews,
+                'rating' => $data['rating'] ?? null,
+                'total_reviews' => $data['userRatingCount'] ?? null,
+                'name' => $data['displayName']['text'] ?? null,
+                'error' => null,
+            ];
+
+            // Only cache successful results
+            Cache::put($cacheKey, $result, now()->addHour());
+
+            return $result;
+
+        } catch (\Exception $e) {
+            return [
+                'reviews' => [],
+                'rating' => null,
+                'total_reviews' => null,
+                'name' => null,
+                'error' => 'Erreur: ' . $e->getMessage(),
+            ];
+        }
     }
 
     /**
