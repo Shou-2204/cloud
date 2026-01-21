@@ -263,8 +263,16 @@
                                                             tooltip: {
                                                                 y: {
                                                                     formatter: function (val) {
-                                                                        return val + " ⭐" } } } }; this.chart=new
-                    ApexCharts(this.$refs.chart, options); this.chart.render(); } }" x-init="init()" wire:ignore>
+                                                                        return val + ' ⭐'
+                                                                    }
+                                                                }
+                                                            }
+                                                        };
+
+                                                    this.chart = new ApexCharts(this.$refs.chart, options);
+                                                    this.chart.render();
+                                                }
+                                            }" x-init="init()" wire:ignore>
                     <div x-ref="chart" class="w-full h-full"></div>
                 </div>
             </div>
