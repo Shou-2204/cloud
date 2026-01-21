@@ -25,7 +25,7 @@ class GooglePlacesService
     }
 
     /**
-     * Get reviews for a Google Place.
+     * Get reviews for a Google Place using Places API (New).
      *
      * @param string $placeId Google Place ID
      * @return array{reviews: array, rating: float|null, total_reviews: int|null, error: string|null}
@@ -46,12 +46,14 @@ class GooglePlacesService
 
         return Cache::remember($cacheKey, now()->addHour(), function () use ($placeId) {
             try {
-                $response = Http::get('https://maps.googleapis.com/maps/api/place/details/json', [
-                    'place_id' => $placeId,
-                    'fields' => 'reviews,rating,user_ratings_total,name',
-                    'key' => $this->apiKey,
-                    'language' => 'fr',
-                ]);
+                // Places API (New) endpoint
+                $url = "https://places.googleapis.com/v1/places/{$placeId}";
+
+                $response = Http::withHeaders([
+                    'X-Goog-Api-Key' => $this->apiKey,
+                    'X-Goog-FieldMask' => 'id,displayName,rating,userRatingCount,reviews',
+                    'Accept-Language' => 'fr',
+                ])->get($url);
 
                 if (!$response->successful()) {
                     return [
@@ -65,31 +67,24 @@ class GooglePlacesService
 
                 $data = $response->json();
 
-                if (($data['status'] ?? '') !== 'OK') {
-                    $errorMessage = match ($data['status'] ?? 'UNKNOWN') {
-                        'INVALID_REQUEST' => 'Requête invalide',
-                        'OVER_QUERY_LIMIT' => 'Quota API dépassé',
-                        'REQUEST_DENIED' => 'Clé API invalide ou non autorisée',
-                        'NOT_FOUND' => 'Établissement non trouvé',
-                        default => 'Erreur Google: ' . ($data['status'] ?? 'Inconnue'),
-                    };
-
+                // Mapping new API response to our structure
+                $reviews = collect($data['reviews'] ?? [])->map(function ($review) {
                     return [
-                        'reviews' => [],
-                        'rating' => null,
-                        'total_reviews' => null,
-                        'name' => null,
-                        'error' => $errorMessage,
+                        'author_name' => $review['authorAttribution']['displayName'] ?? 'Anonyme',
+                        'author_url' => $review['authorAttribution']['uri'] ?? null,
+                        'profile_photo_url' => $review['authorAttribution']['photoUri'] ?? null,
+                        'rating' => $review['rating'] ?? 0,
+                        'relative_time_description' => $review['relativePublishTimeDescription'] ?? '',
+                        'text' => $review['text']['text'] ?? ($review['originalText']['text'] ?? ''),
+                        'time' => strtotime($review['publishTime'] ?? 'now'),
                     ];
-                }
-
-                $result = $data['result'] ?? [];
+                })->toArray();
 
                 return [
-                    'reviews' => $result['reviews'] ?? [],
-                    'rating' => $result['rating'] ?? null,
-                    'total_reviews' => $result['user_ratings_total'] ?? null,
-                    'name' => $result['name'] ?? null,
+                    'reviews' => $reviews,
+                    'rating' => $data['rating'] ?? null,
+                    'total_reviews' => $data['userRatingCount'] ?? null,
+                    'name' => $data['displayName']['text'] ?? null,
                     'error' => null,
                 ];
             } catch (\Exception $e) {
