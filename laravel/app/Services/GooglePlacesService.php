@@ -57,6 +57,7 @@ class GooglePlacesService
                 'X-Goog-Api-Key' => $this->apiKey,
                 'X-Goog-FieldMask' => 'id,displayName,rating,userRatingCount,reviews',
                 'Accept-Language' => 'fr',
+                'Referer' => config('app.url'),
             ])->get($url);
 
             if (!$response->successful()) {
