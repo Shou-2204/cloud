@@ -132,14 +132,11 @@ class SubscriptionController extends Controller
     {
         $this->authorize('update', $team);
 
-        try {
-            $this->swapSubscription->execute($team, $request->validated('price'));
-        } catch (Exception $e) {
-            return back()->with('error', 'Erreur lors du changement de plan : ' . $e->getMessage());
-        }
+        // Dispatch job for async processing
+        \App\Jobs\UpdateSubscriptionJob::dispatch($team, $request->validated('price'));
 
         return redirect()->route('subscription.index')
-            ->with('status', 'Votre abonnement a été mis à jour avec succès !');
+            ->with('status', 'Le changement de votre abonnement est en cours de traitement. La mise à jour sera effective dans quelques instants.');
     }
 
     /**
