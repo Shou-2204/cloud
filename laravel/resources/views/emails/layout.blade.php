@@ -26,7 +26,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-            background-color: #f3f4f6;
+            background-color: #FFFBF5;
+            /* Ivory Background */
             color: #374151;
             margin: 0;
             padding: 0;
@@ -35,7 +36,8 @@
         }
 
         .wrapper {
-            background-color: #f3f4f6;
+            background-color: #FFFBF5;
+            /* Ivory Wrapper */
             margin: 0;
             padding: 0;
             width: 100%;
@@ -53,7 +55,8 @@
         }
 
         .header a {
-            color: #3b82f6;
+            color: #10b981;
+            /* Emerald Text */
             font-size: 19px;
             font-weight: bold;
             text-decoration: none;
@@ -135,7 +138,8 @@
         }
 
         a {
-            color: #4f46e5;
+            color: #10b981;
+            /* Emerald Link */
         }
 
         .button {
@@ -145,17 +149,20 @@
             display: inline-block;
             overflow: hidden;
             text-decoration: none;
-            background-color: #4f46e5;
-            border-bottom: 8px solid #4f46e5;
-            border-left: 18px solid #4f46e5;
-            border-right: 18px solid #4f46e5;
-            border-top: 8px solid #4f46e5;
+            background-color: #10b981;
+            /* Emerald Button */
+            border-bottom: 8px solid #10b981;
+            border-left: 18px solid #10b981;
+            border-right: 18px solid #10b981;
+            border-top: 8px solid #10b981;
             font-weight: 600;
         }
 
         .panel {
-            border-left: #4f46e5 solid 4px;
-            background-color: #eef2ff;
+            border-left: #10b981 solid 4px;
+            /* Emerald Border */
+            background-color: #FFFBF5;
+            /* Ivory Panel Background */
             margin: 24px 0;
             padding: 16px 24px;
         }
