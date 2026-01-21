@@ -135,4 +135,10 @@ Route::middleware([
             Route::post('/resume', [SubscriptionController::class, 'resume'])->name('resume');
             Route::post('/billing', [SubscriptionController::class, 'updateBilling'])->name('update-billing');
         });
+
+    // Reviews Section (for subscribed teams)
+    Route::prefix('reviews')->name('reviews.')->group(function (): void {
+        Route::get('/stats', [App\Http\Controllers\ReviewController::class, 'stats'])->name('stats');
+        Route::get('/negative', [App\Http\Controllers\ReviewController::class, 'negative'])->name('negative');
+    });
 });

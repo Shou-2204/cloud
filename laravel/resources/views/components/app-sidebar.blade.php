@@ -184,6 +184,44 @@
                                 class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
                                 Mon Abonnement</div>
                         </a>
+
+                        {{-- Avis Section (for subscribed teams) --}}
+                        <div x-data="{ openAvis: {{ request()->routeIs('reviews.*') ? 'true' : 'false' }} }" class="mt-1">
+                            <button @click="openAvis = !openAvis"
+                                class="w-full flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative hover:bg-gray-50 dark:hover:bg-emerald-dark-600 focus:outline-none {{ request()->routeIs('reviews.*') ? 'bg-emerald-50 dark:bg-emerald-900/50' : '' }}"
+                                :class="sidebarCollapsed ? 'justify-center' : 'justify-between text-gray-600 dark:text-gray-400'">
+                                <div class="flex items-center">
+                                    <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('reviews.*') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                    </svg>
+                                    <span class="ml-3 whitespace-nowrap transition-opacity duration-200 font-medium"
+                                        x-show="!sidebarCollapsed">Avis</span>
+                                </div>
+                                <svg x-show="!sidebarCollapsed"
+                                    class="h-4 w-4 transform transition-transform duration-200 text-gray-400"
+                                    :class="{'rotate-90': openAvis}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                                <div x-show="sidebarCollapsed"
+                                    class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                                    Avis</div>
+                            </button>
+
+                            <div x-show="openAvis && !sidebarCollapsed" x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="opacity-0 transform scale-95"
+                                x-transition:enter-end="opacity-100 transform scale-100" class="space-y-1 pl-11 pr-3 mt-1">
+                                <a href="{{ route('reviews.stats') }}" wire:navigate
+                                    class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('reviews.stats') ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
+                                    Mes données
+                                </a>
+                                <a href="{{ route('reviews.negative') }}" wire:navigate
+                                    class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('reviews.negative') ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
+                                    Feedbacks Négatifs
+                                </a>
+                            </div>
+                        </div>
                     @else
                         <a href="{{ route('subscription.index') }}" wire:navigate
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-xl text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 group relative"
