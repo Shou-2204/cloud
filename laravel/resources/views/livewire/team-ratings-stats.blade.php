@@ -160,6 +160,7 @@
                                                     updateChart() {
                                                         if (this.chart) {
                                                             this.chart.updateSeries([{
+                                                                name: 'Note moyenne',
                                                                 data: this.data
                                                             }]);
                                                             this.chart.updateOptions({
