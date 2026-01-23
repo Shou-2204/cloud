@@ -35,6 +35,9 @@ class InviteTeamMember implements InvitesTeamMembers
         ]);
 
         Mail::to($email)->send(new TeamInvitation($invitation));
+
+        // Notify team owner about the invitation
+        $team->owner->notify(new \App\Notifications\NewTeamInvitation($team, $email));
     }
 
     /**

@@ -178,6 +178,10 @@ class SubscriptionController extends Controller
 
         $team->subscription('default')->resume();
 
+        // Send in-app notification
+        $planName = $this->resolvePlanName($team->subscription('default')?->stripe_price);
+        $team->owner->notify(new \App\Notifications\SubscriptionChanged($planName, 'resumed'));
+
         return redirect()->route('subscription.show', $team)
             ->with('status', 'Votre abonnement a été réactivé !');
     }

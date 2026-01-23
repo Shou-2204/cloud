@@ -22,42 +22,62 @@
 
             {{-- NOTIFICATIONS --}}
             @if(Auth::user()->unreadNotifications->isNotEmpty())
-                <div class="max-w-2xl mx-auto mb-10">
-                    <div class="bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                <div class="max-w-3xl mx-auto mb-12">
+                    {{-- Header --}}
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl shadow-lg shadow-orange-500/20">
+                                <svg class="w-6 h-6 text-emerald-950 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                 </svg>
                             </div>
-                            <div class="ml-3 w-full">
-                                <h3 class="text-sm font-medium text-indigo-800 dark:text-indigo-200">
-                                    Vous avez {{ Auth::user()->unreadNotifications->count() }} nouvelle(s) notification(s)
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Notifications
                                 </h3>
-                                <div class="mt-2 text-sm text-indigo-700 dark:text-indigo-300">
-                                    <ul class="list-disc pl-5 space-y-1">
-                                        @foreach(Auth::user()->unreadNotifications->take(3) as $notification)
-                                            <li>
-                                                <a href="{{ $notification->data['url'] ?? '#' }}" class="underline hover:text-indigo-600 dark:hover:text-white">
-                                                    {{ $notification->data['message'] ?? 'Nouvelle notification' }}
-                                                </a>
-                                                <span class="text-xs opacity-75 ml-2">
-                                                    {{ $notification->created_at->diffForHumans() }}
-                                                </span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    {{ Auth::user()->unreadNotifications->count() }} en attente
+                                </p>
                             </div>
                         </div>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400">
+                            <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span>
+                            Nouveau
+                        </span>
                     </div>
+
+                    {{-- Notifications Cards --}}
+                    <div class="space-y-3">
+                        @foreach(Auth::user()->unreadNotifications->take(2) as $notification)
+                            <a href="{{ $notification->data['url'] ?? '#' }}"
+                               class="group block bg-white dark:bg-emerald-dark-500 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-emerald-dark-600 hover:shadow-lg hover:border-emerald-200 dark:hover:border-emerald-dark-500 transition-all duration-200 hover:-translate-y-0.5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                                            {{ $notification->data['message'] ?? 'Nouvelle notification' }}
+                                        </p>
+                                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                            {{ $notification->created_at->diffForHumans() }}
+                                        </p>
+                                    </div>
+                                    <svg class="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors ml-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+
+                    {{-- View All Link --}}
+                    @if(Auth::user()->unreadNotifications->count() > 3)
+                        <div class="mt-4 text-center">
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                + {{ Auth::user()->unreadNotifications->count() - 3 }} autre(s) notification(s)
+                            </span>
+                        </div>
+                    @endif
                 </div>
             @endif
-
-            {{-- SEARCH BAR --}}
-            <div class="max-w-2xl mx-auto mb-16 relative z-20">
-                <livewire:global-search />
-            </div>
 
             {{-- DASHBOARD GRID (ALIGNED) --}}
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">

@@ -53,11 +53,18 @@
                 {{-- Page Title (Divider + Title) --}}
                 <div class="hidden md:flex ml-6 pl-6 border-l border-emerald-500/30 items-center h-8">
                     @if (isset($header))
-                        <div class="text-white font-medium text-lg">
+                        <div class="text-white font-medium text-lg whitespace-nowrap">
                             {{ $header }}
                         </div>
                     @endif
                 </div>
+
+                {{-- Global Search (Auth only) --}}
+                @auth
+                    <div class="ml-6 w-96" style="width: 24rem;">
+                        <livewire:global-search />
+                    </div>
+                @endauth
             </div>
 
             <div class="flex items-center space-x-4">
