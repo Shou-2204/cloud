@@ -61,6 +61,11 @@
             </div>
 
             <div class="flex items-center space-x-4">
+                {{-- Notifications --}}
+                @auth
+                    <livewire:notification-bell />
+                @endauth
+
                 {{-- Theme Switcher --}}
                 <div class="flex items-center text-white">
                     <x-theme-switch />
