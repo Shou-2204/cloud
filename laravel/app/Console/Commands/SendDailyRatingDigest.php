@@ -31,20 +31,21 @@ class SendDailyRatingDigest extends Command
 
         if ($teamIds->isEmpty()) {
             $this->info('No new ratings to send.');
+
             return Command::SUCCESS;
         }
 
         $sentCount = 0;
 
         foreach ($teamIds as $teamId) {
-            $team = Team::with('owner')->find($teamId);
+            $team = Team::with(['owner', 'settings', 'profile'])->find($teamId);
 
-            if (!$team) {
+            if (! $team) {
                 continue;
             }
 
             // Check if team's digest frequency matches
-            $teamFrequency = $team->digest_frequency ?? 'daily';
+            $teamFrequency = $team->settings->digest_frequency ?? 'daily';
 
             // Skip if frequency disabled or doesn't match
             if ($teamFrequency === 'none' || $teamFrequency !== $frequency) {
@@ -69,8 +70,8 @@ class SendDailyRatingDigest extends Command
                 ->values();
 
             // Determine recipient
-            $recipientEmail = $team->feedback_email
-                ?? $team->email_public
+            $recipientEmail = $team->settings->feedback_email
+                ?? $team->profile->email_public
                 ?? $team->owner->email;
 
             // Send digest
@@ -97,4 +98,3 @@ class SendDailyRatingDigest extends Command
         return Command::SUCCESS;
     }
 }
-

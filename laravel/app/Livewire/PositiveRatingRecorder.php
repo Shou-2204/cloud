@@ -15,8 +15,11 @@ use Livewire\Component;
 class PositiveRatingRecorder extends Component
 {
     public Team $team;
+
     public int $rating = 0;
+
     public bool $recorded = false;
+
     public bool $hasAlreadyVoted = false;
 
     /**
@@ -44,6 +47,7 @@ class PositiveRatingRecorder extends Component
         if ($this->isRateLimited()) {
             $this->hasAlreadyVoted = true;
             $this->recorded = true;
+
             return;
         }
 
@@ -68,12 +72,13 @@ class PositiveRatingRecorder extends Component
     {
         $ip = request()->ip();
         $sessionId = session()->getId();
+
         return "review_limit:{$this->team->id}:{$ip}:{$sessionId}";
     }
 
     protected function getSessionHash(): string
     {
-        return hash('sha256', request()->ip() . '|' . session()->getId());
+        return hash('sha256', request()->ip().'|'.session()->getId());
     }
 
     protected function isRateLimited(): bool
@@ -91,4 +96,3 @@ class PositiveRatingRecorder extends Component
         return view('livewire.positive-rating-recorder');
     }
 }
-

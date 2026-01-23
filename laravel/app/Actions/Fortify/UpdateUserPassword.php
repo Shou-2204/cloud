@@ -18,7 +18,7 @@ class UpdateUserPassword implements UpdatesUserPasswords
      */
     public function update(User $user, array $input): void
     {
-        if (!$user->has_set_password) {
+        if (! $user->has_set_password) {
             Validator::make($input, [
                 'password' => $this->passwordRules(),
             ])->validateWithBag('updatePassword');

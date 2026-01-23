@@ -11,17 +11,13 @@ class CreateUserFromProvider
 {
     /**
      * Create or retrieve a user from a social provider.
-     *
-     * @param  string  $provider
-     * @param  \Laravel\Socialite\Contracts\User  $providerUser
-     * @return \App\Models\User
      */
     public function execute(string $provider, SocialiteUser $providerUser): User
     {
         // On cherche si l'utilisateur existe déjà par email
         $user = User::where('email', $providerUser->getEmail())->first();
 
-        if (!$user) {
+        if (! $user) {
             $user = User::create([
                 'name' => $providerUser->getName(),
                 'email' => $providerUser->getEmail(),

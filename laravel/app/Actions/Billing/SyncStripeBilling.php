@@ -18,7 +18,7 @@ class SyncStripeBilling
      */
     public function execute(Team $team): void
     {
-        if (!$team->hasStripeId()) {
+        if (! $team->hasStripeId()) {
             return;
         }
 
@@ -42,6 +42,7 @@ class SyncStripeBilling
             foreach ($existingTaxIds as $taxId) {
                 $team->deleteTaxId($taxId->id);
             }
+
             return;
         }
 

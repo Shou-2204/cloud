@@ -27,7 +27,7 @@ class SubscribeTeamTest extends TestCase
         // Since we cannot easily partial mock Eloquent models in simple tests without heavy setup,
         // we will assume fresh team is not subscribed.
 
-        $action = new SubscribeTeam();
+        $action = new SubscribeTeam;
 
         // Note: newSubscription returns a SubscriptionBuilder, it doesn't call Stripe API yet.
         $builder = $action->execute($team, 'price_123');
@@ -50,7 +50,7 @@ class SubscribeTeamTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $action = new SubscribeTeam();
+        $action = new SubscribeTeam;
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Votre équipe est déjà abonnée !');

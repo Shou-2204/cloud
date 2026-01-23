@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 
 class PublicSiteController extends Controller
 {
@@ -25,6 +24,7 @@ class PublicSiteController extends Controller
             'Discover how ShouCloud adapts to your industry needs. Restaurants, Retail, Services.',
             [['name' => 'Solutions', 'url' => route('solutions.index')]]
         );
+
         return view('public.solutions.index', compact('seo'));
     }
 
@@ -46,11 +46,11 @@ class PublicSiteController extends Controller
             ],
         ];
 
-        abort_if(!isset($solutions[$slug]), 404);
+        abort_if(! isset($solutions[$slug]), 404);
 
         $data = $solutions[$slug];
         $seo = $this->getSeo(
-            $data['title'] . ' - ShouCloud',
+            $data['title'].' - ShouCloud',
             $data['description'],
             [
                 ['name' => 'Solutions', 'url' => route('solutions.index')],
@@ -68,6 +68,7 @@ class PublicSiteController extends Controller
             'Découvrez l\'ensemble des fonctionnalités de ShouCloud : Avis Google, Wallet, Marketing SMS & Email.',
             [['name' => 'Fonctionnalités', 'url' => route('features')]]
         );
+
         return view('public.features', compact('seo'));
     }
 
@@ -78,6 +79,7 @@ class PublicSiteController extends Controller
             'Learn about the team behind ShouCloud and our mission to simplify business growth.',
             [['name' => 'About', 'url' => route('about')]]
         );
+
         return view('public.about', compact('seo'));
     }
 
@@ -92,7 +94,7 @@ class PublicSiteController extends Controller
         // Mock posts
         $posts = [
             (object) ['slug' => 'boost-seo-2026', 'title' => 'How to Boost SEO in 2026', 'excerpt' => 'Strategies that work.'],
-            (object) ['slug' => 'customer-retention', 'title' => 'Mastering Customer Retention', 'excerpt' => 'Keep them coming back.']
+            (object) ['slug' => 'customer-retention', 'title' => 'Mastering Customer Retention', 'excerpt' => 'Keep them coming back.'],
         ];
 
         return view('public.blog.index', compact('seo', 'posts'));
@@ -101,7 +103,7 @@ class PublicSiteController extends Controller
     public function post(string $slug): View
     {
         $seo = $this->getSeo(
-            ucfirst(str_replace('-', ' ', $slug)) . ' - ShouCloud Blog',
+            ucfirst(str_replace('-', ' ', $slug)).' - ShouCloud Blog',
             'Read our comprehensive guide on this topic.',
             [
                 ['name' => 'Blog', 'url' => route('blog.index')],
@@ -119,13 +121,14 @@ class PublicSiteController extends Controller
             'Get in touch with our support or sales team.',
             [['name' => 'Contact', 'url' => route('contact')]]
         );
+
         return view('public.contact', compact('seo'));
     }
 
     public function legal(string $page): View
     {
         $validPages = ['terms', 'privacy'];
-        abort_if(!in_array($page, $validPages), 404);
+        abort_if(! in_array($page, $validPages), 404);
 
         $titles = [
             'terms' => 'Terms of Service',
@@ -133,8 +136,8 @@ class PublicSiteController extends Controller
         ];
 
         $seo = $this->getSeo(
-            $titles[$page] . ' - ShouCloud',
-            'Read our ' . strtolower($titles[$page]),
+            $titles[$page].' - ShouCloud',
+            'Read our '.strtolower($titles[$page]),
             [['name' => 'Legal', 'url' => '#'], ['name' => $titles[$page], 'url' => route('legal.show', $page)]]
         );
 

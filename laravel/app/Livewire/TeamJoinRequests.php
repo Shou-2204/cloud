@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\User;
 use App\Models\Team;
+use App\Models\User;
 use App\Notifications\TeamActivityLog;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -55,12 +55,12 @@ class TeamJoinRequests extends Component
             ]));
 
             $user->notify(new TeamActivityLog('request_accepted', [
-                'team_name' => $team->name
+                'team_name' => $team->name,
             ]));
         }
 
         $this->dispatch('saved');
-        
+
         return redirect()->route('teams.show', $this->teamId);
     }
 

@@ -28,8 +28,7 @@ class SubscriptionCancellationNotice extends Mailable implements ShouldQueue
         public bool $contactAllowed,
         public string $userEmail,
         public string $userName,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the message envelope.
@@ -37,7 +36,7 @@ class SubscriptionCancellationNotice extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '🔔 Demande de désabonnement - ' . $this->team->name,
+            subject: '🔔 Demande de désabonnement - '.$this->team->name,
         );
     }
 

@@ -22,8 +22,7 @@ class NegativeRatingSummary extends Mailable
         public string $teamName,
         public Collection $ratings,
         public string $period,
-    ) {
-    }
+    ) {}
 
     public function envelope(): Envelope
     {

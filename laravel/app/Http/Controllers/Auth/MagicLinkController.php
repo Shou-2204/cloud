@@ -35,7 +35,7 @@ class MagicLinkController extends Controller
         );
 
         // Construct full URL manually using APP_URL
-        $url = rtrim(config('app.url'), '/') . $relativePath;
+        $url = rtrim(config('app.url'), '/').$relativePath;
 
         // Send Email
         Mail::to($user)->send(new MagicLinkLogin($url));
@@ -50,7 +50,7 @@ class MagicLinkController extends Controller
     {
         // Use relative signature check (absolute: false) to prevent issues with
         // http/https or localhost/127.0.0.1 mismatches in local environments.
-        if (!$request->hasValidSignature(absolute: false)) {
+        if (! $request->hasValidSignature(absolute: false)) {
             abort(401, 'Ce lien de connexion a expiré ou est invalide.');
         }
 

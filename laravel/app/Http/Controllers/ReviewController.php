@@ -13,8 +13,7 @@ class ReviewController extends Controller
 {
     public function __construct(
         private GooglePlacesService $googlePlacesService
-    ) {
-    }
+    ) {}
 
     /**
      * Display the statistics page with ratings chart.
@@ -27,8 +26,8 @@ class ReviewController extends Controller
 
         $googleData = null;
 
-        if ($team && $team->subscribed() && $team->google_place_id) {
-            $googleData = $this->googlePlacesService->getPlaceReviews($team->google_place_id);
+        if ($team && $team->subscribed() && $team->settings->google_place_id) {
+            $googleData = $this->googlePlacesService->getPlaceReviews($team->settings->google_place_id);
         }
 
         return view('reviews.stats', [
@@ -49,11 +48,11 @@ class ReviewController extends Controller
         $error = null;
 
         if ($team && $team->subscribed()) {
-            if (!$this->googlePlacesService->isConfigured()) {
+            if (! $this->googlePlacesService->isConfigured()) {
                 $error = 'service_not_configured';
-            } elseif ($team->google_place_id) {
+            } elseif ($team->settings->google_place_id) {
                 $googleData = $this->googlePlacesService->getPlaceReviews(
-                    $team->google_place_id
+                    $team->settings->google_place_id
                 );
                 $error = $googleData['error'] ?? null;
             } else {
@@ -94,4 +93,3 @@ class ReviewController extends Controller
         ]);
     }
 }
-

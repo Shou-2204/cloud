@@ -22,7 +22,7 @@ class TeamController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        if (!$user->current_team_id) {
+        if (! $user->current_team_id) {
             return redirect()->route('onboarding');
         }
 
@@ -38,7 +38,7 @@ class TeamController extends Controller
         $user = $request->user();
 
         // Security: Verify user is linked to team
-        if (!$user->teams()->where('team_id', $team->id)->exists()) {
+        if (! $user->teams()->where('team_id', $team->id)->exists()) {
             abort(403);
         }
 

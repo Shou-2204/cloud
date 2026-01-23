@@ -3,8 +3,8 @@
 namespace App\Listeners;
 
 use App\Notifications\TeamActivityLog;
-use Laravel\Jetstream\Events\TeamMemberAdded;
 use Laravel\Jetstream\Events\InvitingTeamMember;
+use Laravel\Jetstream\Events\TeamMemberAdded;
 
 class LogTeamMemberActivity
 {

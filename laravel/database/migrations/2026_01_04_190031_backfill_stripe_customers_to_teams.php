@@ -2,8 +2,6 @@
 
 use App\Models\Team;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -14,7 +12,7 @@ return new class extends Migration
     {
         // On désactive la protection des timestamps pour ne pas modifier 'updated_at'
         Team::withoutTimestamps(function () {
-            
+
             // On prend toutes les équipes qui n'ont pas encore de compte Stripe
             // On charge le 'owner' car on a besoin de son email
             $teams = Team::whereNull('stripe_id')->with('owner')->cursor();
@@ -29,9 +27,9 @@ return new class extends Migration
                     // Création du client chez Stripe
                     $team->createAsStripeCustomer([
                         'email' => $team->owner->email,
-                        'name'  => $team->name,
+                        'name' => $team->name,
                     ]);
-                    
+
                     // Optionnel : un petit output dans la console pour voir que ça avance
                     // echo "Equipe {$team->name} connectée à Stripe.\n";
 

@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Config;
-// use Illuminate\Support\Facades\Event; // Plus besoin de cette façade pour ça
 use App\Models\Team;
 use App\Observers\TeamObserver;
+use Illuminate\Support\Facades\Config;
+// use Illuminate\Support\Facades\Event; // Plus besoin de cette façade pour ça
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,8 +34,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Dynamic Password Policy for Registration View
         \Illuminate\Support\Facades\View::composer('auth.register', function ($view) {
-            $rulesProvider = new class {
+            $rulesProvider = new class
+            {
                 use \App\Actions\Fortify\PasswordValidationRules;
+
                 public function getRules()
                 {
                     return $this->passwordRules();

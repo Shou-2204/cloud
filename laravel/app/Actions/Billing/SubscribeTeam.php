@@ -9,8 +9,6 @@ class SubscribeTeam
     /**
      * Subscribe a team to a plan.
      *
-     * @param  \App\Models\Team  $team
-     * @param  string  $priceId
      * @return \Laravel\Cashier\SubscriptionBuilder
      */
     public function execute(Team $team, string $priceId)

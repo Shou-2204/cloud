@@ -87,7 +87,7 @@ Route::get('/robots.txt', function () {
     $content .= "Disallow: /dashboard\n";
     $content .= "Disallow: /myteam\n";
     $content .= "Disallow: /mysubscription\n\n";
-    $content .= "Sitemap: " . url('/sitemap.xml');
+    $content .= 'Sitemap: '.url('/sitemap.xml');
 
     return response($content, 200)
         ->header('Content-Type', 'text/plain');

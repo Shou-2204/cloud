@@ -22,7 +22,7 @@ class SwapSubscription
     {
         $subscription = $team->subscription('default');
 
-        if (!$subscription) {
+        if (! $subscription) {
             throw new Exception('Aucun abonnement actif à modifier.');
         }
 

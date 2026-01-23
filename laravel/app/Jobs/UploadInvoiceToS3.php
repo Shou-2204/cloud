@@ -16,7 +16,7 @@ class UploadInvoiceToS3 implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $invoiceId;
+    public $invoiceId;
 
     /**
      * Create a new job instance.
@@ -35,25 +35,25 @@ class UploadInvoiceToS3 implements ShouldQueue
         $stripeInvoice = Cashier::stripe()->invoices->retrieve($this->invoiceId);
 
         // Ensure the invoice is paid and belongs to a team (customer)
-        if ($stripeInvoice->status !== 'paid' || !$stripeInvoice->customer) {
+        if ($stripeInvoice->status !== 'paid' || ! $stripeInvoice->customer) {
             return;
         }
 
         // Find the team by stripe_id
         $team = Team::where('stripe_id', $stripeInvoice->customer)->first();
 
-        if (!$team) {
+        if (! $team) {
             // Log warning: Team not found for invoice
             return;
         }
 
         // 2. Download PDF
-        if (!empty($stripeInvoice->invoice_pdf)) {
+        if (! empty($stripeInvoice->invoice_pdf)) {
             $pdfContent = file_get_contents($stripeInvoice->invoice_pdf);
 
             if ($pdfContent) {
                 // 3. Upload to S3
-                $filename = 'invoices/' . $team->id . '/' . $stripeInvoice->id . '.pdf';
+                $filename = 'invoices/'.$team->id.'/'.$stripeInvoice->id.'.pdf';
                 Storage::disk('s3')->put($filename, $pdfContent);
 
                 // 4. Create/Update record in team_invoices

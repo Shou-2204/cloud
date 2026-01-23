@@ -15,6 +15,7 @@ use Livewire\Component;
 class TeamRatingsStats extends Component
 {
     public ?Team $team = null;
+
     public string $period = '7d'; // Default period
 
     public function mount(): void
@@ -40,7 +41,7 @@ class TeamRatingsStats extends Component
      */
     public function sendNegativeSummary(): void
     {
-        if (!$this->team) {
+        if (! $this->team) {
             return;
         }
 
@@ -92,7 +93,7 @@ class TeamRatingsStats extends Component
      */
     public function getStatsProperty(): array
     {
-        if (!$this->team) {
+        if (! $this->team) {
             return ['count' => 0, 'average' => 0, 'trend' => 0, 'positive' => 0, 'negative' => 0];
         }
 
@@ -147,7 +148,7 @@ class TeamRatingsStats extends Component
      */
     public function getChartDataProperty(): array
     {
-        if (!$this->team) {
+        if (! $this->team) {
             return ['labels' => [], 'data' => []];
         }
 
@@ -199,7 +200,7 @@ class TeamRatingsStats extends Component
      */
     public function getTotalAverageProperty(): float
     {
-        if (!$this->team) {
+        if (! $this->team) {
             return 0;
         }
 
@@ -213,4 +214,3 @@ class TeamRatingsStats extends Component
         return view('livewire.team-ratings-stats');
     }
 }
-
