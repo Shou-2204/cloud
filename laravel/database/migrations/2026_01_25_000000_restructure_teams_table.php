@@ -80,7 +80,35 @@ return new class extends Migration
         // We iterate over teams and insert into new tables.
         // Using raw SQL for performance and to avoid model dependencies during migration.
 
-        $teams = DB::table('teams')->get();
+        // 2. Migrate Data
+        // We iterate over teams and insert into new tables.
+        // Using raw SQL and cursor for performance/memory safety.
+
+        $teams = DB::table('teams')->cursor();
+
+        foreach ($teams as $team) {
+            // ... (omitted for brevity in replacement check, but actually line 86-136 logic remains same)
+            // Wait, replace_file_content replaces the whole block.
+            // I need to be careful not to delete the loop body if I don't provide it?
+            // "In ReplacementContent, specify the replacement content for the specified target content."
+            // "TargetContent ... must be a unique substring".
+            
+            // I will target just the line defining $teams
+    
+    // ...
+    // Actually, I can do multiple chunks to safe on context tokens, or one big chunk.
+    // Let's do small chunks.
+    
+        $teams = DB::table('teams')->cursor();
+    
+    // ...
+    
+        // 2. Restore Data (Reverse)
+        $profiles = DB::table('team_profiles')->cursor();
+    // ...
+        $billings = DB::table('team_billing_details')->cursor();
+    // ...
+        $settings = DB::table('team_settings')->cursor();
 
         foreach ($teams as $team) {
             // Profile
@@ -228,7 +256,7 @@ return new class extends Migration
         });
 
         // 2. Restore Data (Reverse)
-        $profiles = DB::table('team_profiles')->get();
+        $profiles = DB::table('team_profiles')->cursor();
         foreach ($profiles as $profile) {
             DB::table('teams')->where('id', $profile->team_id)->update([
                 'tagline' => $profile->tagline,
@@ -248,7 +276,7 @@ return new class extends Migration
             ]);
         }
 
-        $billings = DB::table('team_billing_details')->get();
+        $billings = DB::table('team_billing_details')->cursor();
         foreach ($billings as $billing) {
             DB::table('teams')->where('id', $billing->team_id)->update([
                 'billing_name' => $billing->billing_name,
@@ -262,7 +290,7 @@ return new class extends Migration
             ]);
         }
 
-        $settings = DB::table('team_settings')->get();
+        $settings = DB::table('team_settings')->cursor();
         foreach ($settings as $setting) {
             DB::table('teams')->where('id', $setting->team_id)->update([
                 'digest_frequency' => $setting->digest_frequency,

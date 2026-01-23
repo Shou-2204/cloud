@@ -18,7 +18,7 @@ class SyncStripeBilling
      */
     public function execute(Team $team): void
     {
-        if (! $team->hasStripeId()) {
+        if (!$team->hasStripeId()) {
             return;
         }
 
@@ -35,7 +35,7 @@ class SyncStripeBilling
     protected function syncTaxIds(Team $team): void
     {
         $existingTaxIds = $team->taxIds();
-        $vatId = $team->vat_id;
+        $vatId = $team->billingDetail->vat_id;
 
         // If no VAT ID provided, remove all existing ones
         if (empty($vatId)) {

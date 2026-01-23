@@ -3,8 +3,8 @@
 
         <!-- Header -->
         <div class="text-center mb-8">
-            @if($team->logo_path)
-                <img src="{{ Storage::disk('minio_public')->url($team->logo_path) }}" alt="{{ $team->name }}"
+            @if($team->profile->logo_path)
+                <img src="{{ Storage::disk('minio_public')->url($team->profile->logo_path) }}" alt="{{ $team->name }}"
                     class="h-20 w-20 rounded-full mx-auto mb-4 object-cover shadow-lg">
             @endif
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Enquête de satisfaction</h1>

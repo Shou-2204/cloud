@@ -12,8 +12,8 @@
                 Votre note a déjà été prise en compte. Nous vous remercions pour votre retour !
             </p>
 
-            @if($team->google_review_url)
-                <a href="{{ $team->google_review_url }}" target="_blank"
+            @if($team->settings->google_review_url)
+                <a href="{{ $team->settings->google_review_url }}" target="_blank"
                     class="block w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold shadow-lg transition transform hover:-translate-y-0.5">
                     Laisser un avis sur Google
                 </a>
@@ -33,11 +33,11 @@
             </div>
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Merci beaucoup !</h2>
             <p class="text-gray-600 dark:text-gray-300 mb-6">
-                {{ $team->review_positive_message ?? "Nous sommes ravis que cela vous ait plu ! Pourriez-vous nous laisser un petit mot sur Google ? Cela nous aide énormément." }}
+                {{ $team->settings->review_positive_message ?? "Nous sommes ravis que cela vous ait plu ! Pourriez-vous nous laisser un petit mot sur Google ? Cela nous aide énormément." }}
             </p>
 
-            @if($team->google_review_url)
-                <a href="{{ $team->google_review_url }}" target="_blank"
+            @if($team->settings->google_review_url)
+                <a href="{{ $team->settings->google_review_url }}" target="_blank"
                     class="block w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold shadow-lg transition transform hover:-translate-y-0.5">
                     Laisser un avis sur Google
                 </a>

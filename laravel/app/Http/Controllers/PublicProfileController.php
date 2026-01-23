@@ -13,14 +13,14 @@ class PublicProfileController extends Controller
      */
     public function show(Request $request, Team $team)
     {
-        if (! $team->subscribed()) {
+        if (!$team->subscribed()) {
             abort(403, 'This organization is not available publicly.');
         }
 
         // Basic Analytics: Count unique views per session
-        $viewKey = 'viewed_team_'.$team->id;
-        if (! Session::has($viewKey)) {
-            $team->increment('public_views');
+        $viewKey = 'viewed_team_' . $team->id;
+        if (!Session::has($viewKey)) {
+            $team->profile()->increment('public_views');
             Session::put($viewKey, true);
         }
 
@@ -34,11 +34,11 @@ class PublicProfileController extends Controller
      */
     public function review(Request $request, Team $team)
     {
-        if (! $team->subscribed()) {
+        if (!$team->subscribed()) {
             abort(403, 'This organization is not available publicly.');
         }
 
-        if (! $team->reviews_enabled) {
+        if (!$team->settings->reviews_enabled) {
             return redirect()->route('profile.public', $team->public_uuid);
         }
 

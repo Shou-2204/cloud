@@ -42,7 +42,7 @@
             </div>
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Désolé pour cette expérience</h2>
             <p class="text-gray-600 dark:text-gray-300 mb-6">
-                {{ $team->review_negative_message ?? "Dites-nous ce qui n'a pas été. Notre direction lit chaque message." }}
+                {{ $team->settings->review_negative_message ?? "Dites-nous ce qui n'a pas été. Notre direction lit chaque message." }}
             </p>
 
             <form wire:submit="submit">
@@ -65,9 +65,9 @@
                     <span wire:loading>Envoi en cours...</span>
                 </button>
 
-                @if($team->google_review_url)
+                @if($team->settings->google_review_url)
                     <div class="mt-4">
-                        <a href="{{ $team->google_review_url }}" target="_blank" rel="noopener noreferrer"
+                        <a href="{{ $team->settings->google_review_url }}" target="_blank" rel="noopener noreferrer"
                             class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:underline">
                             Je ne souhaite pas de réponse, je veux publier mon avis sur Google.
                         </a>

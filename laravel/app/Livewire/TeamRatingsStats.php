@@ -41,7 +41,7 @@ class TeamRatingsStats extends Component
      */
     public function sendNegativeSummary(): void
     {
-        if (! $this->team) {
+        if (!$this->team) {
             return;
         }
 
@@ -59,8 +59,8 @@ class TeamRatingsStats extends Component
         }
 
         // Determine recipient
-        $recipientEmail = $this->team->feedback_email
-            ?? $this->team->email_public
+        $recipientEmail = $this->team->settings->feedback_email
+            ?? $this->team->profile->email_public
             ?? $this->team->owner->email;
 
         // Send the summary email via queue (Horizon)
@@ -93,7 +93,7 @@ class TeamRatingsStats extends Component
      */
     public function getStatsProperty(): array
     {
-        if (! $this->team) {
+        if (!$this->team) {
             return ['count' => 0, 'average' => 0, 'trend' => 0, 'positive' => 0, 'negative' => 0];
         }
 
@@ -148,7 +148,7 @@ class TeamRatingsStats extends Component
      */
     public function getChartDataProperty(): array
     {
-        if (! $this->team) {
+        if (!$this->team) {
             return ['labels' => [], 'data' => []];
         }
 
@@ -200,7 +200,7 @@ class TeamRatingsStats extends Component
      */
     public function getTotalAverageProperty(): float
     {
-        if (! $this->team) {
+        if (!$this->team) {
             return 0;
         }
 
