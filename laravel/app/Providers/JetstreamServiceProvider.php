@@ -29,6 +29,8 @@ class JetstreamServiceProvider extends ServiceProvider
     {
         $this->configurePermissions();
 
+        Jetstream::useTeamModel(\App\Models\Team::class);
+
         Jetstream::createTeamsUsing(CreateTeam::class);
         Jetstream::updateTeamNamesUsing(UpdateTeamName::class);
         Jetstream::addTeamMembersUsing(AddTeamMember::class);

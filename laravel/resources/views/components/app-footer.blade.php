@@ -1,4 +1,4 @@
-<footer class="bg-white dark:bg-emerald-dark-500 border-t border-gray-100 dark:border-emerald-dark-600 mt-auto">
+<footer class="w-full bg-white dark:bg-emerald-dark-500 border-t border-gray-100 dark:border-emerald-dark-600 mt-auto">
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div class="md:flex md:items-center md:justify-between">
             <div class="flex justify-center flex-wrap gap-6 md:order-2">

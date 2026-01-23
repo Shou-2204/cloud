@@ -18,9 +18,9 @@ class TeamJoinRequests extends Component
 
     protected $listeners = ['saved' => '$refresh'];
 
-    public function mount($teamId)
+    public function mount($team)
     {
-        $this->teamId = $teamId;
+        $this->teamId = $team instanceof Team ? $team->id : $team;
     }
 
     public function getPendingUsersProperty()

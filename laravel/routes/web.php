@@ -121,7 +121,16 @@ Route::middleware([
         Route::get('/create', function () {
             return redirect()->route('onboarding');
         })->name('teams.create');
-        Route::get('/{team}', [\Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'show'])->name('teams.show');
+
+        // Team Settings with Tabs
+        Route::get('/{team}', function ($team) {
+            return redirect()->route('teams.settings', ['team' => $team, 'tab' => 'general']);
+        })->name('teams.show');
+
+        // Main Settings Route
+        Route::get('/{team}/settings/{tab?}', [App\Http\Controllers\TeamSettingsController::class, 'show'])
+            ->name('teams.settings');
+            
         Route::put('/{team}', [\Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'update'])->name('teams.update');
     });
 
