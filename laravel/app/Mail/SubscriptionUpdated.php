@@ -4,7 +4,6 @@ namespace App\Mail;
 
 use App\Models\Team;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -20,8 +19,7 @@ class SubscriptionUpdated extends Mailable
     public function __construct(
         public Team $team,
         public string $planName
-    ) {
-    }
+    ) {}
 
     /**
      * Get the message envelope.
@@ -29,7 +27,7 @@ class SubscriptionUpdated extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Mise à jour de votre abonnement - ' . config('app.name'),
+            subject: 'Mise à jour de votre abonnement - '.config('app.name'),
         );
     }
 

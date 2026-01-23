@@ -16,9 +16,13 @@ use Livewire\Component;
 class NegativeReviewForm extends Component
 {
     public Team $team;
+
     public int $rating = 0;
+
     public string $feedback = '';
+
     public bool $submitted = false;
+
     public bool $rateLimited = false;
 
     /**
@@ -87,6 +91,7 @@ class NegativeReviewForm extends Component
     {
         $ip = request()->ip();
         $sessionId = session()->getId();
+
         return "review_limit:{$this->team->id}:{$ip}:{$sessionId}";
     }
 
@@ -95,7 +100,7 @@ class NegativeReviewForm extends Component
      */
     protected function getSessionHash(): string
     {
-        return hash('sha256', request()->ip() . '|' . session()->getId());
+        return hash('sha256', request()->ip().'|'.session()->getId());
     }
 
     /**
@@ -123,14 +128,16 @@ class NegativeReviewForm extends Component
         if ($this->isRateLimited()) {
             $this->rateLimited = true;
             $this->addError('feedback', 'Vous avez déjà envoyé un message récemment. Veuillez patienter avant de réessayer.');
+
             return;
         }
 
         $this->validate();
 
         // Check minimum word count
-        if (!$this->hasEnoughWords) {
-            $this->addError('feedback', 'Veuillez écrire au moins ' . self::MIN_WORDS . ' mots pour nous aider à comprendre.');
+        if (! $this->hasEnoughWords) {
+            $this->addError('feedback', 'Veuillez écrire au moins '.self::MIN_WORDS.' mots pour nous aider à comprendre.');
+
             return;
         }
 
@@ -153,4 +160,3 @@ class NegativeReviewForm extends Component
         return view('livewire.negative-review-form');
     }
 }
-

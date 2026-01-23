@@ -4,12 +4,12 @@ namespace App\Jobs;
 
 use App\Actions\Billing\SwapSubscription;
 use App\Models\Team;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Exception;
 use Illuminate\Support\Facades\Log;
 
 class UpdateSubscriptionJob implements ShouldQueue
@@ -22,8 +22,7 @@ class UpdateSubscriptionJob implements ShouldQueue
     public function __construct(
         public Team $team,
         public string $priceId
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.
@@ -50,7 +49,7 @@ class UpdateSubscriptionJob implements ShouldQueue
 
             Log::info("Successfully swapped subscription for Team ID: {$this->team->id}");
         } catch (Exception $e) {
-            Log::error("Failed to swap subscription for Team ID: {$this->team->id}. Error: " . $e->getMessage());
+            Log::error("Failed to swap subscription for Team ID: {$this->team->id}. Error: ".$e->getMessage());
             // Optionally release back to queue or fail
             $this->fail($e);
         }

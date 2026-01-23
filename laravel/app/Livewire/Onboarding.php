@@ -6,13 +6,14 @@ use App\Models\Team;
 use App\Notifications\TeamActivityLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('layouts.app')]
 class Onboarding extends Component
 {
     public $newTeamName = '';
+
     public $joinCode = '';
 
     public function mount()
@@ -26,17 +27,17 @@ class Onboarding extends Component
     {
         $this->validate(['newTeamName' => 'required|string|min:3']);
         $user = Auth::user();
-        
+
         // Note: L'Observer TeamObserver détectera automatiquement cette création
         // et enverra la notification 'team_created'. Pas besoin de code ici.
         $team = $user->ownedTeams()->create([
             'name' => $this->newTeamName,
             'personal_team' => false,
         ]);
-        
+
         $user->current_team_id = $team->id;
         $user->save();
-        
+
         return redirect()->route('dashboard');
     }
 
@@ -48,14 +49,15 @@ class Onboarding extends Component
         $team = Team::where('join_code', $this->joinCode)->first();
 
         $exists = DB::table('team_user')
-                    ->where('team_id', $team->id)
-                    ->where('user_id', $user->id)
-                    ->exists();
+            ->where('team_id', $team->id)
+            ->where('user_id', $user->id)
+            ->exists();
 
         if ($exists || $team->owner_id === $user->id) {
-             $user->current_team_id = $team->id;
-             $user->save();
-             return redirect()->route('dashboard');
+            $user->current_team_id = $team->id;
+            $user->save();
+
+            return redirect()->route('dashboard');
         }
 
         DB::table('team_user')->insert([
@@ -71,7 +73,7 @@ class Onboarding extends Component
         $team->owner->notify(new TeamActivityLog('join_request_pending', [
             'team_name' => $team->name,
             'user_email' => $user->email,
-            'via' => 'onboarding'
+            'via' => 'onboarding',
         ]));
 
         $user->current_team_id = $team->id;

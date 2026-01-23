@@ -12,4 +12,3 @@ Artisan::command('inspire', function () {
 Schedule::command('ratings:send-digest daily')->dailyAt('08:00');
 Schedule::command('ratings:send-digest weekly')->weeklyOn(1, '08:00'); // Monday at 8h
 Schedule::command('ratings:send-digest monthly')->monthlyOn(1, '08:00'); // 1st of month at 8h
-

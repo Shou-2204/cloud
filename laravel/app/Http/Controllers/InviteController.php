@@ -19,8 +19,9 @@ class InviteController extends Controller
      */
     public function redirect(string $code): RedirectResponse
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             session(['intended_join_code' => $code]);
+
             return redirect()->route('register');
         }
 

@@ -26,8 +26,7 @@ class DailyRatingDigest extends Mailable implements ShouldQueue
         public int $positiveCount,
         public int $negativeCount,
         public Collection $negativeFeedbacks,
-    ) {
-    }
+    ) {}
 
     public function envelope(): Envelope
     {

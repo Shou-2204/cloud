@@ -4,7 +4,6 @@ namespace App\Listeners;
 
 use App\Jobs\UploadInvoiceToS3;
 use Laravel\Cashier\Events\WebhookReceived;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class StripeInvoicePaidListener
 {

@@ -2,8 +2,8 @@
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Cover Image -->
         <div class="h-48 md:h-64 bg-emerald-600 w-full object-cover relative">
-            @if($team->cover_image_path)
-                <img src="{{ Storage::disk('minio_public')->url($team->cover_image_path) }}" alt="Cover"
+            @if($team->profile->cover_image_path)
+                <img src="{{ Storage::disk('minio_public')->url($team->profile->cover_image_path) }}" alt="Cover"
                     class="w-full h-full object-cover opacity-80">
             @else
                 <div class="w-full h-full bg-gradient-to-r from-emerald-500 to-teal-600"></div>
@@ -16,9 +16,9 @@
                 <div class="sm:flex sm:items-end sm:space-x-6">
                     <!-- Logo -->
                     <div class="flex-shrink-0 relative">
-                        @if($team->logo_path)
+                        @if($team->profile->logo_path)
                             <img class="h-32 w-32 rounded-xl ring-4 ring-white dark:ring-gray-800 object-cover bg-white"
-                                src="{{ Storage::disk('minio_public')->url($team->logo_path) }}" alt="{{ $team->name }}">
+                                src="{{ Storage::disk('minio_public')->url($team->profile->logo_path) }}" alt="{{ $team->name }}">
                         @else
                             <div
                                 class="h-32 w-32 rounded-xl ring-4 ring-white dark:ring-gray-800 bg-emerald-100 flex items-center justify-center text-4xl font-bold text-emerald-600">
@@ -30,14 +30,14 @@
                     <!-- Identity -->
                     <div class="mt-6 sm:mt-0 sm:flex-1">
                         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $team->name }}</h1>
-                        @if($team->tagline)
-                            <p class="text-lg text-emerald-600 dark:text-emerald-400 font-medium">{{ $team->tagline }}</p>
+                        @if($team->profile->tagline)
+                            <p class="text-lg text-emerald-600 dark:text-emerald-400 font-medium">{{ $team->profile->tagline }}</p>
                         @endif
                     </div>
 
                     <!-- Actions -->
                     <div class="mt-6 sm:mt-0 flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-3">
-                        @if($team->reviews_enabled)
+                        @if($team->settings->reviews_enabled)
                             <a href="{{ route('profile.survey', $team->public_uuid) }}"
                                 class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 w-full sm:w-auto">
                                 <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,11 +52,11 @@
                 </div>
 
                 <!-- Bio -->
-                @if($team->bio)
+                @if($team->profile->bio)
                     <div class="mt-8 border-t border-gray-100 dark:border-gray-700 pt-8">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">À propos</h3>
                         <div class="prose prose-emerald dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
-                            {{ $team->bio }}
+                            {{ $team->profile->bio }}
                         </div>
                     </div>
                 @endif
@@ -68,7 +68,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <!-- Social Media (Moved before Contact Info) -->
-                @if($team->social_instagram || $team->social_facebook || $team->social_tiktok || $team->social_linkedin || $team->social_twitter)
+                @if($team->profile->social_instagram || $team->profile->social_facebook || $team->profile->social_tiktok || $team->profile->social_linkedin || $team->profile->social_twitter)
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
                             <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor"
@@ -80,8 +80,8 @@
                             Réseaux Sociaux
                         </h3>
                         <div class="flex flex-col space-y-3">
-                            @if($team->social_instagram)
-                                <a href="{{ $team->social_instagram }}" target="_blank"
+                            @if($team->profile->social_instagram)
+                                <a href="{{ $team->profile->social_instagram }}" target="_blank"
                                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition group">
                                     <div
                                         class="p-2 bg-pink-50 dark:bg-pink-900/20 rounded-lg group-hover:bg-pink-100 dark:group-hover:bg-pink-900/40 transition">
@@ -93,8 +93,8 @@
                                     <span class="ml-3 font-medium">Suivez-nous sur Insta</span>
                                 </a>
                             @endif
-                            @if($team->social_facebook)
-                                <a href="{{ $team->social_facebook }}" target="_blank"
+                            @if($team->profile->social_facebook)
+                                <a href="{{ $team->profile->social_facebook }}" target="_blank"
                                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition group">
                                     <div
                                         class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition">
@@ -106,8 +106,8 @@
                                     <span class="ml-3 font-medium">Suivez notre actu sur Facebook</span>
                                 </a>
                             @endif
-                            @if($team->social_tiktok)
-                                <a href="{{ $team->social_tiktok }}" target="_blank"
+                            @if($team->profile->social_tiktok)
+                                <a href="{{ $team->profile->social_tiktok }}" target="_blank"
                                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition group">
                                     <div
                                         class="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg group-hover:bg-gray-100 dark:group-hover:bg-gray-600 transition">
@@ -119,8 +119,8 @@
                                     <span class="ml-3 font-medium">Regardez nos lives sur TikTok</span>
                                 </a>
                             @endif
-                            @if($team->social_linkedin)
-                                <a href="{{ $team->social_linkedin }}" target="_blank"
+                            @if($team->profile->social_linkedin)
+                                <a href="{{ $team->profile->social_linkedin }}" target="_blank"
                                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 transition group">
                                     <div
                                         class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition">
@@ -132,8 +132,8 @@
                                     <span class="ml-3 font-medium">Rejoignez notre réseau pro</span>
                                 </a>
                             @endif
-                            @if($team->social_twitter)
-                                <a href="{{ $team->social_twitter }}" target="_blank"
+                            @if($team->profile->social_twitter)
+                                <a href="{{ $team->profile->social_twitter }}" target="_blank"
                                     class="flex items-center text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition group">
                                     <div
                                         class="p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg group-hover:bg-gray-100 dark:group-hover:bg-gray-600 transition">
@@ -163,36 +163,36 @@
                         Coordonnées
                     </h3>
                     <dl class="space-y-4">
-                        @if($team->address)
+                        @if($team->profile->address)
                             <div>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Adresse</dt>
-                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $team->address }}</dd>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $team->profile->address }}</dd>
                             </div>
                         @endif
-                        @if($team->email_public)
+                        @if($team->profile->email_public)
                             <div>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    <a href="mailto:{{ $team->email_public }}"
-                                        class="hover:text-emerald-500 transition">{{ $team->email_public }}</a>
+                                    <a href="mailto:{{ $team->profile->email_public }}"
+                                        class="hover:text-emerald-500 transition">{{ $team->profile->email_public }}</a>
                                 </dd>
                             </div>
                         @endif
-                        @if($team->phone)
+                        @if($team->profile->phone)
                             <div>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Téléphone</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    <a href="tel:{{ $team->phone }}"
-                                        class="hover:text-emerald-500 transition">{{ $team->phone }}</a>
+                                    <a href="tel:{{ $team->profile->phone }}"
+                                        class="hover:text-emerald-500 transition">{{ $team->profile->phone }}</a>
                                 </dd>
                             </div>
                         @endif
-                        @if($team->website)
+                        @if($team->profile->website)
                             <div>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Site Web</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    <a href="{{ $team->website }}" target="_blank" rel="noopener"
-                                        class="text-emerald-600 hover:text-emerald-500 transition">{{ $team->website }}</a>
+                                    <a href="{{ $team->profile->website }}" target="_blank" rel="noopener"
+                                        class="text-emerald-600 hover:text-emerald-500 transition">{{ $team->profile->website }}</a>
                                 </dd>
                             </div>
                         @endif

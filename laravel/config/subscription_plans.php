@@ -40,7 +40,7 @@ return [
     ],
     'smart' => [
         'name' => 'Smart',
-        'description' => "Fidélisez votre clientèle avec le Wallet Mobile.",
+        'description' => 'Fidélisez votre clientèle avec le Wallet Mobile.',
         'price_monthly' => 79,
         'price_yearly' => 790,
         'stripe_id_monthly' => env('STRIPE_PRICE_ID_SMART_MONTHLY'),
@@ -50,7 +50,7 @@ return [
         'features' => [
             [
                 'name' => 'Tout de Starter',
-                'description' => "Inclus toutes les fonctionnalités du plan Starter",
+                'description' => 'Inclus toutes les fonctionnalités du plan Starter',
                 'included' => true,
                 'highlight' => true, // Pour afficher en gras ou différemment
             ],
@@ -78,7 +78,7 @@ return [
     ],
     'pro' => [
         'name' => 'Pro',
-        'description' => "Automatisez tout. Dominez votre marché.",
+        'description' => 'Automatisez tout. Dominez votre marché.',
         'price_monthly' => 149,
         'price_yearly' => 1490,
         'stripe_id_monthly' => env('STRIPE_PRICE_ID_PRO_MONTHLY'),
@@ -88,7 +88,7 @@ return [
         'features' => [
             [
                 'name' => 'Tout de Smart',
-                'description' => "Inclus toutes les fonctionnalités du plan Smart",
+                'description' => 'Inclus toutes les fonctionnalités du plan Smart',
                 'included' => true,
                 'highlight' => true,
             ],

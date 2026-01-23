@@ -11,7 +11,9 @@ class TeamActivityLog extends Notification implements ShouldQueue
     use Queueable;
 
     public string $action;
+
     public array $meta;
+
     public string $ip; // On stocke l'IP ici
 
     public function __construct(string $action, array $meta = [], ?string $ip = null)
@@ -44,7 +46,7 @@ class TeamActivityLog extends Notification implements ShouldQueue
         if (isset($this->meta['team_id'])) {
             $tags[] = 'team:'.$this->meta['team_id'];
         }
-        
+
         if (isset($this->meta['user_id'])) {
             $tags[] = 'user:'.$this->meta['user_id'];
         }

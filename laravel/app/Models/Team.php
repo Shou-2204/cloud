@@ -1,13 +1,14 @@
 <?php
+
 /*
  * File: app/Models/Team.php
  */
-
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Laravel\Cashier\Billable;
 use Laravel\Jetstream\Events\TeamCreated;
@@ -28,39 +29,10 @@ class Team extends JetstreamTeam
         'personal_team',
         'join_code',
         'auto_approval',
-        'billing_name',
-        'billing_address',
-        'billing_address_line2',
-        'billing_city',
-        'billing_state',
-        'billing_postal_code',
-        'billing_country',
-        'vat_id',
-        // Public Profile
         'public_uuid',
-        'tagline',
-        'bio',
-        'logo_path',
-        'cover_image_path',
-        'phone',
-        'email_public',
-        'website',
-        'address',
-        'social_instagram',
-        'social_facebook',
-        'social_tiktok',
-        'social_linkedin',
-        'social_twitter',
-        'google_place_id',
-        'google_api_key',
-        'google_business_data',
-        'public_views',
-        'reviews_enabled',
-        'google_review_url',
-        'review_positive_message',
-        'review_negative_message',
-        'feedback_email',
-        'digest_frequency',
+        // Cashier/Stripe fields are guarded or managed by trait, but we can list them if needed.
+        // Usually they are not in fillable unless we manually update them.
+        // For now, keeping only what was core.
     ];
 
     protected $dispatchesEvents = [
@@ -74,8 +46,6 @@ class Team extends JetstreamTeam
         return [
             'personal_team' => 'boolean',
             'auto_approval' => 'boolean',
-            'google_business_data' => 'array',
-            'reviews_enabled' => 'boolean',
         ];
     }
 
@@ -86,17 +56,6 @@ class Team extends JetstreamTeam
             $team->public_uuid = (string) Str::uuid();
         });
     }
-
-    /**
-     * Get the route key for the model.
-     * Use public_uuid for explicit route binding on public pages if needed,
-     * but usually we specify {team:public_uuid} in the route definition.
-     */
-    // public function getRouteKeyName()
-    // {
-    //     return 'public_uuid'; 
-    // } 
-    // Keeping default ID for internal routes, explicit binding for public ones.
 
     public function users(): BelongsToMany
     {
@@ -116,17 +75,34 @@ class Team extends JetstreamTeam
         return $this->hasMany(TeamRating::class)->orderByDesc('created_at');
     }
 
+    // New Relationships
+
+    public function profile(): HasOne
+    {
+        return $this->hasOne(TeamProfile::class)->withDefault();
+    }
+
+    public function billingDetail(): HasOne
+    {
+        return $this->hasOne(TeamBillingDetail::class)->withDefault();
+    }
+
+    public function settings(): HasOne
+    {
+        return $this->hasOne(TeamSetting::class)->withDefault();
+    }
+
     public function toSearchableArray()
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
             'owner_email' => $this->owner->email,
-            'tagline' => $this->tagline,
-            'bio' => $this->bio,
+            'tagline' => $this->profile->tagline,
+            'bio' => $this->profile->bio,
             'public_uuid' => $this->public_uuid,
-            'email_public' => $this->email_public,
-            'website' => $this->website,
+            'email_public' => $this->profile->email_public,
+            'website' => $this->profile->website,
         ];
     }
 
@@ -135,7 +111,7 @@ class Team extends JetstreamTeam
      */
     public function stripeName(): ?string
     {
-        return $this->billing_name ?? $this->name;
+        return $this->billingDetail->billing_name ?? $this->name;
     }
 
     /**
@@ -144,12 +120,12 @@ class Team extends JetstreamTeam
     public function stripeAddress(): array
     {
         return [
-            'line1' => $this->billing_address,
-            'line2' => $this->billing_address_line2,
-            'city' => $this->billing_city,
-            'state' => $this->billing_state,
-            'postal_code' => $this->billing_postal_code,
-            'country' => $this->billing_country,
+            'line1' => $this->billingDetail->billing_address,
+            'line2' => $this->billingDetail->billing_address_line2,
+            'city' => $this->billingDetail->billing_city,
+            'state' => $this->billingDetail->billing_state,
+            'postal_code' => $this->billingDetail->billing_postal_code,
+            'country' => $this->billingDetail->billing_country,
         ];
     }
 }

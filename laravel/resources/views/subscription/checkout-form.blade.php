@@ -25,7 +25,7 @@
                         <div>
                             <x-label for="billing_name" value="{{ __('Nom de facturation / Entreprise') }}" />
                             <x-input id="billing_name" name="billing_name" type="text" class="mt-1 block w-full"
-                                :value="old('billing_name', $team->billing_name)" required autofocus />
+                                :value="old('billing_name', $team->billingDetail->billing_name)" required autofocus />
                             <x-input-error for="billing_name" class="mt-2" />
                         </div>
 
@@ -33,7 +33,7 @@
                             <div class="md:col-span-2">
                                 <x-label for="billing_address" value="{{ __('Adresse ligne 1') }}" />
                                 <x-input id="billing_address" name="billing_address" type="text"
-                                    class="mt-1 block w-full" :value="old('billing_address', $team->billing_address)"
+                                    class="mt-1 block w-full" :value="old('billing_address', $team->billingDetail->billing_address)"
                                     required placeholder="123 Rue de la Paix" />
                                 <x-input-error for="billing_address" class="mt-2" />
                             </div>
@@ -41,21 +41,21 @@
                             <div class="md:col-span-2">
                                 <x-label for="billing_address_line2" value="{{ __('Adresse ligne 2 (Optionnel)') }}" />
                                 <x-input id="billing_address_line2" name="billing_address_line2" type="text"
-                                    class="mt-1 block w-full" :value="old('billing_address_line2', $team->billing_address_line2)" placeholder="Bâtiment B, Étage 3" />
+                                    class="mt-1 block w-full" :value="old('billing_address_line2', $team->billingDetail->billing_address_line2)" placeholder="Bâtiment B, Étage 3" />
                                 <x-input-error for="billing_address_line2" class="mt-2" />
                             </div>
 
                             <div>
                                 <x-label for="billing_postal_code" value="{{ __('Code Postal') }}" />
                                 <x-input id="billing_postal_code" name="billing_postal_code" type="text"
-                                    class="mt-1 block w-full" :value="old('billing_postal_code', $team->billing_postal_code)" required placeholder="75000" />
+                                    class="mt-1 block w-full" :value="old('billing_postal_code', $team->billingDetail->billing_postal_code)" required placeholder="75000" />
                                 <x-input-error for="billing_postal_code" class="mt-2" />
                             </div>
 
                             <div>
                                 <x-label for="billing_city" value="{{ __('Ville') }}" />
                                 <x-input id="billing_city" name="billing_city" type="text" class="mt-1 block w-full"
-                                    :value="old('billing_city', $team->billing_city)" required placeholder="Paris" />
+                                    :value="old('billing_city', $team->billingDetail->billing_city)" required placeholder="Paris" />
                                 <x-input-error for="billing_city" class="mt-2" />
                             </div>
 
@@ -63,15 +63,15 @@
                                 <x-label for="billing_country" value="{{ __('Pays') }}" />
                                 <select id="billing_country" name="billing_country"
                                     class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                    <option value="FR" @selected(old('billing_country', $team->billing_country) === 'FR')>
+                                    <option value="FR" @selected(old('billing_country', $team->billingDetail->billing_country) === 'FR')>
                                         France</option>
-                                    <option value="BE" @selected(old('billing_country', $team->billing_country) === 'BE')>
+                                    <option value="BE" @selected(old('billing_country', $team->billingDetail->billing_country) === 'BE')>
                                         Belgique</option>
-                                    <option value="CH" @selected(old('billing_country', $team->billing_country) === 'CH')>
+                                    <option value="CH" @selected(old('billing_country', $team->billingDetail->billing_country) === 'CH')>
                                         Suisse</option>
-                                    <option value="CA" @selected(old('billing_country', $team->billing_country) === 'CA')>
+                                    <option value="CA" @selected(old('billing_country', $team->billingDetail->billing_country) === 'CA')>
                                         Canada</option>
-                                    <option value="LU" @selected(old('billing_country', $team->billing_country) === 'LU')>
+                                    <option value="LU" @selected(old('billing_country', $team->billingDetail->billing_country) === 'LU')>
                                         Luxembourg</option>
                                     {{-- Add more as needed --}}
                                 </select>
@@ -82,7 +82,7 @@
                         <div>
                             <x-label for="vat_id" value="{{ __('Numéro de TVA (Optionnel)') }}" />
                             <x-input id="vat_id" name="vat_id" type="text" class="mt-1 block w-full"
-                                :value="old('vat_id', $team->vat_id)" placeholder="FRXX123456789" />
+                                :value="old('vat_id', $team->billingDetail->vat_id)" placeholder="FRXX123456789" />
                             <x-input-error for="vat_id" class="mt-2" />
                         </div>
 

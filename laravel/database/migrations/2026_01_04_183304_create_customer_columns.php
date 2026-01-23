@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('pm_last_four', 4)->nullable();
             $table->timestamp('trial_ends_at')->nullable();
         });
-        
+
         // J'ai retiré la création de 'subscriptions' et 'subscription_items' ici
         // car elles sont gérées par tes autres fichiers de migration.
     }

@@ -34,6 +34,6 @@ class LoginDetected extends Notification implements ShouldQueue
 
     public function tags(): array
     {
-        return ['login', 'user:' . $this->user->id];
+        return ['login', 'user:'.$this->user->id];
     }
 }

@@ -10,7 +10,6 @@ use App\Http\Requests\Billing\StoreBillingRequest;
 use App\Http\Requests\Billing\SwapSubscriptionRequest;
 use App\Mail\SubscriptionCancellationNotice;
 use App\Models\Team;
-use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,8 +25,7 @@ class SubscriptionController extends Controller
     public function __construct(
         protected SyncStripeBilling $syncStripeBilling,
         protected SwapSubscription $swapSubscription,
-    ) {
-    }
+    ) {}
 
     /**
      * Display the pricing page (public).
@@ -45,7 +43,7 @@ class SubscriptionController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        if (!$user->current_team_id) {
+        if (! $user->current_team_id) {
             return redirect()->route('onboarding');
         }
 
@@ -193,21 +191,21 @@ class SubscriptionController extends Controller
      */
     private function isBillingInfoMissing(Team $team): bool
     {
-        return empty($team->billing_name)
-            || empty($team->billing_address)
-            || empty($team->billing_city)
-            || empty($team->billing_postal_code)
-            || empty($team->billing_country);
+        return empty($team->billingDetail->billing_name)
+            || empty($team->billingDetail->billing_address)
+            || empty($team->billingDetail->billing_city)
+            || empty($team->billingDetail->billing_postal_code)
+            || empty($team->billingDetail->billing_country);
     }
 
     /**
      * Update team with billing information.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     private function updateTeamBilling(Team $team, array $data): void
     {
-        $team->update([
+        $team->billingDetail()->updateOrCreate([], [
             'billing_name' => $data['billing_name'],
             'billing_address' => $data['billing_address'],
             'billing_address_line2' => $data['billing_address_line2'] ?? null,
@@ -236,7 +234,7 @@ class SubscriptionController extends Controller
      */
     private function resolvePlanName(?string $stripePrice): string
     {
-        if (!$stripePrice) {
+        if (! $stripePrice) {
             return 'Abonnement Inconnu';
         }
 

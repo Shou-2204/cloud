@@ -8,11 +8,12 @@ use Sushi\Sushi;
 
 class StaticPage extends Model
 {
-    use Sushi;
     use Searchable;
+    use Sushi;
 
     // 1. IMPORTANT : On dit à Eloquent que l'ID n'est pas un chiffre auto-incrémenté
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     protected $schema = [
@@ -108,6 +109,6 @@ class StaticPage extends Model
         ];
     }
 
-    // 5. On peut supprimer getScoutKey() et getScoutKeyName() 
+    // 5. On peut supprimer getScoutKey() et getScoutKeyName()
     // car Laravel utilise maintenant l'ID standard du modèle par défaut.
 }

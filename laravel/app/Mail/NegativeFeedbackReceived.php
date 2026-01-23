@@ -26,8 +26,7 @@ class NegativeFeedbackReceived extends Mailable implements ShouldQueue
         public Team $team,
         public int $rating,
         public string $feedback,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the message envelope.
@@ -35,6 +34,7 @@ class NegativeFeedbackReceived extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         $stars = str_repeat('⭐', $this->rating);
+
         return new Envelope(
             subject: "📣 Nouveau Retour Client ({$stars}) - {$this->team->name}",
         );

@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB; // <--- N'oublie pas ça
 
 return new class extends Migration
@@ -21,7 +19,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Impossible de revenir en arrière automatiquement car on ne sait pas 
+        // Impossible de revenir en arrière automatiquement car on ne sait pas
         // quelles équipes étaient personnelles avant.
     }
 };

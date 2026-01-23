@@ -21,18 +21,18 @@ class GooglePlacesService
      */
     public function isConfigured(): bool
     {
-        return !empty($this->apiKey);
+        return ! empty($this->apiKey);
     }
 
     /**
      * Get reviews for a Google Place using Places API (New).
      *
-     * @param string $placeId Google Place ID
+     * @param  string  $placeId  Google Place ID
      * @return array{reviews: array, rating: float|null, total_reviews: int|null, error: string|null}
      */
     public function getPlaceReviews(string $placeId): array
     {
-        if (!$this->isConfigured()) {
+        if (! $this->isConfigured()) {
             return [
                 'reviews' => [],
                 'rating' => null,
@@ -60,7 +60,7 @@ class GooglePlacesService
                 'Referer' => config('app.url'),
             ])->get($url);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 $errorBody = $response->json();
                 $errorMessage = $errorBody['error']['message'] ?? $response->reason();
 
@@ -69,7 +69,7 @@ class GooglePlacesService
                     'rating' => null,
                     'total_reviews' => null,
                     'name' => null,
-                    'error' => 'Erreur Google API: ' . $errorMessage,
+                    'error' => 'Erreur Google API: '.$errorMessage,
                 ];
             }
 
@@ -107,7 +107,7 @@ class GooglePlacesService
                 'rating' => null,
                 'total_reviews' => null,
                 'name' => null,
-                'error' => 'Erreur: ' . $e->getMessage(),
+                'error' => 'Erreur: '.$e->getMessage(),
             ];
         }
     }
