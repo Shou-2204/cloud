@@ -49,16 +49,67 @@
                     {{-- Notifications Cards --}}
                     <div class="space-y-3">
                         @foreach(Auth::user()->unreadNotifications->take(2) as $notification)
-                            <a href="{{ $notification->data['url'] ?? '#' }}"
+                            @php
+                                $data = $notification->data;
+                                $url = $data['url'] ?? '#';
+                                $message = $data['message'] ?? 'Nouvelle notification';
+                                $icon = 'bell';
+        
+                                // Legacy support for TeamActivityLog
+                                if ($url === '#' && isset($data['team_id'])) {
+                                    try {
+                                        $url = route('teams.show', $data['team_id']);
+                                    } catch (\Exception $e) {}
+                                }
+                                
+                                // Force translation & Icons
+                                if (isset($data['action'])) {
+                                    $actions = [
+                                        'team_updated' => ['label' => 'Mise à jour de l\'équipe', 'icon' => 'pencil'],
+                                        'team_renamed' => ['label' => 'Organisation renommée', 'icon' => 'tag'],
+                                        'settings_updated' => ['label' => 'Paramètres modifiés', 'icon' => 'cog'],
+                                        'organization_renamed' => ['label' => 'Organisation renommée', 'icon' => 'tag'],
+                                        'member_added' => ['label' => 'Nouveau collaborateur', 'icon' => 'user-add'],
+                                        'member_removed' => ['label' => 'Collaborateur retiré', 'icon' => 'user-remove'],
+                                        'review_received' => ['label' => 'Nouvel avis reçu', 'icon' => 'star'],
+                                    ];
+                                    
+                                    if (isset($actions[$data['action']])) {
+                                        $message = 'Activité : ' . $actions[$data['action']]['label'];
+                                        $icon = $actions[$data['action']]['icon'];
+                                    } elseif ($message === 'Nouvelle notification') {
+                                        $message = 'Activité : ' . ucfirst(str_replace('_', ' ', $data['action']));
+                                    }
+                                }
+
+                                $svgIcon = match($icon) {
+                                    'pencil' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />',
+                                    'tag' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />',
+                                    'cog' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />',
+                                    'user-add' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />',
+                                    'user-remove' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6" />',
+                                    'star' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />',
+                                    default => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />'
+                                };
+                            @endphp
+                            <a href="{{ route('notifications.read', $notification->id) }}"
                                class="group block bg-white dark:bg-emerald-dark-500 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-emerald-dark-600 hover:shadow-lg hover:border-emerald-200 dark:hover:border-emerald-dark-500 transition-all duration-200 hover:-translate-y-0.5">
                                 <div class="flex items-center justify-between">
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                                            {{ $notification->data['message'] ?? 'Nouvelle notification' }}
-                                        </p>
-                                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                            {{ $notification->created_at->diffForHumans() }}
-                                        </p>
+                                    <div class="flex items-center gap-4 min-w-0">
+                                        {{-- Icon --}}
+                                        <div class="flex-shrink-0 p-2 bg-gray-50 dark:bg-emerald-dark-600 rounded-lg group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/30 transition-colors">
+                                            <svg class="h-6 w-6 {{ $icon === 'star' ? 'text-yellow-400' : 'text-gray-400 dark:text-gray-500' }} group-hover:text-emerald-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                {!! $svgIcon !!}
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                                                {{ $message }}
+                                            </p>
+                                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                {{ $notification->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
                                     </div>
                                     <svg class="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors ml-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

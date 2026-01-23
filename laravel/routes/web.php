@@ -150,5 +150,9 @@ Route::middleware([
         Route::get('/stats', [App\Http\Controllers\ReviewController::class, 'stats'])->name('stats');
         Route::get('/public', [App\Http\Controllers\ReviewController::class, 'publicReviews'])->name('public');
         Route::get('/private', [App\Http\Controllers\ReviewController::class, 'privateFeedbacks'])->name('private');
+        Route::get('/private', [App\Http\Controllers\ReviewController::class, 'privateFeedbacks'])->name('private');
     });
+
+    // Notifications Interaction
+    Route::get('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'read'])->name('notifications.read');
 });

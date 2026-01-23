@@ -34,6 +34,8 @@ class TeamActivityLog extends Notification implements ShouldQueue
             'action' => $this->action,
             'ip' => $this->ip, // On utilise la propriété stockée
             'performed_at' => now(),
+            'message' => 'Activité : ' . ucfirst(str_replace('_', ' ', $this->action)),
+            'url' => isset($this->meta['team_id']) ? route('teams.show', $this->meta['team_id']) : route('dashboard'),
         ], $this->meta);
     }
 
