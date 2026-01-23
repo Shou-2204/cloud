@@ -15,12 +15,18 @@ use Livewire\Component;
 class PositiveRatingRecorder extends Component
 {
     public Team $team;
-
+    
     public int $rating = 0;
 
     public bool $recorded = false;
 
     public bool $hasAlreadyVoted = false;
+
+    public ?int $ratingId = null;
+
+    public string $feedback = '';
+
+    public bool $showFeedbackForm = false;
 
     /**
      * Rate limit: seconds before another submission is allowed (24 hours).
@@ -52,15 +58,39 @@ class PositiveRatingRecorder extends Component
         }
 
         $this->rating = $rating;
+        // Remark: We apply rate limit at the END or BEGINNING? 
+        // If we apply it now, user cannot re-submit if page reloads. Ideally apply AFTER feedback or if skipped.
+        // But to prevent spam, applying now is safer for the RATING part.
         $this->applyRateLimit();
 
-        TeamRating::create([
+        $ratingRecord = TeamRating::create([
             'team_id' => $this->team->id,
             'rating' => $rating,
             'feedback' => null,
             'session_hash' => $this->getSessionHash(),
         ]);
 
+        $this->ratingId = $ratingRecord->id;
+        $this->showFeedbackForm = true;
+    }
+
+    public function submitFeedback()
+    {
+        if ($this->ratingId) {
+            $rating = TeamRating::find($this->ratingId);
+            if ($rating) {
+                $rating->update(['feedback' => $this->feedback]);
+            }
+        }
+
+        $this->showFeedbackForm = false;
+        $this->recorded = true;
+        // Redirect will happen in view via button link or JS
+    }
+
+    public function skipFeedback()
+    {
+        $this->showFeedbackForm = false;
         $this->recorded = true;
     }
 

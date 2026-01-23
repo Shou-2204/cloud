@@ -29,15 +29,15 @@
         </tr>
     </table>
 
-    @if($negativeFeedbacks->isNotEmpty())
-        <h2>💬 Retours à traiter</h2>
-        <p>Vous avez reçu des commentaires nécessitant votre attention :</p>
+    @if($feedbacks->isNotEmpty())
+        <h2>💬 Vos derniers avis</h2>
+        <p>Voici les messages laissés par vos clients :</p>
 
-        @foreach($negativeFeedbacks as $feedback)
-            <div class="panel">
+        @foreach($feedbacks as $feedback)
+            <div class="panel" style="{{ $feedback->rating >= 4 ? 'border-left-color: #10b981;' : 'border-left-color: #ef4444;' }}">
                 <div class="panel-content">
                     <p>
-                        <strong class="text-red">{{ $feedback->rating }}★/5</strong>
+                        <strong class="{{ $feedback->rating >= 4 ? 'text-green' : 'text-red' }}">{{ $feedback->rating }}★/5</strong>
                         @if($feedback->created_at)
                             <span class="text-sm" style="color: #6b7280; margin-left: 8px;">
                                 {{ $feedback->created_at->format('H:i') }}
@@ -51,19 +51,11 @@
             </div>
         @endforeach
     @else
-        @if($negativeCount > 0)
-            <div class="panel">
-                <div class="panel-content">
-                    <p>Vous avez reçu {{ $negativeCount }} note(s) négative(s) sans commentaire écrit.</p>
-                </div>
+        <div class="panel" style="background-color: #f9fafb; border-left-color: #9ca3af;">
+            <div class="panel-content">
+                <p>Vous avez reçu des notes sans commentaire écrit aujourd'hui.</p>
             </div>
-        @else
-            <div class="panel" style="background-color: #f0fdf4; border-left-color: #10b981;">
-                <div class="panel-content">
-                    <p class="text-green">Aucun retour négatif aujourd'hui. Bravo à toute l'équipe ! 👏</p>
-                </div>
-            </div>
-        @endif
+        </div>
     @endif
 
     <div style="text-align: center; margin-top: 32px;">

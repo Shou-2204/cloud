@@ -37,9 +37,9 @@ class TeamRatingsStats extends Component
     }
 
     /**
-     * Send negative ratings summary by email.
+     * Send ratings summary by email.
      */
-    public function sendNegativeSummary(): void
+    public function sendSummary(): void
     {
         if (!$this->team) {
             return;
@@ -48,13 +48,15 @@ class TeamRatingsStats extends Component
         $days = $this->getDays();
         $startDate = now()->subDays($days);
 
-        $negativeRatings = TeamRating::where('team_id', $this->team->id)
+        $ratings = TeamRating::where('team_id', $this->team->id)
             ->where('created_at', '>=', $startDate)
-            ->where('rating', '<=', 3)
             ->orderByDesc('created_at')
             ->get();
 
-        if ($negativeRatings->isEmpty()) {
+        if ($ratings->isEmpty()) {
+            // Optional: Send "No ratings" email? Or just return.
+            // For manual trigger, maybe show flash "No ratings".
+            $this->dispatch('no-ratings');
             return;
         }
 
@@ -65,9 +67,9 @@ class TeamRatingsStats extends Component
 
         // Send the summary email via queue (Horizon)
         \Illuminate\Support\Facades\Mail::to($recipientEmail)
-            ->queue(new \App\Mail\NegativeRatingSummary(
+            ->queue(new \App\Mail\RatingSummary(
                 teamName: $this->team->name,
-                ratings: $negativeRatings,
+                ratings: $ratings,
                 period: $this->period,
             ));
 

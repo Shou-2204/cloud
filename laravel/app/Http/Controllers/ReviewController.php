@@ -84,8 +84,7 @@ class ReviewController extends Controller
                 ->where('type', \App\Notifications\NewPrivateFeedback::class)
                 ->markAsRead();
 
-            $negativeRatings = TeamRating::where('team_id', $team->id)
-                ->where('rating', '<=', 3)
+            $feedbacks = TeamRating::where('team_id', $team->id)
                 ->whereNotNull('feedback')
                 ->where('feedback', '!=', '')
                 ->orderByDesc('created_at')
@@ -93,7 +92,7 @@ class ReviewController extends Controller
         }
 
         return view('reviews.private', [
-            'ratings' => $negativeRatings,
+            'ratings' => $feedbacks,
             'team' => $team,
         ]);
     }

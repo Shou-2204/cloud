@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 /**
  * Summary email of negative ratings for a given period.
  */
-class NegativeRatingSummary extends Mailable
+class RatingSummary extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -34,14 +34,14 @@ class NegativeRatingSummary extends Mailable
         };
 
         return new Envelope(
-            subject: "📋 Synthèse des avis négatifs ({$periodLabel}) - {$this->teamName}",
+            subject: "📋 Synthèse des avis ({$periodLabel}) - {$this->teamName}",
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.negative-rating-summary-html',
+            view: 'emails.rating-summary-html',
         );
     }
 }

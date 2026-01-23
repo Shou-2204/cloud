@@ -64,8 +64,7 @@ class SendDailyRatingDigest extends Command
             $averageRating = $ratings->avg('rating');
             $positiveCount = $ratings->where('rating', '>=', 4)->count();
             $negativeCount = $ratings->where('rating', '<=', 3)->count();
-            $negativeFeedbacks = $ratings
-                ->where('rating', '<=', 3)
+            $feedbacks = $ratings
                 ->whereNotNull('feedback')
                 ->values();
 
@@ -81,7 +80,7 @@ class SendDailyRatingDigest extends Command
                 averageRating: $averageRating,
                 positiveCount: $positiveCount,
                 negativeCount: $negativeCount,
-                negativeFeedbacks: $negativeFeedbacks,
+                feedbacks: $feedbacks,
             ));
 
             // Mark as notified

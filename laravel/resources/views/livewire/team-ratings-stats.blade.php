@@ -77,12 +77,12 @@
                             </div>
                         </div>
 
-                        {{-- Button to get negative summary --}}
-                        @if($this->stats['negative'] > 0)
-                            <button wire:click="sendNegativeSummary" wire:loading.attr="disabled"
-                                class="ml-4 px-3 py-2 text-xs font-medium rounded-lg bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:hover:bg-orange-900/50 transition-colors">
-                                <span wire:loading.remove wire:target="sendNegativeSummary">📧 Synthèse négatifs</span>
-                                <span wire:loading wire:target="sendNegativeSummary">Envoi...</span>
+                        {{-- Button to get summary --}}
+                        @if($this->stats['count'] > 0)
+                            <button wire:click="sendSummary" wire:loading.attr="disabled"
+                                class="ml-4 px-3 py-2 text-xs font-medium rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50 transition-colors">
+                                <span wire:loading.remove wire:target="sendSummary">📧 Obtenir une synthèse par mail</span>
+                                <span wire:loading wire:target="sendSummary">Envoi...</span>
                             </button>
                         @endif
                     </div>
@@ -123,7 +123,7 @@
                 @if(session('summary_sent'))
                     <div
                         class="mb-4 p-3 rounded-lg bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-sm">
-                        ✅ La synthèse des avis négatifs a été envoyée par email.
+                        ✅ La synthèse des avis a été envoyée par email.
                     </div>
                 @endif
 
