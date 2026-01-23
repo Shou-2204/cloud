@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
         Cashier::useCustomerModel(Team::class);
         Team::observe(TeamObserver::class);
 
+        // Prevent Lazy Loading & other silent errors in non-prod
+        \Illuminate\Database\Eloquent\Model::shouldBeStrict(! $this->app->isProduction());
+
         // J'AI SUPPRIMÉ LES BLOCS "Event::listen" ICI.
         // Laravel fait maintenant la liaison automatiquement grâce à l'Event Discovery.
 

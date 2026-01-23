@@ -25,7 +25,7 @@ class TeamActivityLog extends Notification implements ShouldQueue
 
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     public function toDatabase($notifiable)
@@ -37,6 +37,20 @@ class TeamActivityLog extends Notification implements ShouldQueue
             'message' => 'Activité : ' . ucfirst(str_replace('_', ' ', $this->action)),
             'url' => isset($this->meta['team_id']) ? route('teams.show', $this->meta['team_id']) : route('dashboard'),
         ], $this->meta);
+    }
+
+    /**
+     * Get the broadcastable representation of the notification.
+     */
+    public function toBroadcast(object $notifiable): \Illuminate\Notifications\Messages\BroadcastMessage
+    {
+        return new \Illuminate\Notifications\Messages\BroadcastMessage([
+            'action' => $this->action,
+            'message' => 'Activité : ' . ucfirst(str_replace('_', ' ', $this->action)),
+            'url' => isset($this->meta['team_id']) ? route('teams.show', $this->meta['team_id']) : route('dashboard'),
+            // Send all meta data to the client if needed, or filter it
+            ...$this->meta,
+        ]);
     }
 
     // Indispensable pour retrouver les logs dans Horizon

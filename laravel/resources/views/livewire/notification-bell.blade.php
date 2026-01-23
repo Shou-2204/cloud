@@ -1,4 +1,4 @@
-<div class="relative" wire:poll.30s x-data="{ open: false }">
+<div class="relative" x-data="{ open: false }">
     <style>
         @keyframes swing {
             0% { transform: rotate(0deg); }
