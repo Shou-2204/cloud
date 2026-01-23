@@ -20,6 +20,40 @@
                 </p>
             </div>
 
+            {{-- NOTIFICATIONS --}}
+            @if(Auth::user()->unreadNotifications->isNotEmpty())
+                <div class="max-w-2xl mx-auto mb-10">
+                    <div class="bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3 w-full">
+                                <h3 class="text-sm font-medium text-indigo-800 dark:text-indigo-200">
+                                    Vous avez {{ Auth::user()->unreadNotifications->count() }} nouvelle(s) notification(s)
+                                </h3>
+                                <div class="mt-2 text-sm text-indigo-700 dark:text-indigo-300">
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        @foreach(Auth::user()->unreadNotifications->take(3) as $notification)
+                                            <li>
+                                                <a href="{{ $notification->data['url'] ?? '#' }}" class="underline hover:text-indigo-600 dark:hover:text-white">
+                                                    {{ $notification->data['message'] ?? 'Nouvelle notification' }}
+                                                </a>
+                                                <span class="text-xs opacity-75 ml-2">
+                                                    {{ $notification->created_at->diffForHumans() }}
+                                                </span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             {{-- SEARCH BAR --}}
             <div class="max-w-2xl mx-auto mb-16 relative z-20">
                 <livewire:global-search />

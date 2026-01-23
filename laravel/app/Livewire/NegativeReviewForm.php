@@ -6,7 +6,9 @@ namespace App\Livewire;
 
 use App\Models\Team;
 use App\Models\TeamRating;
+use App\Notifications\NewPrivateFeedback;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 /**
@@ -145,12 +147,19 @@ class NegativeReviewForm extends Component
         $this->applyRateLimit();
 
         // Save to database (email sent via daily digest)
-        TeamRating::create([
+        $rating = TeamRating::create([
             'team_id' => $this->team->id,
             'rating' => $this->rating,
             'feedback' => $this->feedback,
             'session_hash' => $this->getSessionHash(),
         ]);
+
+        // Send notification to team members
+        // @phpstan-ignore-next-line
+        Notification::send(
+            $this->team->users->merge([$this->team->owner])->unique('id'),
+            new NewPrivateFeedback($rating)
+        );
 
         $this->submitted = true;
     }
