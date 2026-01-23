@@ -54,7 +54,10 @@ class PrivateFeedbackNotificationTest extends TestCase
             ->call('submit');
 
         $this->assertEquals(1, $user->fresh()->unreadNotifications->count());
-        $this->assertEquals('Nouveau feedback privé reçu (2/5)', $user->unreadNotifications->first()->data['message']);
+        $notification = $user->unreadNotifications->first();
+        $this->assertEquals('Nouveau feedback privé reçu (2/5)', $notification->data['message']);
+        $this->assertTrue(isset($notification->data['url']));
+        $this->assertEquals(route('reviews.private'), $notification->data['url']);
     }
 
     public function test_visiting_private_feedbacks_clears_notifications()

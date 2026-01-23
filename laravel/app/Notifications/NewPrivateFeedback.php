@@ -44,6 +44,7 @@ class NewPrivateFeedback extends Notification
             'team_id' => $this->rating->team_id,
             'rating_value' => $this->rating->rating,
             'message' => 'Nouveau feedback privé reçu (' . $this->rating->rating . '/5)',
+            'url' => route('reviews.private'),
         ];
     }
 }

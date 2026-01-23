@@ -38,7 +38,7 @@
                                     <ul class="list-disc pl-5 space-y-1">
                                         @foreach(Auth::user()->unreadNotifications->take(3) as $notification)
                                             <li>
-                                                <a href="{{ route('reviews.private') }}" class="underline hover:text-indigo-600 dark:hover:text-white">
+                                                <a href="{{ $notification->data['url'] ?? '#' }}" class="underline hover:text-indigo-600 dark:hover:text-white">
                                                     {{ $notification->data['message'] ?? 'Nouvelle notification' }}
                                                 </a>
                                                 <span class="text-xs opacity-75 ml-2">
@@ -46,13 +46,6 @@
                                                 </span>
                                             </li>
                                         @endforeach
-                                        @if(Auth::user()->unreadNotifications->count() > 3)
-                                            <li class="list-none pt-1">
-                                                <a href="{{ route('reviews.private') }}" class="font-medium hover:text-indigo-600 dark:hover:text-white">
-                                                    Voir toutes les notifications &rarr;
-                                                </a>
-                                            </li>
-                                        @endif
                                     </ul>
                                 </div>
                             </div>
