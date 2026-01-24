@@ -1,7 +1,7 @@
 <div>
     @if($showFeedbackForm)
         <!-- Feedback Form for Positive Ratings -->
-        <div class="text-center transition-all duration-300">
+        <div class="text-center transition-all duration-300" x-data="{ showMessageForm: false }">
             <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
                 <span class="text-3xl">🎉</span>
             </div>
@@ -13,18 +13,31 @@
             <!-- 1. Google Review (Primary Action) -->
             @if($team->settings->google_review_url)
                 <a href="{{ $team->settings->google_review_url }}" target="_blank"
-                    class="block w-full py-4 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-lg shadow-lg transition transform hover:-translate-y-0.5 mb-8 flex items-center justify-center gap-2">
+                    class="block w-full py-4 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-lg shadow-lg transition transform hover:-translate-y-0.5 mb-4 flex items-center justify-center gap-2">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"></path></svg>
                     Laisser un avis sur Google
                 </a>
             @else
-                <button class="block w-full py-3 px-4 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed mb-8">
+                <button class="block w-full py-3 px-4 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed mb-4">
                     Lien Google non configuré
                 </button>
             @endif
 
-            <!-- 2. Message Form (Secondary Action) -->
-            <div class="border-t border-gray-100 dark:border-gray-700 pt-6">
+            <!-- 2. Actions Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                <button @click="showMessageForm = !showMessageForm" 
+                    class="py-3 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl font-medium shadow-sm transition">
+                    Laissez un message
+                </button>
+
+                <a href="{{ route('profile.public', $team->public_uuid) }}"
+                    class="flex items-center justify-center py-3 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl font-medium shadow-sm transition">
+                    Retour au profil
+                </a>
+            </div>
+
+            <!-- 3. Message Form (Secondary Action) -->
+            <div x-show="showMessageForm" x-transition class="border-t border-gray-100 dark:border-gray-700 pt-6">
                 <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">
                     Vous souhaitez nous laisser un message privé ?
                 </h3>
@@ -35,10 +48,12 @@
                         placeholder="Votre message pour l'équipe..."></textarea>
                 </div>
 
-                <button wire:click="submitFeedback"
-                    class="w-full py-2 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg font-medium shadow-sm transition text-sm">
-                    Envoyer le message à l'établissement
-                </button>
+                <div class="flex justify-end">
+                    <button wire:click="submitFeedback"
+                        class="py-2 px-6 bg-emerald-600 border border-transparent text-white hover:bg-emerald-700 rounded-lg font-medium shadow-sm transition text-sm">
+                        Envoyer
+                    </button>
+                </div>
             </div>
         </div>
     @elseif($hasAlreadyVoted || $recorded)

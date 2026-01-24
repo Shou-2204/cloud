@@ -28,8 +28,11 @@ class UserForm
                 Textarea::make('two_factor_recovery_codes')
                     ->columnSpanFull(),
                 DateTimePicker::make('two_factor_confirmed_at'),
-                TextInput::make('current_team_id')
-                    ->numeric(),
+                \Filament\Forms\Components\Select::make('current_team_id')
+                    ->relationship('currentTeam', 'name')
+                    ->searchable()
+                    ->label('Current Team')
+                    ->placeholder('Select a team'),
                 TextInput::make('profile_photo_path'),
             ]);
     }

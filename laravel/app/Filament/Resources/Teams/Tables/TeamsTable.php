@@ -1,36 +1,31 @@
 <?php
 
-namespace App\Filament\Resources\Users\Tables;
+namespace App\Filament\Resources\Teams\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\Action;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class UsersTable
+class TeamsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('public_uuid')
                     ->searchable(),
-                TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('two_factor_confirmed_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('current_team_id')
+                TextColumn::make('user_id')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('profile_photo_path')
+                TextColumn::make('name')
                     ->searchable(),
+                TextColumn::make('join_code')
+                    ->searchable(),
+                IconColumn::make('personal_team')
+                    ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -39,19 +34,20 @@ class UsersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('stripe_id')
+                    ->searchable(),
+                TextColumn::make('pm_type')
+                    ->searchable(),
+                TextColumn::make('pm_last_four')
+                    ->searchable(),
+                TextColumn::make('trial_ends_at')
+                    ->dateTime()
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                Action::make('impersonate')
-                    ->label('Log in as')
-                    ->icon('heroicon-o-arrow-right-end-on-rectangle')
-                    ->requiresConfirmation()
-                    ->action(function ($record) {
-                        \Illuminate\Support\Facades\Auth::login($record);
-                        return redirect('/dashboard'); // Redirect to main app dashboard, not admin
-                    }),
                 EditAction::make(),
             ])
             ->toolbarActions([
