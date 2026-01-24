@@ -52,19 +52,24 @@ class GenerateSitemap extends Command
         }
 
         // Add Dynamic Blog Posts (In real app, fetch from DB)
-        // $posts = \App\Models\Post::all();
-        // foreach ($posts as $post) {
-        //     $sitemap->add(Url::create("/blog/{$post->slug}")
-        //         ->setPriority(0.6)
-        //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
-        // }
-        // Mocking for now
         $posts = ['boost-seo-2026', 'customer-retention'];
         foreach ($posts as $slug) {
             $sitemap->add(Url::create("/blog/{$slug}")
                 ->setPriority(0.6)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
         }
+
+        // Add Public Team Profiles (Only Subscribed)
+        $this->info('Adding subscribed teams...');
+        \App\Models\Team::query()->cursor()->each(function (\App\Models\Team $team) use ($sitemap) {
+            // Check if team has active subscription and public page enabled (implicit by not being personal usually, but handled by controller logic)
+            // We reuse the controller logic: must be subscribed.
+            if ($team->subscribed()) {
+                 $sitemap->add(Url::create(route('profile.public', $team->public_uuid))
+                    ->setPriority(0.9)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
+            }
+        });
 
         $sitemap->writeToFile($path);
 

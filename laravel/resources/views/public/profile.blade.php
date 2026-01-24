@@ -1,4 +1,32 @@
 <x-public-layout>
+    @push('structured-data')
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "{{ $team->name }}",
+      "image": [
+        "{{ $team->profile->logo_path ? Storage::disk('minio_public')->url($team->profile->logo_path) : '' }}"
+       ],
+      "@id": "{{ route('profile.public', $team->public_uuid) }}",
+      "url": "{{ route('profile.public', $team->public_uuid) }}",
+      "telephone": "{{ $team->profile->phone }}",
+      "email": "{{ $team->profile->email_public }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ $team->profile->address }}"
+      },
+      "description": "{{ $team->profile->tagline }}",
+      "sameAs": [
+        "{{ $team->profile->website }}",
+        "{{ $team->profile->social_facebook }}",
+        "{{ $team->profile->social_twitter }}",
+        "{{ $team->profile->social_instagram }}",
+        "{{ $team->profile->social_linkedin }}"
+      ]
+    }
+    </script>
+    @endpush
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Cover Image -->
         <div class="h-48 md:h-64 bg-emerald-600 w-full object-cover relative">

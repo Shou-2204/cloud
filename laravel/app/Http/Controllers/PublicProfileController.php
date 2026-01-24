@@ -20,12 +20,20 @@ class PublicProfileController extends Controller
         // Basic Analytics: Count unique views per session
         $viewKey = 'viewed_team_' . $team->id;
         if (!Session::has($viewKey)) {
-            $team->profile()->increment('public_views');
+            $team->profile->increment('public_views');
             Session::put($viewKey, true);
         }
 
+        // SEO Metadata
+        $seo = [
+            'title' => $team->name . ' - Avis & Profil Public',
+            'description' => $team->profile->tagline ?? $team->profile->bio ?? 'Découvrez les avis et services de ' . $team->name,
+            'image' => $team->profile->cover_image_path ? \Illuminate\Support\Facades\Storage::disk('minio_public')->url($team->profile->cover_image_path) : null,
+        ];
+
         return view('public.profile', [
             'team' => $team,
+            'seo' => $seo,
         ]);
     }
 
