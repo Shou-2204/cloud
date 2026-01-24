@@ -10,13 +10,14 @@ class SubscriptionChanged extends Notification
     use Queueable;
 
     public string $planName;
+
     public string $type;
 
     /**
      * Create a new notification instance.
      *
-     * @param string $planName The name of the plan
-     * @param string $type One of: 'subscribed', 'upgraded', 'downgraded', 'cancelled', 'resumed'
+     * @param  string  $planName  The name of the plan
+     * @param  string  $type  One of: 'subscribed', 'upgraded', 'downgraded', 'cancelled', 'resumed'
      */
     public function __construct(string $planName, string $type = 'subscribed')
     {
@@ -52,7 +53,7 @@ class SubscriptionChanged extends Notification
         return [
             'plan_name' => $this->planName,
             'type' => $this->type,
-            'message' => $messages[$this->type] ?? "Modification de votre abonnement",
+            'message' => $messages[$this->type] ?? 'Modification de votre abonnement',
             'url' => route('subscription.index'),
         ];
     }

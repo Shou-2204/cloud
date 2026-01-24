@@ -21,7 +21,6 @@ class SmsMessage
     /**
      * Create a new SMS message instance.
      *
-     * @param  string  $content
      * @return void
      */
     public function __construct(string $content = '')
@@ -32,7 +31,6 @@ class SmsMessage
     /**
      * Set the content of the SMS.
      *
-     * @param  string  $content
      * @return $this
      */
     public function content(string $content): self
@@ -45,7 +43,6 @@ class SmsMessage
     /**
      * Set the sender of the SMS.
      *
-     * @param  string  $from
      * @return $this
      */
     public function from(string $from): self

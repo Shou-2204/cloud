@@ -41,7 +41,7 @@ class TeamRatingsStats extends Component
      */
     public function sendSummary(): void
     {
-        if (!$this->team) {
+        if (! $this->team) {
             return;
         }
 
@@ -57,6 +57,7 @@ class TeamRatingsStats extends Component
             // Optional: Send "No ratings" email? Or just return.
             // For manual trigger, maybe show flash "No ratings".
             $this->dispatch('no-ratings');
+
             return;
         }
 
@@ -95,7 +96,7 @@ class TeamRatingsStats extends Component
      */
     public function getStatsProperty(): array
     {
-        if (!$this->team) {
+        if (! $this->team) {
             return ['count' => 0, 'average' => 0, 'trend' => 0, 'positive' => 0, 'negative' => 0];
         }
 
@@ -150,7 +151,7 @@ class TeamRatingsStats extends Component
      */
     public function getChartDataProperty(): array
     {
-        if (!$this->team) {
+        if (! $this->team) {
             return ['labels' => [], 'data' => []];
         }
 
@@ -202,7 +203,7 @@ class TeamRatingsStats extends Component
      */
     public function getTotalAverageProperty(): float
     {
-        if (!$this->team) {
+        if (! $this->team) {
             return 0;
         }
 

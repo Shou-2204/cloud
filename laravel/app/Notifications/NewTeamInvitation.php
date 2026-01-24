@@ -11,6 +11,7 @@ class NewTeamInvitation extends Notification
     use Queueable;
 
     public Team $team;
+
     public string $email;
 
     /**

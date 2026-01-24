@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Livewire\NegativeReviewForm;
 use App\Models\Team;
 use App\Models\User;
 use App\Notifications\NewPrivateFeedback;
@@ -9,7 +10,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 use Tests\TestCase;
-use App\Livewire\NegativeReviewForm;
 
 class PrivateFeedbackNotificationTest extends TestCase
 {
@@ -85,7 +85,7 @@ class PrivateFeedbackNotificationTest extends TestCase
         $this->assertEquals(1, $user->fresh()->unreadNotifications->count());
 
         $this->actingAs($user)
-             ->get(route('reviews.private'));
+            ->get(route('reviews.private'));
 
         $this->assertEquals(0, $user->fresh()->unreadNotifications->count());
     }

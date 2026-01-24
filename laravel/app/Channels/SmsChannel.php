@@ -18,7 +18,6 @@ class SmsChannel
     /**
      * Create a new SMS channel instance.
      *
-     * @param  \App\Services\Sms\SmsManager  $manager
      * @return void
      */
     public function __construct(SmsManager $manager)
@@ -30,7 +29,6 @@ class SmsChannel
      * Send the given notification.
      *
      * @param  mixed  $notifiable
-     * @param  \Illuminate\Notifications\Notification  $notification
      * @return void
      */
     public function send($notifiable, Notification $notification)

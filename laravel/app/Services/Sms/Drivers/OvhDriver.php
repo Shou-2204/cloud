@@ -4,15 +4,19 @@ namespace App\Services\Sms\Drivers;
 
 use App\Contracts\SmsProvider;
 use App\Services\Sms\SmsMessage;
-use Illuminate\Support\Facades\Http;
 use Exception;
+use Illuminate\Support\Facades\Http;
 
 class OvhDriver implements SmsProvider
 {
     protected $appKey;
+
     protected $appSecret;
+
     protected $consumerKey;
+
     protected $endpoint;
+
     protected $serviceName;
 
     public function __construct($appKey, $appSecret, $consumerKey, $endpoint, $serviceName)
@@ -27,16 +31,13 @@ class OvhDriver implements SmsProvider
     /**
      * Send the given SMS message to the given number.
      *
-     * @param  string  $to
-     * @param  \App\Services\Sms\SmsMessage  $message
-     * @return void
      * @throws \Exception
      */
     public function send(string $to, SmsMessage $message): void
     {
         $method = 'POST';
         $uri = "/sms/{$this->serviceName}/jobs";
-        $url = $this->endpoint . $uri;
+        $url = $this->endpoint.$uri;
 
         $body = json_encode([
             'message' => $message->content,
@@ -50,8 +51,8 @@ class OvhDriver implements SmsProvider
 
         // Calculate Signature
         // "$1$" + SHA1_HEX(AS + CK + METHOD + QUERY + BODY + MSTIMESTAMP)
-        $toSign = $this->appSecret . '+' . $this->consumerKey . '+' . $method . '+' . $url . '+' . $body . '+' . $time;
-        $signature = '$1$' . sha1($toSign);
+        $toSign = $this->appSecret.'+'.$this->consumerKey.'+'.$method.'+'.$url.'+'.$body.'+'.$time;
+        $signature = '$1$'.sha1($toSign);
 
         $response = Http::withHeaders([
             'X-Ovh-Application' => $this->appKey,
@@ -62,7 +63,7 @@ class OvhDriver implements SmsProvider
         ])->withBody($body, 'application/json')->post($url);
 
         if (! $response->successful()) {
-            throw new Exception("OVH SMS Error: " . $response->body());
+            throw new Exception('OVH SMS Error: '.$response->body());
         }
     }
 }

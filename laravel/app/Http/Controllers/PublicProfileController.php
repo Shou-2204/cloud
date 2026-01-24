@@ -13,21 +13,21 @@ class PublicProfileController extends Controller
      */
     public function show(Request $request, Team $team)
     {
-        if (!$team->subscribed()) {
+        if (! $team->subscribed()) {
             abort(403, 'This organization is not available publicly.');
         }
 
         // Basic Analytics: Count unique views per session
-        $viewKey = 'viewed_team_' . $team->id;
-        if (!Session::has($viewKey)) {
+        $viewKey = 'viewed_team_'.$team->id;
+        if (! Session::has($viewKey)) {
             $team->profile->increment('public_views');
             Session::put($viewKey, true);
         }
 
         // SEO Metadata
         $seo = [
-            'title' => $team->name . ' - Avis & Profil Public',
-            'description' => $team->profile->tagline ?? $team->profile->bio ?? 'Découvrez les avis et services de ' . $team->name,
+            'title' => $team->name.' - Avis & Profil Public',
+            'description' => $team->profile->tagline ?? $team->profile->bio ?? 'Découvrez les avis et services de '.$team->name,
             'image' => $team->profile->cover_image_path ? \Illuminate\Support\Facades\Storage::disk('minio_public')->url($team->profile->cover_image_path) : null,
         ];
 
@@ -42,11 +42,11 @@ class PublicProfileController extends Controller
      */
     public function review(Request $request, Team $team)
     {
-        if (!$team->subscribed()) {
+        if (! $team->subscribed()) {
             abort(403, 'This organization is not available publicly.');
         }
 
-        if (!$team->settings->reviews_enabled) {
+        if (! $team->settings->reviews_enabled) {
             return redirect()->route('profile.public', $team->public_uuid);
         }
 

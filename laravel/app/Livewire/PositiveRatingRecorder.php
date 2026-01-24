@@ -15,7 +15,7 @@ use Livewire\Component;
 class PositiveRatingRecorder extends Component
 {
     public Team $team;
-    
+
     public int $rating = 0;
 
     public bool $recorded = false;
@@ -58,7 +58,7 @@ class PositiveRatingRecorder extends Component
         }
 
         $this->rating = $rating;
-        // Remark: We apply rate limit at the END or BEGINNING? 
+        // Remark: We apply rate limit at the END or BEGINNING?
         // If we apply it now, user cannot re-submit if page reloads. Ideally apply AFTER feedback or if skipped.
         // But to prevent spam, applying now is safer for the RATING part.
         $this->applyRateLimit();

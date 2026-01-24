@@ -34,7 +34,7 @@ class TeamActivityLog extends Notification implements ShouldQueue
             'action' => $this->action,
             'ip' => $this->ip, // On utilise la propriété stockée
             'performed_at' => now(),
-            'message' => 'Activité : ' . ucfirst(str_replace('_', ' ', $this->action)),
+            'message' => 'Activité : '.ucfirst(str_replace('_', ' ', $this->action)),
             'url' => isset($this->meta['team_id']) ? route('teams.show', $this->meta['team_id']) : route('dashboard'),
         ], $this->meta);
     }
@@ -46,7 +46,7 @@ class TeamActivityLog extends Notification implements ShouldQueue
     {
         return new \Illuminate\Notifications\Messages\BroadcastMessage([
             'action' => $this->action,
-            'message' => 'Activité : ' . ucfirst(str_replace('_', ' ', $this->action)),
+            'message' => 'Activité : '.ucfirst(str_replace('_', ' ', $this->action)),
             'url' => isset($this->meta['team_id']) ? route('teams.show', $this->meta['team_id']) : route('dashboard'),
             // Send all meta data to the client if needed, or filter it
             ...$this->meta,
