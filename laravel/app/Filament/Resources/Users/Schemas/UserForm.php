@@ -19,6 +19,10 @@ class UserForm
                     ->label('Email address')
                     ->email()
                     ->required(),
+                TextInput::make('phone')
+                    ->label('Numéro de téléphone')
+                    ->tel()
+                    ->maxLength(20),
                 DateTimePicker::make('email_verified_at'),
                 TextInput::make('password')
                     ->password()

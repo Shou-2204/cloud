@@ -58,6 +58,15 @@
             <x-input-error for="name" class="mt-2" />
         </div>
 
+        <!-- Phone -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="phone" value="{{ __('Numéro de téléphone') }}" />
+            <x-input id="phone" type="text" class="mt-1 block w-full" wire:model="state.phone" 
+                placeholder="+33 6 12 34 56 78"
+                autocomplete="tel" />
+            <x-input-error for="phone" class="mt-2" />
+        </div>
+
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
