@@ -18,7 +18,7 @@ class SyncStripeBilling
      */
     public function execute(Team $team): void
     {
-        if (!$team->hasStripeId()) {
+        if (! $team->hasStripeId()) {
             return;
         }
 

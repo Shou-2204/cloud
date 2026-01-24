@@ -65,7 +65,7 @@ class GenerateSitemap extends Command
             // Check if team has active subscription and public page enabled (implicit by not being personal usually, but handled by controller logic)
             // We reuse the controller logic: must be subscribed.
             if ($team->subscribed()) {
-                 $sitemap->add(Url::create(route('profile.public', $team->public_uuid))
+                $sitemap->add(Url::create(route('profile.public', $team->public_uuid))
                     ->setPriority(0.9)
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
             }

@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Notifications\DatabaseNotification;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -21,6 +20,7 @@ class NotificationBell extends Component
     {
         // This empty method forces a re-render when a notification is received
     }
+
     public function getUnreadCountProperty(): int
     {
         /** @var \App\Models\User|null $user */

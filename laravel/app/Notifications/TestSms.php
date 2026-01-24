@@ -37,7 +37,7 @@ class TestSms extends Notification implements ShouldQueue
      */
     public function toSms(object $notifiable): SmsMessage
     {
-        return (new SmsMessage())
+        return (new SmsMessage)
             ->content($this->content)
             ->from('System');
     }

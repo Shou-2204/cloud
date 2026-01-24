@@ -4,13 +4,15 @@ namespace App\Services\Sms\Drivers;
 
 use App\Contracts\SmsProvider;
 use App\Services\Sms\SmsMessage;
-use Illuminate\Support\Facades\Http;
 use Exception;
+use Illuminate\Support\Facades\Http;
 
 class TwilioDriver implements SmsProvider
 {
     protected $sid;
+
     protected $token;
+
     protected $from;
 
     public function __construct($sid, $token, $from)
@@ -23,9 +25,6 @@ class TwilioDriver implements SmsProvider
     /**
      * Send the given SMS message to the given number.
      *
-     * @param  string  $to
-     * @param  \App\Services\Sms\SmsMessage  $message
-     * @return void
      * @throws \Exception
      */
     public function send(string $to, SmsMessage $message): void
@@ -43,7 +42,7 @@ class TwilioDriver implements SmsProvider
             ->post($url, $payload);
 
         if (! $response->successful()) {
-            throw new Exception("Twilio SMS Error: " . $response->body());
+            throw new Exception('Twilio SMS Error: '.$response->body());
         }
     }
 }

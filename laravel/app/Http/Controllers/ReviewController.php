@@ -76,13 +76,10 @@ class ReviewController extends Controller
         $user = Auth::user();
         $team = $user->currentTeam;
 
-        $negativeRatings = collect();
+        $feedbacks = collect();
 
         if ($team && $team->subscribed()) {
-            // Mark notifications as read
-            $user->unreadNotifications
-                ->where('type', \App\Notifications\NewPrivateFeedback::class)
-                ->markAsRead();
+            $this->markPrivateFeedbackNotificationsAsRead($user);
 
             $feedbacks = TeamRating::where('team_id', $team->id)
                 ->whereNotNull('feedback')
@@ -95,5 +92,12 @@ class ReviewController extends Controller
             'ratings' => $feedbacks,
             'team' => $team,
         ]);
+    }
+
+    private function markPrivateFeedbackNotificationsAsRead(\App\Models\User $user): void
+    {
+        $user->unreadNotifications
+            ->where('type', \App\Notifications\NewPrivateFeedback::class)
+            ->markAsRead();
     }
 }

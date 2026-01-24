@@ -130,7 +130,7 @@ Route::middleware([
         // Main Settings Route
         Route::get('/{team}/settings/{tab?}', [App\Http\Controllers\TeamSettingsController::class, 'show'])
             ->name('teams.settings');
-            
+
         Route::put('/{team}', [\Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'update'])->name('teams.update');
     });
 

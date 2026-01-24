@@ -11,9 +11,7 @@ class TeamSettingsController extends Controller
     /**
      * Show the team settings screen.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  mixed  $team
-     * @param  string  $tab
      * @return \Illuminate\View\View
      */
     public function show(Request $request, $teamId, string $tab = 'general')
@@ -24,11 +22,8 @@ class TeamSettingsController extends Controller
         }
 
         if (Gate::denies('view', $team)) {
-            dd('GATE DENIED'); // Temporary debug
             abort(403);
         }
-
-        // dd('GATE PASSED, LOADING VIEW'); // Temporary debug to confirm view load attempt
 
         $tabs = [
             'general' => 'Informations générales',

@@ -26,7 +26,7 @@ class SmsManager extends Manager
      */
     protected function createLogDriver()
     {
-        return new LogDriver();
+        return new LogDriver;
     }
 
     /**

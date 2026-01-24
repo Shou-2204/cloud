@@ -4,8 +4,6 @@ namespace App\Notifications;
 
 use App\Models\TeamRating;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class NewPrivateFeedback extends Notification
@@ -43,7 +41,7 @@ class NewPrivateFeedback extends Notification
             'rating_id' => $this->rating->id,
             'team_id' => $this->rating->team_id,
             'rating_value' => $this->rating->rating,
-            'message' => 'Nouveau feedback privé reçu (' . $this->rating->rating . '/5)',
+            'message' => 'Nouveau feedback privé reçu ('.$this->rating->rating.'/5)',
             'url' => route('reviews.private'),
         ];
     }
