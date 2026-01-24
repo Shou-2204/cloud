@@ -16,13 +16,13 @@ use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Jetstream\Team as JetstreamTeam;
-use Laravel\Scout\Searchable;
+
 
 class Team extends JetstreamTeam
 {
     use Billable;
     use HasFactory;
-    use Searchable;
+
 
     protected $fillable = [
         'name',
