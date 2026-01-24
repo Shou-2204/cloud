@@ -2,18 +2,18 @@
     @push('structured-data')
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
+      "@@context": "https://schema.org",
+      "@@type": "LocalBusiness",
       "name": "{{ $team->name }}",
       "image": [
         "{{ $team->profile->logo_path ? Storage::disk('minio_public')->url($team->profile->logo_path) : '' }}"
        ],
-      "@id": "{{ route('profile.public', $team->public_uuid) }}",
+      "@@id": "{{ route('profile.public', $team->public_uuid) }}",
       "url": "{{ route('profile.public', $team->public_uuid) }}",
       "telephone": "{{ $team->profile->phone }}",
       "email": "{{ $team->profile->email_public }}",
       "address": {
-        "@type": "PostalAddress",
+        "@@type": "PostalAddress",
         "streetAddress": "{{ $team->profile->address }}"
       },
       "description": "{{ $team->profile->tagline }}",
