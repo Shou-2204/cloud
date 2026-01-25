@@ -40,7 +40,7 @@
          x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95"
-         class="absolute right-0 mt-2 w-[28rem] bg-white dark:bg-emerald-dark-700 rounded-xl shadow-xl ring-1 ring-black/5 z-50 overflow-hidden"
+         class="absolute right-0 mt-2 w-72 sm:w-80 md:w-[28rem] max-w-[calc(100vw-1rem)] bg-white dark:bg-emerald-dark-700 rounded-xl shadow-xl ring-1 ring-black/5 z-50 overflow-hidden"
          style="display: none;">
 
         {{-- Header --}}

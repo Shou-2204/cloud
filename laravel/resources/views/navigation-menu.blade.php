@@ -1,4 +1,4 @@
-<nav
+<nav x-data="{ mobileSearchOpen: false }"
     class="bg-emerald-light-600 dark:bg-emerald-dark border-b border-emerald-light-500 dark:border-emerald-dark-600 sticky top-0 z-30 transition-colors duration-300">
     <div class="px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -59,15 +59,39 @@
                     @endif
                 </div>
 
-                {{-- Global Search (Auth only) --}}
+                {{-- Search Toggle + Inline Search (Left side, after title) --}}
                 @auth
-                    <div class="ml-6 w-96" style="width: 24rem;">
-                        <livewire:global-search />
+                    <div class="flex items-center ml-4">
+                        {{-- Search Toggle Button --}}
+                        <button @click="mobileSearchOpen = !mobileSearchOpen" 
+                            class="text-emerald-100 hover:text-white focus:outline-none p-2 rounded-lg hover:bg-emerald-500/50 transition-colors">
+                            <svg x-show="!mobileSearchOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <svg x-show="mobileSearchOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+
+                        {{-- Inline Search Input --}}
+                        <div x-show="mobileSearchOpen" 
+                             x-transition:enter="transition ease-out duration-150"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-100"
+                             x-transition:leave-start="opacity-100 scale-100"
+                             x-transition:leave-end="opacity-0 scale-95"
+                             class="ml-2 w-56 sm:w-72 md:w-80 lg:w-[28rem] xl:w-[36rem]"
+                             style="display: none;">
+                            <livewire:global-search />
+                        </div>
                     </div>
                 @endauth
+
             </div>
 
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2 sm:space-x-4">
+
                 {{-- Notifications --}}
                 @auth
                     <livewire:notification-bell />

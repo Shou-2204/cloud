@@ -39,7 +39,7 @@
                  x-transition:leave="transition ease-in duration-75"
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95"
-                 class="absolute z-50 mt-2 w-full min-w-[400px] bg-white dark:bg-emerald-dark-600 rounded-xl shadow-2xl border border-gray-200 dark:border-emerald-dark-500 overflow-hidden"
+                 class="absolute z-50 mt-2 w-full md:min-w-[400px] bg-white dark:bg-emerald-dark-600 rounded-xl shadow-2xl border border-gray-200 dark:border-emerald-dark-500 overflow-hidden"
                  style="display: none;">
                 <div class="py-1">
                     @foreach($results as $index => $page)
