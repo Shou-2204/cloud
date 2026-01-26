@@ -6,7 +6,9 @@ use App\Models\TeamRating;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class NewPrivateFeedback extends Notification
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class NewPrivateFeedback extends Notification implements ShouldQueue
 {
     use Queueable;
 

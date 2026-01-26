@@ -6,6 +6,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class GooglePlacesService
 {
@@ -52,24 +53,18 @@ class GooglePlacesService
         try {
             // Places API (New) endpoint
             $url = "https://places.googleapis.com/v1/places/{$placeId}";
-            
-            // Log API usage (attempt)
-            // Note: We don't have team_id here contextually easily unless passed, 
-            // but we can log the endpoint. If we want team_id we'd need to refactor.
-            // For now specific global tracking is fine.
-            $usageLog = \App\Models\ApiUsageLog::create([
-                'endpoint' => 'place_details', // This is technically Place Details (New)
-            ]);
 
-            $response = Http::withHeaders([
-                'X-Goog-Api-Key' => $this->apiKey,
-                'X-Goog-FieldMask' => 'id,displayName,rating,userRatingCount,reviews',
-                'Accept-Language' => 'fr',
-                'Referer' => config('app.url'),
-            ])->get($url);
+            Log::info('Google Places API Request', ['endpoint' => 'place_details', 'place_id' => $placeId]);
 
-            // Update log with status
-            $usageLog->update(['status_code' => $response->status()]);
+            $response = Http::timeout(10)
+                ->withHeaders([
+                    'X-Goog-Api-Key' => $this->apiKey,
+                    'X-Goog-FieldMask' => 'id,displayName,rating,userRatingCount,reviews',
+                    'Accept-Language' => 'fr',
+                    'Referer' => config('app.url'),
+                ])->get($url);
+
+            Log::info('Google Places API Response', ['status' => $response->status()]);
 
             if (! $response->successful()) {
                 $errorBody = $response->json();
