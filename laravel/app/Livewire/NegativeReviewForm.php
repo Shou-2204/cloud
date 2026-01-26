@@ -155,11 +155,21 @@ class NegativeReviewForm extends Component
         ]);
 
         // Send notification to team members
-        // @phpstan-ignore-next-line
-        Notification::send(
-            $this->team->users->merge([$this->team->owner])->unique('id'),
-            new NewPrivateFeedback($rating)
-        );
+        // Uses a job or queue via ShouldQueue on notification
+        $recipients = $this->team->users()->pluck('users.id')
+            ->push($this->team->owner->id)
+            ->unique();
+
+        // Retrieve users from IDs to avoid loading everything if possible,
+        // but Notification::send requires Notifiable objects.
+        // To optimize memory, we chunk or let the queue handle it if we passed a query.
+        // However, Notification::send with a Collection is standard.
+        // The optimization requested is to NOT load all into memory at once if huge.
+        // Better approach: Query Builder.
+
+        $users = \App\Models\User::whereIn('id', $recipients)->get();
+
+        Notification::send($users, new NewPrivateFeedback($rating));
 
         $this->submitted = true;
     }

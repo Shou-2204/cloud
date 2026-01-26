@@ -70,15 +70,26 @@ class ReviewController extends Controller
     /**
      * Display private feedbacks (rating <= 3).
      */
-    public function privateFeedbacks(): View
+    public function privateFeedbacks(): mixed
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $team = $user->currentTeam;
 
+        if (is_null($team)) {
+             return redirect()->route('onboarding');
+        }
+
+        // Security Check: Only Owner or Admin (role based)
+        // Assuming 'admin' role exists in pivot or user is owner.
+        // Jetstream default roles are 'admin', 'editor', etc.
+        if ($user->id !== $team->owner_id && ! $user->hasTeamRole($team, 'admin')) {
+             abort(403, 'Unauthorized access to private feedback.');
+        }
+
         $feedbacks = collect();
 
-        if ($team && $team->subscribed()) {
+        if ($team->subscribed()) {
             $this->markPrivateFeedbackNotificationsAsRead($user);
 
             $feedbacks = TeamRating::where('team_id', $team->id)
@@ -96,8 +107,9 @@ class ReviewController extends Controller
 
     private function markPrivateFeedbackNotificationsAsRead(\App\Models\User $user): void
     {
-        $user->unreadNotifications
+        $user->unreadNotifications()
             ->where('type', \App\Notifications\NewPrivateFeedback::class)
+            ->get()
             ->markAsRead();
     }
 }

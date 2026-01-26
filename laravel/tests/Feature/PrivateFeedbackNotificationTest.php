@@ -65,6 +65,9 @@ class PrivateFeedbackNotificationTest extends TestCase
         $user = User::factory()->create();
         $team = Team::factory()->create(['user_id' => $user->id, 'personal_team' => true]);
 
+        $user->current_team_id = $team->id;
+        $user->save();
+
         // Mock subscription so the controller enters the block
         // $team->trial_ends_at = now()->addDays(10);
         // $team->save();
