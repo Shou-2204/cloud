@@ -76,10 +76,22 @@ class PositiveRatingRecorder extends Component
 
     public function submitFeedback()
     {
-        if ($this->ratingId) {
+        if ($this->ratingId && !empty($this->feedback)) {
             $rating = TeamRating::find($this->ratingId);
             if ($rating) {
                 $rating->update(['feedback' => $this->feedback]);
+
+                // Send notification to team members (same as NegativeReviewForm)
+                $recipients = $this->team->users()->pluck('users.id')
+                    ->push($this->team->owner->id)
+                    ->unique();
+
+                $users = \App\Models\User::whereIn('id', $recipients)->get();
+
+                \Illuminate\Support\Facades\Notification::send(
+                    $users,
+                    new \App\Notifications\NewPrivateFeedback($rating)
+                );
             }
         }
 
@@ -108,7 +120,7 @@ class PositiveRatingRecorder extends Component
 
     protected function getSessionHash(): string
     {
-        return hash('sha256', request()->ip().'|'.session()->getId());
+        return hash('sha256', request()->ip() . '|' . session()->getId());
     }
 
     protected function isRateLimited(): bool
