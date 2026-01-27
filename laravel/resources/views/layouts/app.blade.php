@@ -87,6 +87,10 @@
         </div>
     </div>
 
+    @auth
+        <livewire:bug-report />
+    @endauth
+
     @stack('modals')
 
     @livewireScripts

@@ -105,7 +105,8 @@
 
                 @if(Auth::user()->currentTeam)
                     <!-- Organisation Tree -->
-                    <div x-data="{ open: {{ request()->routeIs('teams.settings') || request()->routeIs('teams.show') ? 'true' : 'false' }} }" class="space-y-1">
+                    <div x-data="{ open: {{ request()->routeIs('teams.settings') || request()->routeIs('teams.show') ? 'true' : 'false' }} }"
+                        class="space-y-1">
 
                         <!-- Header / Toggle -->
                         <button type="button"
@@ -145,19 +146,22 @@
                             x-transition:enter-end="opacity-100 transform scale-100" class="space-y-1 pl-11 pr-3">
 
                             <!-- General Info -->
-                            <a href="{{ route('teams.settings', ['team' => Auth::user()->currentTeam, 'tab' => 'general']) }}" wire:navigate
+                            <a href="{{ route('teams.settings', ['team' => Auth::user()->currentTeam, 'tab' => 'general']) }}"
+                                wire:navigate
                                 class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('teams.settings') && (request()->route('tab') === 'general' || !request()->route('tab')) ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
                                 Informations générales
                             </a>
 
                             <!-- Public Profile -->
-                            <a href="{{ route('teams.settings', ['team' => Auth::user()->currentTeam, 'tab' => 'public-profile']) }}" wire:navigate
+                            <a href="{{ route('teams.settings', ['team' => Auth::user()->currentTeam, 'tab' => 'public-profile']) }}"
+                                wire:navigate
                                 class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('teams.settings') && request()->route('tab') === 'public-profile' ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
                                 Profil public
                             </a>
 
                             <!-- Reviews Settings -->
-                            <a href="{{ route('teams.settings', ['team' => Auth::user()->currentTeam, 'tab' => 'reviews']) }}" wire:navigate
+                            <a href="{{ route('teams.settings', ['team' => Auth::user()->currentTeam, 'tab' => 'reviews']) }}"
+                                wire:navigate
                                 class="block py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('teams.settings') && request()->route('tab') === 'reviews' ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
                                 Gestion des avis
                             </a>
@@ -256,6 +260,17 @@
 
         {{-- SUBSCRIPTION & LOGOUT (BOTTOM) --}}
         <div class="p-4 border-t border-gray-100 dark:border-emerald-dark-600 bg-gray-50 dark:bg-emerald-dark-600/30">
+
+            {{-- Theme Switcher --}}
+            <div class="mb-3 flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white"
+                :class="sidebarCollapsed ? 'justify-center' : ''">
+                <x-theme-switch />
+                <span class="ml-3 whitespace-nowrap transition-opacity duration-200"
+                    x-show="!sidebarCollapsed">Thème</span>
+                <div x-show="sidebarCollapsed"
+                    class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                    Thème</div>
+            </div>
 
             {{-- MON OFFRE (Subscription) --}}
             @if(Auth::user()->currentTeam && Auth::user()->currentTeam->subscribed())
