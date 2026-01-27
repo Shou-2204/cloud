@@ -115,9 +115,20 @@
                     <button @click="$dispatch('open-bug-modal')"
                         class="flex items-center justify-center p-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-500/50 focus:outline-none transition-colors"
                         title="Signaler un bug">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 12.75c1.148 0 2.278.08 3.383.237 1.037.146 1.866.966 1.866 2.013 0 3.728-2.35 6.75-5.25 6.75S6.75 18.728 6.75 15c0-1.046.83-1.867 1.866-2.013A24.204 24.204 0 0112 12.75zm0 0c2.883 0 5.647.508 8.207 1.44a23.91 23.91 0 01-1.152 6.06M12 12.75c-2.883 0-5.647.508-8.207 1.44a23.91 23.91 0 001.152 6.06M12 12.75V6.75m0 0a2.25 2.25 0 10-4.5 0m4.5 0a2.25 2.25 0 114.5 0m-4.5 0V4.5" />
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <ellipse cx="12" cy="14" rx="7" ry="8" fill="currentColor"/>
+                            <circle cx="12" cy="5" r="3" fill="currentColor"/>
+                            <line x1="12" y1="8" x2="12" y2="22" stroke="white" stroke-width="1.5"/>
+                            <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1.5"/>
+                            <circle cx="8" cy="11" r="1.5" fill="white" opacity="0.9"/>
+                            <circle cx="16" cy="11" r="1.5" fill="white" opacity="0.9"/>
+                            <circle cx="9" cy="16" r="1.2" fill="white" opacity="0.9"/>
+                            <circle cx="15" cy="16" r="1.2" fill="white" opacity="0.9"/>
+                            <circle cx="12" cy="19" r="1" fill="white" opacity="0.9"/>
+                            <path d="M5 10 L2 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M19 10 L22 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M4 15 L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M20 15 L23 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </button>
                 @endauth
@@ -132,11 +143,11 @@
                 {{-- Guest Auth Links --}}
                 @guest
                     <a href="{{ route('login') }}"
-                        class="text-sm font-medium text-emerald-100 hover:text-white transition hidden sm:inline">Connexion</a>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}"
+                        class="text-sm font-medium text-emerald-100 hover:text-white transition hidden sm:inline">Inscription</a>
+                    @if (Route::has('login'))
+                        <a href="{{ route('login') }}"
                             class="px-3 py-2 text-xs sm:text-sm font-bold text-emerald-600 bg-white hover:bg-emerald-50 rounded-lg transition shadow-md whitespace-nowrap">
-                            Inscription
+                            Connexion
                         </a>
                     @endif
                 @endguest
