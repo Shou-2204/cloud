@@ -29,7 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->email === env('ADMIN_NOTIFICATION_EMAIL');
+        return $this->email === config('app.admin_notification_email');
     }
 
     /**

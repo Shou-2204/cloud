@@ -15,7 +15,7 @@ class TeamPolicy
      */
     public function before(User $user, $ability): ?bool
     {
-        if ($user->email === env('ADMIN_NOTIFICATION_EMAIL')) {
+        if ($user->email === config('app.admin_notification_email')) {
             return true;
         }
 
