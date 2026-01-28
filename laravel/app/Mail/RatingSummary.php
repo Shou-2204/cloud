@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 
 /**
- * Summary email of negative ratings for a given period.
+ * Summary email of ratings for a given period (on-demand).
  */
 class RatingSummary extends Mailable
 {
@@ -22,7 +22,12 @@ class RatingSummary extends Mailable
         public string $teamName,
         public Collection $ratings,
         public string $period,
-    ) {}
+        public float $averageRating,
+        public int $positiveCount,
+        public int $negativeCount,
+        public Collection $feedbacks,
+    ) {
+    }
 
     public function envelope(): Envelope
     {
@@ -41,7 +46,7 @@ class RatingSummary extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.rating-summary-html',
+            markdown: 'emails.rating-summary-html',
         );
     }
 }

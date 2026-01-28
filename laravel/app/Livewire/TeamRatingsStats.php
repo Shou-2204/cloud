@@ -41,7 +41,7 @@ class TeamRatingsStats extends Component
      */
     public function sendSummary(): void
     {
-        if (! $this->team) {
+        if (!$this->team) {
             return;
         }
 
@@ -61,6 +61,12 @@ class TeamRatingsStats extends Component
             return;
         }
 
+        // Calculate stats (same as DailyRatingDigest)
+        $averageRating = (float) $ratings->avg('rating');
+        $positiveCount = $ratings->where('rating', '>=', 4)->count();
+        $negativeCount = $ratings->where('rating', '<=', 3)->count();
+        $feedbacks = $ratings->whereNotNull('feedback')->values();
+
         // Determine recipient
         $recipientEmail = $this->team->settings->feedback_email
             ?? $this->team->profile->email_public
@@ -72,6 +78,10 @@ class TeamRatingsStats extends Component
                 teamName: $this->team->name,
                 ratings: $ratings,
                 period: $this->period,
+                averageRating: $averageRating,
+                positiveCount: $positiveCount,
+                negativeCount: $negativeCount,
+                feedbacks: $feedbacks,
             ));
 
         session()->flash('summary_sent', true);
@@ -96,7 +106,7 @@ class TeamRatingsStats extends Component
      */
     public function getStatsProperty(): array
     {
-        if (! $this->team) {
+        if (!$this->team) {
             return ['count' => 0, 'average' => 0, 'trend' => 0, 'positive' => 0, 'negative' => 0];
         }
 
@@ -151,7 +161,7 @@ class TeamRatingsStats extends Component
      */
     public function getChartDataProperty(): array
     {
-        if (! $this->team) {
+        if (!$this->team) {
             return ['labels' => [], 'data' => []];
         }
 
@@ -203,7 +213,7 @@ class TeamRatingsStats extends Component
      */
     public function getTotalAverageProperty(): float
     {
-        if (! $this->team) {
+        if (!$this->team) {
             return 0;
         }
 
