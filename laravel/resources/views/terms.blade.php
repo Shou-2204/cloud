@@ -12,7 +12,8 @@
 
                 <h2>1. Objet</h2>
                 <p>Les présentes Conditions Générales d'Utilisation ont pour objet de définir les modalités de mise à
-                    disposition des services du site <strong>ShouCloud</strong>, ci-après nommé « le Service » et les
+                    disposition des services du site <strong>{{ config('app.name') }}</strong>, ci-après nommé « le
+                    Service » et les
                     conditions d'utilisation du Service par l'Utilisateur.</p>
 
                 <h2>2. Accès au site et aux services</h2>
@@ -43,7 +44,8 @@
                     aux fichiers et aux libertés.</p>
 
                 <h2>5. Responsabilité</h2>
-                <p>Les sources des informations diffusées sur le site ShouCloud sont réputées fiables mais le site ne
+                <p>Les sources des informations diffusées sur le site {{ config('app.name') }} sont réputées fiables
+                    mais le site ne
                     garantit pas qu'il soit exempt de défauts, d'erreurs ou d'omissions.</p>
                 <p>Le site ne peut être tenu pour responsable d’éventuels virus qui pourraient infecter l’ordinateur ou
                     tout matériel informatique de l’Internaute, suite à une utilisation, à l’accès, ou au téléchargement
@@ -51,7 +53,8 @@
 
                 <h2>6. Liens hypertextes</h2>
                 <p>Des liens hypertextes peuvent être présents sur le site. L’Utilisateur est informé qu’en cliquant sur
-                    ces liens, il sortira du site ShouCloud. Ce dernier n’a pas de contrôle sur les pages web sur
+                    ces liens, il sortira du site {{ config('app.name') }}. Ce dernier n’a pas de contrôle sur les pages
+                    web sur
                     lesquelles aboutissent ces liens et ne saurait, en aucun cas, être responsable de leur contenu.</p>
 
                 <h2>7. Droit applicable et juridiction compétente</h2>

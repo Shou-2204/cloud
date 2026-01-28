@@ -8,7 +8,7 @@
 
     @php
         $seoTitle = $seo['title'] ?? config('app.name', 'Laravel');
-        $seoDescription = $seo['description'] ?? 'ShouCloud - Growth Tools for Modern Businesses';
+        $seoDescription = $seo['description'] ?? config('app.name') . ' - Growth Tools for Modern Businesses';
         $seoUrl = url()->current();
     @endphp
 
@@ -89,7 +89,7 @@
 
         <!-- No Footer -->
         <div class="py-6 text-center text-xs text-gray-500 underline">
-            <a href="{{ route('welcome') }}">Propulsé par ShouCloud</a>
+            <a href="{{ route('welcome') }}">Propulsé par {{ config('app.name') }}</a>
         </div>
     </div>
 

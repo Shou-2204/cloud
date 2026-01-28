@@ -133,6 +133,18 @@ return [
     |
     */
 
-    'admin_notification_email' => env('ADMIN_NOTIFICATION_EMAIL', 'admin@shoucloud.com'),
+    'admin_notification_email' => env('ADMIN_NOTIFICATION_EMAIL', 'admin@example.com'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Contact Emails
+    |--------------------------------------------------------------------------
+    |
+    | Support and sales email addresses displayed on the public website.
+    |
+    */
+
+    'support_email' => env('SUPPORT_EMAIL', 'support@example.com'),
+    'sales_email' => env('SALES_EMAIL', 'sales@example.com'),
 
 ];

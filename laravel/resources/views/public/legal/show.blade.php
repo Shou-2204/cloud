@@ -11,18 +11,24 @@
 
                 <div class="prose prose-sm sm:prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
                     @if($page == 'terms')
-                        <p>These terms and conditions outline the rules and regulations for the use of ShouCloud's Website.
+                        <p>These terms and conditions outline the rules and regulations for the use of
+                            {{ config('app.name') }}'s Website.
                         </p>
                         <h3>1. Introduction</h3>
                         <p>By accessing this website we assume you accept these terms and conditions. Do not continue to use
-                            ShouCloud if you do not agree to take all of the terms and conditions stated on this page.</p>
+                            {{ config('app.name') }} if you do not agree to take all of the terms and conditions stated on
+                            this page.
+                        </p>
                         <!-- In real app, include markdown('terms.md') -->
                     @else
-                        <p>At ShouCloud, accessible from shoucloud.com, one of our main priorities is the privacy of our
+                        <p>At {{ config('app.name') }}, accessible from
+                            {{ str_replace(['http://', 'https://'], '', config('app.url')) }}, one of our main priorities is
+                            the privacy of our
                             visitors. This Privacy Policy document contains types of information that is collected and
-                            recorded by ShouCloud and how we use it.</p>
+                            recorded by {{ config('app.name') }} and how we use it.</p>
                         <h3>1. Log Files</h3>
-                        <p>ShouCloud follows a standard procedure of using log files. These files log visitors when they
+                        <p>{{ config('app.name') }} follows a standard procedure of using log files. These files log
+                            visitors when they
                             visit websites.</p>
                         <!-- In real app, include markdown('policy.md') -->
                     @endif

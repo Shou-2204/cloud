@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ShouCloud - Marketing Digital pour Commerçants</title>
+    <title>{{ config('app.name') }} - Marketing Digital pour Commerçants</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -159,7 +159,7 @@
             class="max-w-7xl mx-auto px-6 w-full mt-10 text-center sm:text-left border-t border-gray-200 dark:border-gray-800 pt-6 reveal-on-scroll delay-300">
             <div
                 class="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400 dark:text-gray-500">
-                <span>&copy; {{ date('Y') }} ShouCloud.</span>
+                <span>&copy; {{ date('Y') }} {{ config('app.name') }}.</span>
                 <div class="flex gap-4">
                     <a href="{{ route('terms.show') }}"
                         class="hover:text-emerald-600 dark:hover:text-emerald-400">CGU</a>

@@ -6,7 +6,7 @@
             <div
                 class="bg-white dark:bg-gray-800 rounded-3xl p-8 sm:p-12 shadow-sm border border-gray-100 dark:border-gray-700 mt-8">
                 <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-6">À propos de <span
-                        class="text-emerald-600 dark:text-emerald-400">ShouCloud</span></h1>
+                        class="text-emerald-600 dark:text-emerald-400">{{ config('app.name') }}</span></h1>
 
                 <div class="prose prose-lg dark:prose-invert text-gray-600 dark:text-gray-300">
                     <p>

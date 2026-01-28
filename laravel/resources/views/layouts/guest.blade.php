@@ -8,7 +8,7 @@
 
     @php
         $seoTitle = $seo['title'] ?? config('app.name', 'Laravel');
-        $seoDescription = $seo['description'] ?? 'ShouCloud - Growth Tools for Modern Businesses';
+        $seoDescription = $seo['description'] ?? config('app.name') . ' - Growth Tools for Modern Businesses';
         $seoUrl = url()->current();
 
         $breadcrumbsData = null;
@@ -50,8 +50,8 @@
     {{-- Structured Data (JSON-LD) --}}
     @if($breadcrumbsData)
         <script type="application/ld+json">
-                                                {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-                                            </script>
+                                                    {!! json_encode($breadcrumbsData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+                                                </script>
     @endif
 
     @stack('structured-data')

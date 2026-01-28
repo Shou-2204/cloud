@@ -15,7 +15,8 @@
                         class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-teal-400">{{ Auth::user()->name }}</span>.
                 </h1>
                 <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                    Gérez vos organisations, vos abonnements et accédez à tout votre univers ShouCloud depuis cet espace
+                    Gérez vos organisations, vos abonnements et accédez à tout votre univers {{ config('app.name') }}
+                    depuis cet espace
                     unifié.
                 </p>
             </div>
@@ -26,9 +27,12 @@
                     {{-- Header --}}
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl shadow-lg shadow-orange-500/20">
-                                <svg class="w-6 h-6 text-emerald-950 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            <div
+                                class="p-2 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl shadow-lg shadow-orange-500/20">
+                                <svg class="w-6 h-6 text-emerald-950 dark:text-white" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                 </svg>
                             </div>
                             <div>
@@ -40,7 +44,8 @@
                                 </p>
                             </div>
                         </div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400">
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400">
                             <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span>
                             Nouveau
                         </span>
@@ -54,14 +59,15 @@
                                 $url = $data['url'] ?? '#';
                                 $message = $data['message'] ?? 'Nouvelle notification';
                                 $icon = 'bell';
-        
+
                                 // Legacy support for TeamActivityLog
                                 if ($url === '#' && isset($data['team_id'])) {
                                     try {
                                         $url = route('teams.show', $data['team_id']);
-                                    } catch (\Exception $e) {}
+                                    } catch (\Exception $e) {
+                                    }
                                 }
-                                
+
                                 // Force translation & Icons
                                 if (isset($data['action'])) {
                                     $actions = [
@@ -73,7 +79,7 @@
                                         'member_removed' => ['label' => 'Collaborateur retiré', 'icon' => 'user-remove'],
                                         'review_received' => ['label' => 'Nouvel avis reçu', 'icon' => 'star'],
                                     ];
-                                    
+
                                     if (isset($actions[$data['action']])) {
                                         $message = 'Activité : ' . $actions[$data['action']]['label'];
                                         $icon = $actions[$data['action']]['icon'];
@@ -82,7 +88,7 @@
                                     }
                                 }
 
-                                $svgIcon = match($icon) {
+                                $svgIcon = match ($icon) {
                                     'pencil' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />',
                                     'tag' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />',
                                     'cog' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />',
@@ -93,17 +99,20 @@
                                 };
                             @endphp
                             <a href="{{ route('notifications.read', $notification->id) }}"
-                               class="group block bg-white dark:bg-emerald-dark-500 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-emerald-dark-600 hover:shadow-lg hover:border-emerald-200 dark:hover:border-emerald-dark-500 transition-all duration-200 hover:-translate-y-0.5">
+                                class="group block bg-white dark:bg-emerald-dark-500 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-emerald-dark-600 hover:shadow-lg hover:border-emerald-200 dark:hover:border-emerald-dark-500 transition-all duration-200 hover:-translate-y-0.5">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-4 min-w-0">
                                         {{-- Icon --}}
-                                        <div class="flex-shrink-0 p-2 bg-gray-50 dark:bg-emerald-dark-600 rounded-lg group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/30 transition-colors">
-                                            <svg class="h-6 w-6 {{ $icon === 'star' ? 'text-yellow-400' : 'text-gray-400 dark:text-gray-500' }} group-hover:text-emerald-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <div
+                                            class="flex-shrink-0 p-2 bg-gray-50 dark:bg-emerald-dark-600 rounded-lg group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/30 transition-colors">
+                                            <svg class="h-6 w-6 {{ $icon === 'star' ? 'text-yellow-400' : 'text-gray-400 dark:text-gray-500' }} group-hover:text-emerald-500 transition-colors"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 {!! $svgIcon !!}
                                             </svg>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                                            <p
+                                                class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                                                 {{ $message }}
                                             </p>
                                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -111,8 +120,10 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <svg class="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors ml-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    <svg class="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors ml-4 flex-shrink-0"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
                                     </svg>
                                 </div>
                             </a>

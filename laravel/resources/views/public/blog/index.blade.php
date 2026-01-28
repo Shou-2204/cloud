@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                        ShouCloud Team
+                                        {{ config('app.name') }} Team
                                     </p>
                                     <div class="flex space-x-1 text-sm text-gray-500 dark:text-gray-400">
                                         <time datetime="2026-01-18">Jan 18, 2026</time>

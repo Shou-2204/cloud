@@ -23,8 +23,8 @@
                                     </svg>
                                 </div>
                                 <div class="ml-3 text-base text-gray-500 dark:text-gray-400">
-                                    <p>support@shoucloud.com</p>
-                                    <p class="mt-1">sales@shoucloud.com</p>
+                                    <p>{{ config('app.support_email') }}</p>
+                                    <p class="mt-1">{{ config('app.sales_email') }}</p>
                                 </div>
                             </div>
 

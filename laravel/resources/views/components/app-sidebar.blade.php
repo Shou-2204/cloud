@@ -322,12 +322,13 @@
                     <span
                         class="ml-3 font-bold text-gray-700 dark:text-gray-200 text-lg tracking-tight whitespace-nowrap"
                         x-show="!sidebarCollapsed">
-                        <span class="text-emerald-600 dark:text-emerald-400">Shou</span>Cloud
+                        {{ config('app.name') }}
                     </span>
 
                     <div x-show="sidebarCollapsed"
                         class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
-                        ShouCloud</div>
+                        {{ config('app.name') }}
+                    </div>
                 </a>
             </div>
         </div>

@@ -313,7 +313,7 @@
                         Contactez-nous pour obtenir un devis personnalisé.
                     </p>
                     
-                    <a href="mailto:contact@shoucloud.com" 
+                    <a href="mailto:{{ config('app.admin_notification_email') }}" 
                        class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all transform hover:scale-105 bg-gray-900 dark:bg-white dark:text-gray-900 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 shadow-lg">
                         Demander un devis
                         <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

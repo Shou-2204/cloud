@@ -28,7 +28,7 @@
                             S
                         </div>
                         <span class="text-xl font-bold tracking-tight text-white hidden sm:inline">
-                            ShouCloud
+                            {{ config('app.name') }}
                         </span>
                     </a>
 
@@ -116,19 +116,19 @@
                         class="flex items-center justify-center p-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-500/50 focus:outline-none transition-colors"
                         title="Signaler un bug">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                            <ellipse cx="12" cy="14" rx="7" ry="8" fill="currentColor"/>
-                            <circle cx="12" cy="5" r="3" fill="currentColor"/>
-                            <line x1="12" y1="8" x2="12" y2="22" stroke="white" stroke-width="1.5"/>
-                            <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1.5"/>
-                            <circle cx="8" cy="11" r="1.5" fill="white" opacity="0.9"/>
-                            <circle cx="16" cy="11" r="1.5" fill="white" opacity="0.9"/>
-                            <circle cx="9" cy="16" r="1.2" fill="white" opacity="0.9"/>
-                            <circle cx="15" cy="16" r="1.2" fill="white" opacity="0.9"/>
-                            <circle cx="12" cy="19" r="1" fill="white" opacity="0.9"/>
-                            <path d="M5 10 L2 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            <path d="M19 10 L22 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            <path d="M4 15 L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            <path d="M20 15 L23 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <ellipse cx="12" cy="14" rx="7" ry="8" fill="currentColor" />
+                            <circle cx="12" cy="5" r="3" fill="currentColor" />
+                            <line x1="12" y1="8" x2="12" y2="22" stroke="white" stroke-width="1.5" />
+                            <line x1="5" y1="12" x2="19" y2="12" stroke="white" stroke-width="1.5" />
+                            <circle cx="8" cy="11" r="1.5" fill="white" opacity="0.9" />
+                            <circle cx="16" cy="11" r="1.5" fill="white" opacity="0.9" />
+                            <circle cx="9" cy="16" r="1.2" fill="white" opacity="0.9" />
+                            <circle cx="15" cy="16" r="1.2" fill="white" opacity="0.9" />
+                            <circle cx="12" cy="19" r="1" fill="white" opacity="0.9" />
+                            <path d="M5 10 L2 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                            <path d="M19 10 L22 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                            <path d="M4 15 L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                            <path d="M20 15 L23 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                         </svg>
                     </button>
                 @endauth

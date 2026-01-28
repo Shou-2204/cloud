@@ -19,9 +19,10 @@ class PublicSiteController extends Controller
 
     public function solutions(): View
     {
+        $appName = config('app.name');
         $seo = $this->getSeo(
-            'Solutions Industry Focused - ShouCloud',
-            'Discover how ShouCloud adapts to your industry needs. Restaurants, Retail, Services.',
+            "Solutions Industry Focused - {$appName}",
+            "Discover how {$appName} adapts to your industry needs. Restaurants, Retail, Services.",
             [['name' => 'Solutions', 'url' => route('solutions.index')]]
         );
 
@@ -46,11 +47,12 @@ class PublicSiteController extends Controller
             ],
         ];
 
-        abort_if(! isset($solutions[$slug]), 404);
+        abort_if(!isset($solutions[$slug]), 404);
 
+        $appName = config('app.name');
         $data = $solutions[$slug];
         $seo = $this->getSeo(
-            $data['title'].' - ShouCloud',
+            $data['title'] . " - {$appName}",
             $data['description'],
             [
                 ['name' => 'Solutions', 'url' => route('solutions.index')],
@@ -63,9 +65,10 @@ class PublicSiteController extends Controller
 
     public function features(): View
     {
+        $appName = config('app.name');
         $seo = $this->getSeo(
-            'Fonctionnalités - ShouCloud',
-            'Découvrez l\'ensemble des fonctionnalités de ShouCloud : Avis Google, Wallet, Marketing SMS & Email.',
+            "Fonctionnalités - {$appName}",
+            "Découvrez l'ensemble des fonctionnalités de {$appName} : Avis Google, Wallet, Marketing SMS & Email.",
             [['name' => 'Fonctionnalités', 'url' => route('features')]]
         );
 
@@ -74,9 +77,10 @@ class PublicSiteController extends Controller
 
     public function about(): View
     {
+        $appName = config('app.name');
         $seo = $this->getSeo(
-            'About Us - ShouCloud',
-            'Learn about the team behind ShouCloud and our mission to simplify business growth.',
+            "About Us - {$appName}",
+            "Learn about the team behind {$appName} and our mission to simplify business growth.",
             [['name' => 'About', 'url' => route('about')]]
         );
 
@@ -85,8 +89,9 @@ class PublicSiteController extends Controller
 
     public function blog(): View
     {
+        $appName = config('app.name');
         $seo = $this->getSeo(
-            'Resources & Blog - ShouCloud',
+            "Resources & Blog - {$appName}",
             'Expert advice, tips, and industry insights to grow your business.',
             [['name' => 'Blog', 'url' => route('blog.index')]]
         );
@@ -102,8 +107,9 @@ class PublicSiteController extends Controller
 
     public function post(string $slug): View
     {
+        $appName = config('app.name');
         $seo = $this->getSeo(
-            ucfirst(str_replace('-', ' ', $slug)).' - ShouCloud Blog',
+            ucfirst(str_replace('-', ' ', $slug)) . " - {$appName} Blog",
             'Read our comprehensive guide on this topic.',
             [
                 ['name' => 'Blog', 'url' => route('blog.index')],
@@ -116,8 +122,9 @@ class PublicSiteController extends Controller
 
     public function contact(): View
     {
+        $appName = config('app.name');
         $seo = $this->getSeo(
-            'Contact Us - ShouCloud',
+            "Contact Us - {$appName}",
             'Get in touch with our support or sales team.',
             [['name' => 'Contact', 'url' => route('contact')]]
         );
@@ -128,16 +135,17 @@ class PublicSiteController extends Controller
     public function legal(string $page): View
     {
         $validPages = ['terms', 'privacy'];
-        abort_if(! in_array($page, $validPages), 404);
+        abort_if(!in_array($page, $validPages), 404);
 
         $titles = [
             'terms' => 'Terms of Service',
             'privacy' => 'Privacy Policy',
         ];
 
+        $appName = config('app.name');
         $seo = $this->getSeo(
-            $titles[$page].' - ShouCloud',
-            'Read our '.strtolower($titles[$page]),
+            $titles[$page] . " - {$appName}",
+            'Read our ' . strtolower($titles[$page]),
             [['name' => 'Legal', 'url' => '#'], ['name' => $titles[$page], 'url' => route('legal.show', $page)]]
         );
 

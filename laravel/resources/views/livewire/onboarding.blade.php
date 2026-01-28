@@ -2,7 +2,7 @@
     {{-- Le Header doit être défini ici, dans la racine --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-            {{ __('Bienvenue sur ShouCloud') }}
+            {{ __('Bienvenue sur') }} {{ config('app.name') }}
         </h2>
     </x-slot>
 

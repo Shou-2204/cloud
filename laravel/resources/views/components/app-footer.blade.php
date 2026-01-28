@@ -33,7 +33,7 @@
             </div>
             <div class="mt-8 md:mt-0 md:order-1">
                 <p class="text-center text-sm text-gray-500 dark:text-gray-400">
-                    &copy; {{ date('Y') }} ShouCloud. Tous droits réservés.
+                    &copy; {{ date('Y') }} {{ config('app.name') }}. Tous droits réservés.
                 </p>
             </div>
         </div>
