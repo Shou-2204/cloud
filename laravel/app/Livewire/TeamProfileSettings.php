@@ -68,13 +68,13 @@ class TeamProfileSettings extends Component
 
         if (isset($this->logo)) {
             $this->team->profile()->updateOrCreate([], [
-                'logo_path' => $this->logo->storePublicly('team-logos', ['disk' => 'minio_public']),
+                'logo_path' => $this->logo->storePublicly('team-logos', ['disk' => 'cloud_public']),
             ]);
         }
 
         if (isset($this->cover)) {
             $this->team->profile()->updateOrCreate([], [
-                'cover_image_path' => $this->cover->storePublicly('team-covers', ['disk' => 'minio_public']),
+                'cover_image_path' => $this->cover->storePublicly('team-covers', ['disk' => 'cloud_public']),
             ]);
         }
 
@@ -115,7 +115,7 @@ class TeamProfileSettings extends Component
         Gate::forUser($this->team->owner)->authorize('update', $this->team);
 
         if ($this->team->profile->logo_path) {
-            Storage::disk('minio_public')->delete($this->team->profile->logo_path);
+            Storage::disk('cloud_public')->delete($this->team->profile->logo_path);
             $this->team->profile()->update(['logo_path' => null]);
         }
 
@@ -130,7 +130,7 @@ class TeamProfileSettings extends Component
         Gate::forUser($this->team->owner)->authorize('update', $this->team);
 
         if ($this->team->profile->cover_image_path) {
-            Storage::disk('minio_public')->delete($this->team->profile->cover_image_path);
+            Storage::disk('cloud_public')->delete($this->team->profile->cover_image_path);
             $this->team->profile()->update(['cover_image_path' => null]);
         }
 

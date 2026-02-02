@@ -28,7 +28,7 @@ class PublicProfileController extends Controller
         $seo = [
             'title' => $team->name.' - Avis & Profil Public',
             'description' => $team->profile->tagline ?? $team->profile->bio ?? 'Découvrez les avis et services de '.$team->name,
-            'image' => $team->profile->cover_image_path ? \Illuminate\Support\Facades\Storage::disk('minio_public')->url($team->profile->cover_image_path) : null,
+            'image' => $team->profile->cover_image_path ? \Illuminate\Support\Facades\Storage::disk('cloud_public')->url($team->profile->cover_image_path) : null,
         ];
 
         return view('public.profile', [

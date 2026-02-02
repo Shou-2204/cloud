@@ -6,7 +6,7 @@
       "@@type": "LocalBusiness",
       "name": "{{ $team->name }}",
       "image": [
-        "{{ $team->profile->logo_path ? Storage::disk('minio_public')->url($team->profile->logo_path) : '' }}"
+        "{{ $team->profile->logo_path ? Storage::disk('cloud_public')->url($team->profile->logo_path) : '' }}"
        ],
       "@@id": "{{ route('profile.public', $team->public_uuid) }}",
       "url": "{{ route('profile.public', $team->public_uuid) }}",
@@ -31,7 +31,7 @@
         <!-- Cover Image -->
         <div class="h-48 md:h-64 bg-emerald-600 w-full object-cover relative">
             @if($team->profile->cover_image_path)
-                <img src="{{ Storage::disk('minio_public')->url($team->profile->cover_image_path) }}" alt="Cover"
+                <img src="{{ Storage::disk('cloud_public')->url($team->profile->cover_image_path) }}" alt="Cover"
                     class="w-full h-full object-cover opacity-80">
             @else
                 <div class="w-full h-full bg-gradient-to-r from-emerald-500 to-teal-600"></div>
@@ -46,7 +46,7 @@
                     <div class="flex-shrink-0 relative">
                         @if($team->profile->logo_path)
                             <img class="h-32 w-32 rounded-xl ring-4 ring-white dark:ring-gray-800 object-cover bg-white"
-                                src="{{ Storage::disk('minio_public')->url($team->profile->logo_path) }}" alt="{{ $team->name }}">
+                                src="{{ Storage::disk('cloud_public')->url($team->profile->logo_path) }}" alt="{{ $team->name }}">
                         @else
                             <div
                                 class="h-32 w-32 rounded-xl ring-4 ring-white dark:ring-gray-800 bg-emerald-100 flex items-center justify-center text-4xl font-bold text-emerald-600">

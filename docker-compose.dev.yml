@@ -1,0 +1,98 @@
+# Docker Compose pour le développement local
+# Utilise le volume externe existant 'laravel_db_data'
+# Usage: docker-compose -f docker-compose.dev.yml up -d
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cloud-mysql-dev
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - laravel_db_data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    container_name: cloud-redis-dev
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+
+  minio:
+    image: minio/minio
+    container_name: cloud-minio-dev
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    command: server /data --console-address ":9001"
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - minio_data:/data
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.10
+    container_name: cloud-meilisearch-dev
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:7700:7700"
+    environment:
+      MEILI_MASTER_KEY: masterKey
+    volumes:
+      - meilisearch_data:/meili_data
+
+  stripe:
+    image: stripe/stripe-cli:latest
+    container_name: cloud-stripe-dev
+    env_file:
+      - ./laravel/.env
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["stripe listen --forward-to https://host.docker.internal:443/stripe/webhook --api-key $$STRIPE_SECRET --skip-verify"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  shlink:
+    image: shlinkio/shlink:stable
+    container_name: cloud-shlink-dev
+    restart: unless-stopped
+    environment:
+      DEFAULT_DOMAIN: localhost:8081
+      IS_HTTPS_ENABLED: "false"
+      DB_DRIVER: mysql
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD:-root}
+      DB_HOST: mysql
+      DB_NAME: shlink
+    ports:
+      - "127.0.0.1:8081:8080"
+    depends_on:
+      - mysql
+
+  shlink-web-client:
+    image: shlinkio/shlink-web-client:stable
+    container_name: cloud-shlink-web-dev
+    restart: unless-stopped
+    environment:
+      SHLINK_SERVER_URL: http://localhost:8081
+      SHLINK_SERVER_API_KEY: ${SHLINK_API_KEY:-e143acb6-a5c7-4528-a389-c9d07789e29c}
+    ports:
+      - "127.0.0.1:8082:80"
+    depends_on:
+      - shlink
+
+volumes:
+  laravel_db_data:
+    external: true
+  redis_data:
+  minio_data:
+  meilisearch_data:

@@ -76,6 +76,6 @@ return [
     |
     */
 
-    'profile_photo_disk' => 'minio_public',
+    'profile_photo_disk' => 'cloud_public',
 
 ];

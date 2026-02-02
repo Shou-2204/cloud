@@ -47,13 +47,13 @@ return [
             'report' => false,
         ],
 
-        'minio_public' => [
+        'cloud_public' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => 'shoucloud-public', // Nom du bucket en dur ou via env('AWS_BUCKET_PUBLIC')
-            'url' => env('AWS_URL_PUBLIC', 'http://127.0.0.1:9000/shoucloud-public'), // URL spécifique
+            'bucket' => env('AWS_BUCKET_PUBLIC', 'public'),
+            'url' => env('AWS_URL_PUBLIC'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => true,
             'visibility' => 'public', // Force la visibilité publique par défaut
@@ -69,12 +69,12 @@ return [
 
         // 2. Disque Privé (Documents Teams, Factures, Backups)
         // Accessible uniquement via URL signées ou backend.
-        'minio_private' => [
+        'cloud_private' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => 'shoucloud-private', // Nom du bucket privé
+            'bucket' => env('AWS_BUCKET_PRIVATE', 'private'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => true,
             'visibility' => 'private', // Force la visibilité privée

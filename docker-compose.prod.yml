@@ -1,0 +1,81 @@
+# Docker Compose pour un nouveau serveur (production)
+# Les volumes se créent automatiquement
+# Usage: docker-compose -f docker-compose.prod.yml up -d
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cloud-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    container_name: cloud-redis
+    restart: always
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.10
+    container_name: cloud-meilisearch
+    restart: always
+    ports:
+      - "127.0.0.1:7700:7700"
+    environment:
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-masterKey}
+    volumes:
+      - meilisearch_data:/meili_data
+
+  stripe:
+    image: stripe/stripe-cli:latest
+    container_name: cloud-stripe
+    env_file:
+      - ./laravel/.env
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["stripe listen --forward-to https://host.docker.internal:443/stripe/webhook --api-key $$STRIPE_SECRET --skip-verify"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  shlink:
+    image: shlinkio/shlink:stable
+    container_name: cloud-shlink
+    restart: always
+    environment:
+      DEFAULT_DOMAIN: ${SHLINK_DOMAIN:-localhost:8081}
+      IS_HTTPS_ENABLED: ${SHLINK_HTTPS:-false}
+      DB_DRIVER: mysql
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD:-root}
+      DB_HOST: mysql
+      DB_NAME: shlink
+    ports:
+      - "127.0.0.1:8081:8080"
+    depends_on:
+      - mysql
+
+  shlink-web-client:
+    image: shlinkio/shlink-web-client:stable
+    container_name: cloud-shlink-web
+    restart: always
+    environment:
+      SHLINK_SERVER_URL: ${SHLINK_SERVER_URL:-http://localhost:8081}
+      SHLINK_SERVER_API_KEY: ${SHLINK_API_KEY:-e143acb6-a5c7-4528-a389-c9d07789e29c}
+    ports:
+      - "127.0.0.1:8082:80"
+    depends_on:
+      - shlink
+
+volumes:
+  mysql_data:
+  redis_data:
+  meilisearch_data:
