@@ -151,4 +151,79 @@ class PublicSiteController extends Controller
 
         return view('public.legal.show', compact('seo', 'page'));
     }
+
+    public function faq(): View
+    {
+        $appName = config('app.name');
+        $seo = $this->getSeo(
+            "FAQ - Questions Fréquentes - {$appName}",
+            "Trouvez les réponses à vos questions sur {$appName} : fonctionnement, prix, sécurité des données et plus encore.",
+            [['name' => 'FAQ', 'url' => route('faq')]]
+        );
+
+        $faqCategories = [
+            [
+                'name' => 'Simplicité et Fonctionnement',
+                'icon' => 'wrench-screwdriver',
+                'questions' => [
+                    [
+                        'question' => 'Mes clients doivent-ils télécharger une application ?',
+                        'answer' => "Non. C'est la force d'InZeeCard. Vos clients utilisent les applications déjà présentes sur leur téléphone : Apple Wallet (iPhone) ou Google Pay (Android). Ils n'ont rien à installer, ce qui garantit un taux d'adoption maximal.",
+                    ],
+                    [
+                        'question' => 'Comment le client récupère-t-il sa carte de fidélité ?',
+                        'answer' => "C'est instantané. Le client scanne un QR Code sur votre comptoir ou approche son téléphone de votre sticker NFC InZeeCard. En deux clics, sa carte personnalisée est ajoutée à son portefeuille numérique.",
+                    ],
+                    [
+                        'question' => 'Comment puis-je valider les points de mes clients ?',
+                        'answer' => "Vous n'avez besoin d'aucun matériel spécifique. Vous utilisez simplement votre propre smartphone pour scanner la carte du client. Rapide, sans contact et sans erreur possible.",
+                    ],
+                ],
+            ],
+            [
+                'name' => 'Valeur Business',
+                'icon' => 'chart-bar',
+                'questions' => [
+                    [
+                        'question' => 'Pourquoi passer du papier au digital avec InZeeCard ?',
+                        'answer' => "Le papier se perd, s'oublie ou s'abîme. Avec InZeeCard, vous restez dans la poche de vos clients. Vous pouvez envoyer des notifications push (alertes gratuites) directement sur leur écran de verrouillage pour les informer d'une promotion ou d'un événement, boostant ainsi votre taux de retour.",
+                    ],
+                    [
+                        'question' => 'Puis-je personnaliser le design de ma carte ?',
+                        'answer' => 'Absolument. Vous pouvez intégrer votre logo, vos couleurs et définir vos propres règles de récompense (ex: "10€ offerts au 10ème passage" ou "-15% après 50€ d\'achats").',
+                    ],
+                ],
+            ],
+            [
+                'name' => 'Prix et Engagement',
+                'icon' => 'credit-card',
+                'questions' => [
+                    [
+                        'question' => 'Y a-t-il des frais de mise en service ?',
+                        'answer' => "Aucun. L'inscription et la configuration de votre compte sont gratuites. Vous ne payez que votre abonnement de 49€ HT / mois pour un usage illimité.",
+                    ],
+                    [
+                        'question' => "L'offre est-elle avec engagement ?",
+                        'answer' => "Non. Chez InZeeCard, nous croyons en la qualité de notre service. Votre abonnement est sans engagement : vous êtes libre de l'interrompre à tout moment depuis votre espace Stripe.",
+                    ],
+                ],
+            ],
+            [
+                'name' => 'Sécurité et Données',
+                'icon' => 'shield-check',
+                'questions' => [
+                    [
+                        'question' => 'Qui possède les données de mes clients ?',
+                        'answer' => "Vous. Contrairement à d'autres plateformes, les données collectées via InZeeCard vous appartiennent. Nous ne les revendons jamais. Vous construisez votre propre base de données pour votre marketing.",
+                    ],
+                    [
+                        'question' => 'Le système est-il conforme au RGPD ?',
+                        'answer' => "Oui. InZeeCard est conçu avec la protection des données par défaut. Le consentement du client est recueilli lors de l'ajout de la carte, et les données sont stockées de manière sécurisée en Europe.",
+                    ],
+                ],
+            ],
+        ];
+
+        return view('public.faq', compact('seo', 'faqCategories'));
+    }
 }

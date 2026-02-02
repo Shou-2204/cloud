@@ -57,6 +57,7 @@ Route::get('/features', [App\Http\Controllers\PublicSiteController::class, 'feat
 // Company Pages
 Route::get('/about', [App\Http\Controllers\PublicSiteController::class, 'about'])->name('about');
 Route::get('/contact', [App\Http\Controllers\PublicSiteController::class, 'contact'])->name('contact');
+Route::get('/faq', [App\Http\Controllers\PublicSiteController::class, 'faq'])->name('faq');
 
 // Legal
 Route::get('/legal/{page}', [App\Http\Controllers\PublicSiteController::class, 'legal'])->name('legal.show');

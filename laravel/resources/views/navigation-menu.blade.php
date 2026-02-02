@@ -57,9 +57,10 @@
                             class="text-sm font-medium text-emerald-100 hover:text-white transition">Tarifs</a>
                         <a href="{{ route('blog.index') }}"
                             class="text-sm font-medium text-emerald-100 hover:text-white transition">Ressources</a>
+                        <a href="{{ route('faq') }}"
+                            class="text-sm font-medium text-emerald-100 hover:text-white transition">FAQ</a>
                         <a href="{{ route('about') }}"
-                            class="text-sm font-medium text-emerald-100 hover:text-white transition whitespace-nowrap">À
-                            propos</a>
+                            class="text-sm font-medium text-emerald-100 hover:text-white transition">À propos</a>
                     </div>
                 @endguest
 
@@ -172,9 +173,10 @@
                     class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">Tarifs</a>
                 <a href="{{ route('blog.index') }}"
                     class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">Ressources</a>
+                <a href="{{ route('faq') }}"
+                    class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">FAQ</a>
                 <a href="{{ route('about') }}"
-                    class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">À
-                    propos</a>
+                    class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">À propos</a>
                 <div class="border-t border-emerald-600 pt-2 mt-2">
                     <a href="{{ route('login') }}"
                         class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">Connexion</a>
