@@ -21,8 +21,8 @@ class PublicSiteController extends Controller
     {
         $appName = config('app.name');
         $seo = $this->getSeo(
-            "Solutions Industry Focused - {$appName}",
-            "Discover how {$appName} adapts to your industry needs. Restaurants, Retail, Services.",
+            "Solutions Métiers - {$appName}",
+            "Découvrez comment {$appName} s'adapte à votre secteur d'activité : Restaurants, Commerces, Services.",
             [['name' => 'Solutions', 'url' => route('solutions.index')]]
         );
 
@@ -34,16 +34,31 @@ class PublicSiteController extends Controller
         // Mapping simple for demo, in real app this could come from DB or config
         $solutions = [
             'restaurants' => [
-                'title' => 'Customer Reviews & Loyalty for Restaurants',
-                'description' => 'Boost your restaurant revenue with automated reviews and sticky loyalty programs.',
+                'title' => 'Solutions pour Restaurants & Cafés',
+                'description' => 'Boostez le chiffre d\'affaires de votre restaurant grâce à la collecte automatisée d\'avis 5 étoiles et un programme de fidélité digital ultra-simple.',
+                'features' => [
+                    'Avis Google Automatisés' => 'Récupérez des avis positifs dès l\'encaissement.',
+                    'Carte de Fidélité Digitalisée' => 'Fini les oublis, la carte est toujours dans le téléphone du client.',
+                    'Marketing de Relance' => 'Envoyez des offres spéciales lors des jours de faible affluence.',
+                ]
             ],
             'retail' => [
-                'title' => 'Retail Growth Solutions',
-                'description' => 'Drive foot traffic and repeat purchases for your retail store.',
+                'title' => 'Solutions pour Commerçants & Boutiques',
+                'description' => 'Augmentez la fréquence de passage en magasin et transformez vos clients de passage en clients fidèles.',
+                'features' => [
+                    'Visibilité Locale Boostée' => 'Remontez dans les résultats de recherche Google Maps.',
+                    'Base de Données Client' => 'Apprenez à mieux connaître vos clients et leurs habitudes.',
+                    'Promotions Ciblées' => 'Informez instantanément vos clients de vos nouveautés.',
+                ]
             ],
             'services' => [
-                'title' => 'Service Business Tools',
-                'description' => 'Streamline your service business bookings and client retention.',
+                'title' => 'Solutions pour Entreprises de Services',
+                'description' => 'Gérez votre réputation en ligne et fidélisez vos clients pour vos prestations récurrentes (Coiffeurs, Instituts, Artisans).',
+                'features' => [
+                    'Récupération de Feedback' => 'Identifiez les clients insatisfaits avant qu\'ils ne postent un avis négatif.',
+                    'Simplicité d\'Usage' => 'Aucune installation technique requise pour vous ou vos clients.',
+                    'Image de Marque Moderne' => 'Proposez une expérience digitale premium à vos clients.',
+                ]
             ],
         ];
 
@@ -79,9 +94,9 @@ class PublicSiteController extends Controller
     {
         $appName = config('app.name');
         $seo = $this->getSeo(
-            "About Us - {$appName}",
-            "Learn about the team behind {$appName} and our mission to simplify business growth.",
-            [['name' => 'About', 'url' => route('about')]]
+            "À propos - {$appName}",
+            "Découvrez l'équipe derrière {$appName} et notre mission pour simplifier la croissance des commerçants.",
+            [['name' => 'À propos', 'url' => route('about')]]
         );
 
         return view('public.about', compact('seo'));
@@ -91,41 +106,89 @@ class PublicSiteController extends Controller
     {
         $appName = config('app.name');
         $seo = $this->getSeo(
-            "Resources & Blog - {$appName}",
-            'Expert advice, tips, and industry insights to grow your business.',
+            "Ressources & Blog - {$appName}",
+            'Conseils d\'experts, astuces et actualités pour développer votre commerce.',
             [['name' => 'Blog', 'url' => route('blog.index')]]
         );
 
         // Mock posts
         $posts = [
-            (object) ['slug' => 'boost-seo-2026', 'title' => 'How to Boost SEO in 2026', 'excerpt' => 'Strategies that work.'],
-            (object) ['slug' => 'customer-retention', 'title' => 'Mastering Customer Retention', 'excerpt' => 'Keep them coming back.'],
+            (object) [
+                'slug' => 'boost-seo-2026',
+                'title' => 'Comment Booster votre SEO Local en 2026',
+                'excerpt' => 'Les stratégies indispensables pour dominer la recherche locale et attirer plus de clients.',
+                'date' => '3 Février 2026',
+                'content' => 'Le SEO local est devenu le pilier de la réussite pour tout commerce de proximité. En 2026, la clé ne réside plus seulement dans les mots-clés, mais dans la preuve sociale et l\'engagement. Apprenez comment optimiser votre fiche Google Business, pourquoi les avis clients sont votre meilleur atout et comment le mobile-first transforme l\'acquisition client.'
+            ],
+            (object) [
+                'slug' => 'customer-retention',
+                'title' => 'Maîtriser la Fidélisation Client au 21ème Siècle',
+                'excerpt' => 'Pourquoi retenir un client coûte 5 fois moins cher que d\'en acquérir un nouveau.',
+                'date' => '1 Février 2026',
+                'content' => 'La fidélisation n\'est plus une option, c\'est une nécessité. Découvrez comment le passage aux cartes de fidélité digitales dans Apple Wallet & Google Wallet révolutionne la relation client. Nous explorons les mécanismes psychologiques de l\'engagement et comment de simples notifications push peuvent transformer votre chiffre d\'affaires sans dépenser un euro en publicité.'
+            ],
         ];
 
         return view('public.blog.index', compact('seo', 'posts'));
     }
-
     public function post(string $slug): View
     {
+        $posts = [
+            'boost-seo-2026' => [
+                'title' => 'Comment Booster votre SEO Local en 2026',
+                'date' => '3 Février 2026',
+                'content' => 'Le référencement local (SEO Local) est l\'outil le plus puissant pour un commerçant aujourd\'hui. Avec l\'évolution des algorithmes, Google privilégie désormais la fraîcheur des avis et l\'interaction réelle.
+
+### Pourquoi le SEO Local est Vital ?
+Chaque jour, des milliers de personnes cherchent des solutions autour d\'elles. Si vous n\'apparaissez pas dans le "Local Pack" de Google, vous n\'existez pas pour eux.
+
+### Les 3 Piliers de 2026 :
+1. **La Fraîcheur des Avis** : Google favorise les fiches qui reçoivent des avis réguliers plutôt que celles qui en ont beaucoup mais datant de l\'an dernier.
+2. **L\'Engagement Mobile** : Votre site et votre tunnel de capture doivent être ultra-rapides sur smartphone.
+3. **La Preuve Sociale Authentique** : Les avis détaillés avec des mots-clés naturels sont plus valorisés que les simples notes de 5 étoiles sans texte.
+
+En automatisant la collecte d\'avis dès le passage en caisse, vous créez un flux naturel de contenu qui informe Google que votre établissement est actif et apprécié.'
+            ],
+            'customer-retention' => [
+                'title' => 'Maîtriser la Fidélisation Client au 21ème Siècle',
+                'date' => '1 Février 2026',
+                'content' => 'Acquérir un nouveau client coûte de plus en plus cher. Dans ce contexte, la rétention (fidélisation) devient le levier de rentabilité numéro un.
+
+### L\'Échec des Cartes Papier
+Les clients perdent leurs cartes, les oublient, et cela crée une frustration plutôt qu\'un engagement. Le papier est "mort" pour la fidélisation moderne.
+
+### Le Pouvoir du Mobile Wallet
+En intégrant votre carte de fidélité directement dans l\'iPhone ou l\'Android de votre client via Apple Wallet & Google Pay, vous obtenez un avantage injuste :
+- **Pas d\'oubli possible** : La carte est toujours là.
+- **Notifications Push** : Vous pouvez envoyer des messages gratuits directement sur l\'écran verrouillé.
+- **Données Actionnables** : Vous savez qui vient, quand et à quelle fréquence.
+
+La fidélisation digitale permet de créer un lien direct et permanent, transformant un client de passage en un ambassadeur de votre marque.'
+            ],
+        ];
+
+        abort_if(!isset($posts[$slug]), 404);
+
+        $data = $posts[$slug];
         $appName = config('app.name');
         $seo = $this->getSeo(
-            ucfirst(str_replace('-', ' ', $slug)) . " - {$appName} Blog",
-            'Read our comprehensive guide on this topic.',
+            $data['title'] . " - {$appName} Blog",
+            'Découvrez nos conseils d\'experts pour développer votre commerce.',
             [
                 ['name' => 'Blog', 'url' => route('blog.index')],
-                ['name' => ucfirst(str_replace('-', ' ', $slug)), 'url' => route('blog.show', $slug)],
+                ['name' => $data['title'], 'url' => route('blog.show', $slug)],
             ]
         );
 
-        return view('public.blog.show', compact('seo', 'slug'));
+        return view('public.blog.show', compact('seo', 'slug', 'data'));
     }
 
     public function contact(): View
     {
         $appName = config('app.name');
         $seo = $this->getSeo(
-            "Contact Us - {$appName}",
-            'Get in touch with our support or sales team.',
+            "Contactez-nous - {$appName}",
+            'Une question ? Notre équipe est là pour vous aider.',
             [['name' => 'Contact', 'url' => route('contact')]]
         );
 

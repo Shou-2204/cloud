@@ -4,43 +4,38 @@
             <x-breadcrumb :crumbs="$seo['breadcrumbs']" />
 
             <header class="mb-12 text-center">
-                <div class="space-y-1 text-center">
-                    <dl class="space-y-10">
-                        <div>
-                            <dt class="sr-only">Published on</dt>
-                            <dd class="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                                <time datetime="2026-01-18">Sunday, January 18, 2026</time>
-                            </dd>
-                        </div>
-                    </dl>
+                <dl class="space-y-10">
                     <div>
-                        <h1
-                            class="text-3xl leading-9 font-extrabold text-gray-900 dark:text-white sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
-                            Strategies to Boost Your Local SEO in 2026
-                        </h1>
+                        <dt class="sr-only">Publié le</dt>
+                        <dd class="text-base leading-6 font-medium text-emerald-600 dark:text-emerald-400">
+                            <time datetime="2026-02-03">{{ $data['date'] }}</time>
+                        </dd>
                     </div>
+                </dl>
+                <div>
+                    <h1
+                        class="text-3xl leading-9 font-extrabold text-gray-900 dark:text-white sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
+                        {{ $data['title'] }}
+                    </h1>
                 </div>
             </header>
 
-            <div class="prose prose-lg dark:prose-invert mx-auto">
-                <p>
-                    This is a placeholder for the blog post content. In a real application, you would render the
-                    markdown or HTML content of the post here.
+            <div class="prose prose-lg dark:prose-invert mx-auto mb-16">
+                @php echo \Illuminate\Support\Str::markdown($data['content']) @endphp
+            </div>
+
+            <!-- Lead Capture Section -->
+            <div
+                class="bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl p-8 sm:p-12 text-center border-2 border-emerald-100 dark:border-emerald-800">
+                <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-4">
+                    Prêt à appliquer ces conseils de pro ?
+                </h3>
+                <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Rejoignez plus de 500 commerçants qui utilisent {{ config('app.name') }} pour booster leur activité.
                 </p>
-                <p>
-                    <strong>Slug:</strong> {{ $slug }}
-                </p>
-                <h2>Key Takeaways</h2>
-                <ul>
-                    <li>Focus on Mobile First UX</li>
-                    <li>Gather consistent Reviews</li>
-                    <li>Utilize Structured Data</li>
-                </ul>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.
-                </p>
+                <div class="max-w-xl mx-auto">
+                    @livewire('lead-capture')
+                </div>
             </div>
         </article>
     </div>

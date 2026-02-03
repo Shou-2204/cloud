@@ -25,28 +25,30 @@
                         </svg>
                     </div>
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Restaurants</h2>
-                    <p class="text-gray-600 dark:text-gray-400">Automate reviews and keep tables full with smart loyalty
-                        programs.</p>
+                    <p class="text-gray-600 dark:text-gray-400">Automatisez vos avis et fidélisez vos clients avec des
+                        programmes intelligents.</p>
                 </a>
 
                 <!-- Retail -->
                 <a href="{{ route('solutions.show', 'retail') }}"
                     class="reveal-on-scroll delay-200 block p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700 hover-lift">
-                    <div class="h-12 w-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6 animate-float" style="animation-delay: 1s;">
+                    <div class="h-12 w-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6 animate-float"
+                        style="animation-delay: 1s;">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                         </svg>
                     </div>
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Retail</h2>
-                    <p class="text-gray-600 dark:text-gray-400">Increase foot traffic and average basket size with
-                        targeted campaigns.</p>
+                    <p class="text-gray-600 dark:text-gray-400">Augmentez le passage en magasin et le panier moyen avec
+                        des campagnes ciblées.</p>
                 </a>
 
                 <!-- Services -->
                 <a href="{{ route('solutions.show', 'services') }}"
                     class="reveal-on-scroll delay-300 block p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700 hover-lift">
-                    <div class="h-12 w-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mb-6 animate-float" style="animation-delay: 2s;">
+                    <div class="h-12 w-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mb-6 animate-float"
+                        style="animation-delay: 2s;">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
@@ -54,8 +56,8 @@
                         </svg>
                     </div>
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Services</h2>
-                    <p class="text-gray-600 dark:text-gray-400">Streamline bookings and client communication for service
-                        providers.</p>
+                    <p class="text-gray-600 dark:text-gray-400">Optimisez vos prises de rendez-vous et la communication
+                        avec vos clients.</p>
                 </a>
             </div>
         </div>

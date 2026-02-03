@@ -53,8 +53,8 @@
                             class="text-sm font-medium text-emerald-100 hover:text-white transition whitespace-nowrap">Fonctionnalités</a>
                         <a href="{{ route('solutions.index') }}"
                             class="text-sm font-medium text-emerald-100 hover:text-white transition">Solutions</a>
-                        <a href="{{ route('subscription.index') }}"
-                            class="text-sm font-medium text-emerald-100 hover:text-white transition">Tarifs</a>
+                        {{-- <a href="{{ route('subscription.index') }}"
+                            class="text-sm font-medium text-emerald-100 hover:text-white transition">Tarifs</a> --}}
                         <a href="{{ route('blog.index') }}"
                             class="text-sm font-medium text-emerald-100 hover:text-white transition">Ressources</a>
                         <a href="{{ route('faq') }}"
@@ -141,17 +141,17 @@
                     </div>
                 @endguest
 
-                {{-- Guest Auth Links --}}
-                @guest
-                    <a href="{{ route('login') }}"
-                        class="text-sm font-medium text-emerald-100 hover:text-white transition hidden sm:inline">Inscription</a>
-                    @if (Route::has('login'))
-                        <a href="{{ route('login') }}"
-                            class="px-3 py-2 text-xs sm:text-sm font-bold text-emerald-600 bg-white hover:bg-emerald-50 rounded-lg transition shadow-md whitespace-nowrap">
-                            Connexion
-                        </a>
-                    @endif
-                @endguest
+                {{-- Guest Auth Links - HIDDEN FOR PRE-LAUNCH (routes still accessible) --}}
+                {{-- @guest
+                <a href="{{ route('login') }}"
+                    class="text-sm font-medium text-emerald-100 hover:text-white transition hidden sm:inline">Inscription</a>
+                @if (Route::has('login'))
+                <a href="{{ route('login') }}"
+                    class="px-3 py-2 text-xs sm:text-sm font-bold text-emerald-600 bg-white hover:bg-emerald-50 rounded-lg transition shadow-md whitespace-nowrap">
+                    Connexion
+                </a>
+                @endif
+                @endguest --}}
             </div>
         </div>
     </div>
@@ -169,19 +169,21 @@
                     class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">Fonctionnalités</a>
                 <a href="{{ route('solutions.index') }}"
                     class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">Solutions</a>
-                <a href="{{ route('subscription.index') }}"
+                {{-- <a href="{{ route('subscription.index') }}"
                     class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">Tarifs</a>
+                --}}
                 <a href="{{ route('blog.index') }}"
                     class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">Ressources</a>
                 <a href="{{ route('faq') }}"
                     class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">FAQ</a>
                 <a href="{{ route('about') }}"
-                    class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">À propos</a>
-                <div class="border-t border-emerald-600 pt-2 mt-2">
+                    class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">À
+                    propos</a>
+                {{-- HIDDEN FOR PRE-LAUNCH (routes still accessible) --}}
+                {{-- <div class="border-t border-emerald-600 pt-2 mt-2">
                     <a href="{{ route('login') }}"
                         class="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-white hover:bg-emerald-600 rounded-lg transition">Connexion</a>
-                </div>
+                </div> --}}
             </div>
-        </div>
     @endguest
 </nav>
