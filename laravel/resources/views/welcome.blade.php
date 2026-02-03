@@ -76,7 +76,7 @@
 </head>
 
 <body
-    class="antialiased bg-slate-50 dark:bg-emerald-dark text-gray-900 dark:text-gray-100 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden"
+    class="antialiased bg-ivory dark:bg-emerald-dark text-gray-900 dark:text-gray-100 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden"
     x-data="{ 
         theme: localStorage.getItem('theme') || 'light',
         init() {
