@@ -138,7 +138,7 @@ return [
 
     'meilisearch' => [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
-        'key' => env('MEILISEARCH_KEY'),
+        'key' => env('MEILI_MASTER_KEY'),
         'index-settings' => [
             // AJOUTER CE BLOC
             \App\Models\StaticPage::class => [
