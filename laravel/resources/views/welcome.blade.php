@@ -180,8 +180,8 @@
                         class="relative bg-white dark:bg-emerald-dark-500 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-emerald-dark-400">
 
                         <!-- Launch Offer Badge -->
-                        <div
-                            class="absolute top-6 right-6 bg-rose-600 text-white px-6 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-3">
+                        <div class="absolute bg-red-600 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full font-bold text-xs sm:text-sm shadow-lg border-2 border-white dark:border-gray-800 z-20 sm:top-6 sm:right-6"
+                            style="top: 0.5rem; right: 0.5rem;">
                             -38% 🔥
                         </div>
 

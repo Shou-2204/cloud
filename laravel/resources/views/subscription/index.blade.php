@@ -66,22 +66,13 @@
                             Annuel
                             <span
                                 class="text-[10px] font-bold tracking-wide uppercase bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded-full">
-                                -2 mois
+                                -12%
                             </span>
                         </button>
                     </div>
                 </div>
                 
-                {{-- Comparison Link --}}
-                <div class="mt-6">
-                    <a href="#compare" 
-                       class="text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 flex items-center justify-center gap-1 transition-colors">
-                        Voir le comparatif complet
-                        <svg class="h-4 w-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </a>
-                </div>
+
             </div>
         </div>
 
@@ -92,7 +83,7 @@
             $isSubscribed = $currentTeam && $currentTeam->subscribed('default');
         @endphp
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-            <div class="grid md:grid-cols-3 gap-8 items-start">
+            <div class="flex justify-center items-start">
                 
                 @auth
                 {{-- Formulaire caché pour le swap (utilisé par JS ou direct) --}}
@@ -116,7 +107,7 @@
 
                     @if ($plan['popular'])
                          {{-- POPULAR CARD (Highlighted) --}}
-                        <div class="h-full relative p-8 bg-white dark:bg-gray-800 rounded-3xl border-2 border-emerald-600 shadow-2xl z-10 scale-105 flex flex-col">
+                        <div class="h-full relative p-8 bg-white dark:bg-gray-800 rounded-3xl border-2 border-emerald-600 shadow-2xl z-10 flex flex-col w-full max-w-lg mx-auto">
                             <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2">
                                 <span class="bg-emerald-600 text-white text-[10px] font-bold uppercase py-1 px-3 rounded-bl-xl rounded-tr-xl shadow-sm">Populaire</span>
                             </div>
@@ -128,7 +119,7 @@
                                 <span class="text-5xl font-extrabold" x-text="annual ? Math.round(plans.{{ $key }}.price_yearly / 12) : plans.{{ $key }}.price_monthly"></span>
                                 <span class="text-xl font-bold">€</span>
                                 <span class="text-gray-500 dark:text-gray-400">/mois</span>
-                                <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé annuellement)</span>
+                                <span class="text-xs text-gray-400 ml-2" x-show="annual" x-cloak>(facturé <span x-text="plans.{{ $key }}.price_yearly"></span>€ annuellement)</span>
                             </div>
 
                             {{-- BUTTON LOGIC --}}
@@ -324,196 +315,7 @@
              </div>
         </div>
 
-        {{-- COMPARISON TABLE SECTION --}}
-        <div id="compare" class="bg-gray-50 dark:bg-gray-900/50 py-24 border-t border-gray-200 dark:border-gray-800 scroll-mt-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-bold">Comparatif détaillé</h2>
-                    <p class="mt-4 text-gray-500">Un regard approfondi sur ce qui est inclus.</p>
-                </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr>
-                                <th class="py-4 px-6 bg-transparent w-1/4"></th>
-                                <th class="py-4 px-6 text-center text-lg font-bold w-1/4">Starter</th>
-                                <th
-                                    class="py-4 px-6 text-center text-lg font-bold text-emerald-600 dark:text-emerald-400 w-1/4 bg-white dark:bg-gray-800 rounded-t-xl border-x-2 border-t-2 border-emerald-600 border-b-0 shadow-lg">
-                                    Smart
-                                </th>
-                                <th class="py-4 px-6 text-center text-lg font-bold w-1/4">Pro</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-
-                            {{-- SECTION: AVIS & RÉPUTATION --}}
-                            {{-- SECTION: AVIS & RÉPUTATION --}}
-                            <tr>
-                                <td class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">Avis &
-                                    Réputation</td>
-                                <td></td>
-                                <td class="bg-white dark:bg-gray-800 border-x-2 border-emerald-600"></td>
-                                <td></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                <td class="py-4 px-6 text-sm font-medium">Collecte d'avis (Email/QR)</td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                                <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
-                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                <td class="py-4 px-6 text-sm font-medium">Centralisation Google Reviews</td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                                <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
-                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                <td class="py-4 px-6 text-sm font-medium">Jeux / Roue de la Fortune (Data)</td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                                <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
-                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                <td class="py-4 px-6 text-sm font-medium">Réponses Automatisées (IA)</td>
-                                <td class="text-center py-4 text-gray-300">-</td>
-                                <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-gray-300">
-                                    -</td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                            </tr>
-
-                            {{-- SECTION: FIDÉLISATION (WALLET) --}}
-                            {{-- SECTION: FIDÉLISATION (WALLET) --}}
-                            <tr>
-                                <td class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
-                                    Fidélisation & Wallet</td>
-                                <td></td>
-                                <td class="bg-white dark:bg-gray-800 border-x-2 border-emerald-600"></td>
-                                <td></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                <td class="py-4 px-6 text-sm font-medium">Cartes de Fidélité Digitales</td>
-                                <td class="text-center py-4 text-gray-300">-</td>
-                                <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
-                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                <td class="py-4 px-6 text-sm font-medium">Notifications Push (Geo-fencing)</td>
-                                <td class="text-center py-4 text-gray-300">-</td>
-                                <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-green-500">
-                                    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                <td class="py-4 px-6 text-sm font-medium">CRM Client</td>
-                                <td class="text-center py-4 text-gray-300">Basic</td>
-                                <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 font-bold text-emerald-600">
-                                    Avancé</td>
-                                <td class="text-center py-4 font-bold text-emerald-600">Expert</td>
-                            </tr>
-
-                            {{-- SECTION: MARKETING AUTOMATION --}}
-                            {{-- SECTION: MARKETING AUTOMATION --}}
-                            <tr>
-                                <td class="py-6 px-6 text-xs font-bold uppercase tracking-widest text-gray-500">
-                                    Marketing & Automation</td>
-                                <td></td>
-                                <td class="bg-white dark:bg-gray-800 border-x-2 border-emerald-600"></td>
-                                <td></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                <td class="py-4 px-6 text-sm font-medium">Campagnes SMS Marketing</td>
-                                <td class="text-center py-4 text-gray-300">-</td>
-                                <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 text-gray-300">
-                                    -</td>
-                                <td class="text-center py-4 text-green-500"><svg class="w-6 h-6 mx-auto" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg></td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                <td class="py-4 px-6 text-sm font-medium">Support Client</td>
-                                <td class="text-center py-4 text-sm">Email 48h</td>
-                                <td
-                                    class="text-center py-4 bg-white dark:bg-gray-800 border-x-2 border-emerald-600 border-b-2 rounded-b-xl text-sm font-bold">
-                                    Chat & Email 24h</td>
-                                <td class="text-center py-4 text-sm font-bold">Dédié + Téléphone</td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
 
 
 

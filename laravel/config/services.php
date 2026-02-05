@@ -51,18 +51,18 @@ return [
         ],
         // Structure hiérarchique : Plan -> Périodicité
         'plans' => [
-            'starter' => [
-                'monthly' => env('STRIPE_PRICE_ID_STARTER_MONTHLY'),
-                'yearly' => env('STRIPE_PRICE_ID_STARTER_YEARLY'),
-            ],
+            //            'starter' => [
+//                'monthly' => env('STRIPE_PRICE_ID_STARTER_MONTHLY'),
+//                'yearly' => env('STRIPE_PRICE_ID_STARTER_YEARLY'),
+//            ],
             'smart' => [
                 'monthly' => env('STRIPE_PRICE_ID_SMART_MONTHLY'),
                 'yearly' => env('STRIPE_PRICE_ID_SMART_YEARLY'),
             ],
-            'pro' => [
-                'monthly' => env('STRIPE_PRICE_ID_PRO_MONTHLY'),
-                'yearly' => env('STRIPE_PRICE_ID_PRO_YEARLY'),
-            ],
+            //            'pro' => [
+//                'monthly' => env('STRIPE_PRICE_ID_PRO_MONTHLY'),
+//                'yearly' => env('STRIPE_PRICE_ID_PRO_YEARLY'),
+//            ],
         ],
     ],
 
