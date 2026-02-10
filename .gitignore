@@ -2,3 +2,4 @@
 .env
 laravel/.env.example
 laravel/public/sitemap.xml
+laravel/.env.save
