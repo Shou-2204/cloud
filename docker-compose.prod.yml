@@ -58,6 +58,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-root}
       DB_HOST: mysql
       DB_NAME: shlink
+      TRUSTED_PROXIES: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+      CORS_ALLOW_ORIGIN: "*"
     ports:
       - "127.0.0.1:8081:8080"
     depends_on:
@@ -71,7 +73,7 @@ services:
       SHLINK_SERVER_URL: ${SHLINK_SERVER_URL:-http://localhost:8081}
       SHLINK_SERVER_API_KEY: ${SHLINK_API_KEY:-e143acb6-a5c7-4528-a389-c9d07789e29c}
     ports:
-      - "127.0.0.1:8082:80"
+      - "127.0.0.1:8082:8080"
     depends_on:
       - shlink
 
