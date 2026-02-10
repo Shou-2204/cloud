@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Jobs\UploadInvoiceToS3;
 use App\Models\Team;
 use App\Notifications\SubscriptionChanged;
+use Illuminate\Support\Facades\Http;
 use Laravel\Cashier\Events\WebhookReceived;
 
 class StripeInvoicePaidListener
@@ -47,6 +48,14 @@ class StripeInvoicePaidListener
 
         $planName = $this->resolvePlanName($subscription['items']['data'][0]['price']['id'] ?? null);
         $team->owner->notify(new SubscriptionChanged($planName, 'subscribed'));
+
+        try {
+            Http::post('https://hooks.slack.com/services/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', [
+                'text' => "💰 Nouvel Abonnement !\n\n👤 *Client:* {$team->owner->name} ({$team->owner->email})\n🏢 *Équipe:* {$team->name}\n🏷 *Plan:* {$planName}",
+            ]);
+        } catch (\Exception $e) {
+            // Silently fail
+        }
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class LeadCapture extends Component
@@ -40,6 +41,14 @@ class LeadCapture extends Component
             'utm_medium' => $utmMedium,
             'utm_campaign' => $utmCampaign,
         ]);
+
+        try {
+            Http::post('https://hooks.slack.com/services/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', [
+                'text' => "🚀 Nouvelle Lead Capture !\n\n📧 *Email:* {$this->email}\n📍 *Source:* {$utmSource}\n🔗 *Campagne:* {$utmCampaign}",
+            ]);
+        } catch (\Exception $e) {
+            // Silently fail to avoid disrupting user experience
+        }
 
         $this->submitted = true;
         $this->email = '';

@@ -1,1 +1,4 @@
 /vendor
+.env
+laravel/.env.example
+laravel/public/sitemap.xml

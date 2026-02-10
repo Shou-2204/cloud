@@ -2,9 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Mail\BugReportMail;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -42,12 +41,15 @@ class BugReport extends Component
         $user = Auth::user();
         $currentUrl = request()->header('referer', url()->current());
 
-        Mail::to(config('app.admin_notification_email'))
-            ->send(new BugReportMail(
-                user: $user,
-                description: $this->description,
-                reportedUrl: $currentUrl,
-            ));
+
+
+        try {
+            Http::post('https://hooks.slack.com/services/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', [
+                'text' => "🐛 Nouveau Rapport de Bug !\n\n👤 *Utilisateur:* {$user->name} ({$user->email})\n🔗 *URL:* {$currentUrl}\n📝 *Description:*\n{$this->description}",
+            ]);
+        } catch (\Exception $e) {
+            // Silently fail
+        }
 
         $this->submitted = true;
     }

@@ -1,107 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443</loc>
+    <loc>https://web.shouphotobooth.cloud</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/pricing</loc>
+    <loc>https://web.shouphotobooth.cloud/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/solutions</loc>
+    <loc>https://web.shouphotobooth.cloud/solutions</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/about</loc>
+    <loc>https://web.shouphotobooth.cloud/about</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/contact</loc>
+    <loc>https://web.shouphotobooth.cloud/contact</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/blog</loc>
+    <loc>https://web.shouphotobooth.cloud/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/solutions/restaurants</loc>
+    <loc>https://web.shouphotobooth.cloud/solutions/restaurants</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/solutions/retail</loc>
+    <loc>https://web.shouphotobooth.cloud/solutions/retail</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/solutions/services</loc>
+    <loc>https://web.shouphotobooth.cloud/solutions/services</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/blog/boost-seo-2026</loc>
+    <loc>https://web.shouphotobooth.cloud/blog/boost-seo-2026</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/blog/customer-retention</loc>
+    <loc>https://web.shouphotobooth.cloud/blog/customer-retention</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/ccbb6b4e-cef4-42e2-954a-8d85a10a4379</loc>
+    <loc>https://web.shouphotobooth.cloud/p/ccbb6b4e-cef4-42e2-954a-8d85a10a4379</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/e4e6797c-51d6-4c9e-a5d8-d392ca26b916</loc>
+    <loc>https://web.shouphotobooth.cloud/p/e4e6797c-51d6-4c9e-a5d8-d392ca26b916</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/9298c1b7-c376-450d-95b0-8a2deca12e5f</loc>
+    <loc>https://web.shouphotobooth.cloud/p/9298c1b7-c376-450d-95b0-8a2deca12e5f</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/96a7c9bb-130a-487d-953e-ea0ef0aaebec</loc>
+    <loc>https://web.shouphotobooth.cloud/p/96a7c9bb-130a-487d-953e-ea0ef0aaebec</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/b24d0e8c-a9b4-4a2e-b078-1a13cdb670a4</loc>
+    <loc>https://web.shouphotobooth.cloud/p/b24d0e8c-a9b4-4a2e-b078-1a13cdb670a4</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/a5cee4d5-edf4-452b-9727-dc3f1a7bce6e</loc>
+    <loc>https://web.shouphotobooth.cloud/p/a5cee4d5-edf4-452b-9727-dc3f1a7bce6e</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/c3a8f51f-07f1-40d3-a2ee-4583d5ed8e42</loc>
+    <loc>https://web.shouphotobooth.cloud/p/c3a8f51f-07f1-40d3-a2ee-4583d5ed8e42</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/0b70c122-dd07-47c1-8d6b-48d46ce1f9db</loc>
+    <loc>https://web.shouphotobooth.cloud/p/0b70c122-dd07-47c1-8d6b-48d46ce1f9db</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/108b7590-1dea-449e-90e5-30b73d349073</loc>
+    <loc>https://web.shouphotobooth.cloud/p/108b7590-1dea-449e-90e5-30b73d349073</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>
     <url>
-    <loc>https://web.shouphotobooth.cloud:44443/p/014a6346-54d1-4d1e-ae71-6d1ddcf97c80</loc>
+    <loc>https://web.shouphotobooth.cloud/p/014a6346-54d1-4d1e-ae71-6d1ddcf97c80</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+            </url>
+    <url>
+    <loc>https://web.shouphotobooth.cloud/p/17e52458-607b-4f75-9ab8-a61127a880db</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
             </url>

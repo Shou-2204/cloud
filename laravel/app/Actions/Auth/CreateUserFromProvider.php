@@ -4,6 +4,7 @@ namespace App\Actions\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 
@@ -25,6 +26,14 @@ class CreateUserFromProvider
                 'email_verified_at' => now(),
                 'has_set_password' => false,
             ]);
+
+            try {
+                Http::post('https://hooks.slack.com/services/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', [
+                    'text' => "🎉 Nouvel Utilisateur (Via {$provider}) !\n\n👤 *Nom:* {$user->name}\n📧 *Email:* {$user->email}",
+                ]);
+            } catch (\Exception $e) {
+                // Silently fail
+            }
         }
 
         return $user;
