@@ -14,7 +14,7 @@ class PublicProfileController extends Controller
     public function show(Request $request, Team $team)
     {
         if (! $team->subscribed()) {
-            abort(403, 'This organization is not available publicly.');
+            return redirect(config('app.url'));
         }
 
         // Basic Analytics: Count unique views per session
@@ -43,7 +43,7 @@ class PublicProfileController extends Controller
     public function review(Request $request, Team $team)
     {
         if (! $team->subscribed()) {
-            abort(403, 'This organization is not available publicly.');
+            return redirect(config('app.url'));
         }
 
         if (! $team->settings->reviews_enabled) {
