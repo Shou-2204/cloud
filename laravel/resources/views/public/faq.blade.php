@@ -110,28 +110,9 @@
             </div>
 
             {{-- CTA Section --}}
-            <div class="mt-16 bg-emerald-600 rounded-2xl p-8 sm:p-12 text-center text-white">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-4">
-                    Vous avez d'autres questions ?
-                </h2>
-                <p class="text-emerald-100 mb-8 max-w-xl mx-auto">
-                    Notre équipe est disponible pour vous accompagner dans la mise en place de votre programme de fidélité.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{{ route('contact') }}"
-                       class="inline-flex items-center justify-center px-6 py-3 bg-white text-emerald-600 font-semibold rounded-full hover:bg-gray-100 transition-all shadow-lg">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                        Contactez-nous
-                    </a>
-                    <a href="{{ route('register') }}"
-                       class="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition-all border-2 border-white/30">
-                        Essayer gratuitement
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
-                    </a>
+            <div class="mt-16 bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-12 text-center shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="max-w-xl mx-auto">
+                    @livewire('lead-capture', ['withDetails' => true])
                 </div>
             </div>
         </div>

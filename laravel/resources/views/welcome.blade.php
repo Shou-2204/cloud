@@ -380,7 +380,7 @@
                             Rejoignez les commerçants qui font confiance à {{ config('app.name') }}
                         </p>
                         <div class="max-w-xl mx-auto">
-                            @livewire('lead-capture')
+                            @livewire('lead-capture', ['withDetails' => true])
                         </div>
                     </div>
                 </div>

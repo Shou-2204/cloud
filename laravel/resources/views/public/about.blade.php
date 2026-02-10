@@ -4,7 +4,7 @@
             <x-breadcrumb :crumbs="$seo['breadcrumbs']" />
 
             <div
-                class="bg-white dark:bg-gray-800 rounded-3xl p-8 sm:p-12 shadow-sm border border-gray-100 dark:border-gray-700 mt-8">
+                class="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-12 shadow-sm border border-gray-100 dark:border-gray-700 mt-8">
                 <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-6">À propos de <span
                         class="text-emerald-600 dark:text-emerald-400">{{ config('app.name') }}</span></h1>
 
@@ -35,12 +35,9 @@
                 </div>
             </div>
 
-            <div class="mt-12 text-center">
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Prêt à grandir avec nous ?</h3>
-                <a href="{{ route('contact') }}"
-                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 transition-all">
-                    Contactez-nous
-                </a>
+                <div class="max-w-xl mx-auto mt-16">
+                    @livewire('lead-capture', ['withDetails' => true])
+                </div>
             </div>
         </div>
     </div>

@@ -16,20 +16,55 @@
         </div>
     @endif
 
-    <!-- Email Form -->
+    <!-- Form -->
     <form wire:submit.prevent="submit" class="w-full">
-        <div class="flex flex-col sm:flex-row gap-3">
-            <div class="flex-1">
-                <input wire:model.live="email" type="email" placeholder="votre@email.com"
-                    class="w-full px-6 py-4 text-base rounded-xl border-2 border-gray-200 dark:border-emerald-dark-400 bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all outline-none @error('email') border-red-500 dark:border-red-500 @enderror">
-                @error('email')
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+        @if ($withDetails)
+            <div class="mb-6 text-center">
+                <p class="font-bold text-lg text-gray-800 dark:text-gray-200">Des questions ? Vous souhaitez être recontacté ?</p>
             </div>
-            <button type="submit"
-                class="px-8 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-600 dark:hover:bg-emerald-500 rounded-xl transition-all shadow-xl shadow-emerald-500/20 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-500/30 whitespace-nowrap">
-                Je réserve ma place
-            </button>
-        </div>
+            <div class="flex flex-col gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <input wire:model.live="name" type="text" placeholder="Votre Nom"
+                            class="w-full px-6 py-4 text-base rounded-xl border-2 border-gray-200 dark:border-emerald-dark-400 bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all outline-none @error('name') border-red-500 dark:border-red-500 @enderror">
+                        @error('name')
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <input wire:model.live="phone" type="tel" placeholder="Votre Téléphone"
+                            class="w-full px-6 py-4 text-base rounded-xl border-2 border-gray-200 dark:border-emerald-dark-400 bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all outline-none @error('phone') border-red-500 dark:border-red-500 @enderror">
+                        @error('phone')
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+                <div>
+                    <input wire:model.live="email" type="email" placeholder="votre@email.com"
+                        class="w-full px-6 py-4 text-base rounded-xl border-2 border-gray-200 dark:border-emerald-dark-400 bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all outline-none @error('email') border-red-500 dark:border-red-500 @enderror">
+                    @error('email')
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+                <button type="submit"
+                    class="w-full px-8 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-600 dark:hover:bg-emerald-500 rounded-xl transition-all shadow-xl shadow-emerald-500/20 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-500/30">
+                    Être recontacté
+                </button>
+            </div>
+        @else
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1">
+                    <input wire:model.live="email" type="email" placeholder="votre@email.com"
+                        class="w-full px-6 py-4 text-base rounded-xl border-2 border-gray-200 dark:border-emerald-dark-400 bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all outline-none @error('email') border-red-500 dark:border-red-500 @enderror">
+                    @error('email')
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+                <button type="submit"
+                    class="px-8 py-4 text-base font-bold text-white bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-600 dark:hover:bg-emerald-500 rounded-xl transition-all shadow-xl shadow-emerald-500/20 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-500/30 whitespace-nowrap">
+                    Je réserve ma place
+                </button>
+            </div>
+        @endif
     </form>
 </div>

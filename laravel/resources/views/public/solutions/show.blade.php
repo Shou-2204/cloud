@@ -24,12 +24,12 @@
                     <div class="mt-8">
                         <p class="text-sm font-bold text-emerald-800 dark:text-emerald-200 mb-4">Rejoignez les
                             commerçants qui réussissent :</p>
-                        @livewire('lead-capture')
+                        @livewire('lead-capture', ['withDetails' => true])
                     </div>
                 </div>
                 <div class="mt-12 lg:mt-0 relative">
                     <div
-                        class="relative bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl p-8 h-96 flex items-center justify-center border-2 border-dashed border-emerald-200 dark:border-emerald-800">
+                        class="relative bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl p-6 sm:p-8 h-96 flex items-center justify-center border-2 border-dashed border-emerald-200 dark:border-emerald-800">
                         <div class="text-center">
                             <svg class="w-24 h-24 text-emerald-500 mx-auto mb-4 opacity-50" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">

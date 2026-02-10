@@ -26,7 +26,7 @@
 
             <!-- Lead Capture Section -->
             <div
-                class="bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl p-8 sm:p-12 text-center border-2 border-emerald-100 dark:border-emerald-800">
+                class="bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl p-6 sm:p-12 text-center border-2 border-emerald-100 dark:border-emerald-800">
                 <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-4">
                     Prêt à appliquer ces conseils de pro ?
                 </h3>
@@ -34,7 +34,7 @@
                     Rejoignez plus de 500 commerçants qui utilisent {{ config('app.name') }} pour booster leur activité.
                 </p>
                 <div class="max-w-xl mx-auto">
-                    @livewire('lead-capture')
+                    @livewire('lead-capture', ['withDetails' => true])
                 </div>
             </div>
         </article>

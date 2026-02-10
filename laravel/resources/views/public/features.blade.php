@@ -142,14 +142,10 @@
                 </div>
             </div>
 
-            <div class="mt-20 text-center reveal-on-scroll delay-300">
-                <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl mb-6">
-                    Prêt à passer au niveau supérieur ?
-                </h2>
-                <a href="{{ route('subscription.index') }}"
-                    class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-bold rounded-xl shadow-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-all hover-lift">
-                    Voir les Tarifs
-                </a>
+            <div class="mt-20">
+                <div class="max-w-xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 sm:p-12">
+                    @livewire('lead-capture', ['withDetails' => true])
+                </div>
             </div>
         </div>
     </div>

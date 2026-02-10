@@ -58,6 +58,12 @@
                                     </p>
                                 </div>
                             </div>
+
+                            <div class="mt-12 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 sm:p-12">
+                                <div class="max-w-xl mx-auto">
+                                    @livewire('lead-capture', ['withDetails' => true])
+                                </div>
+                            </div>
                             
                             {{-- FAQ CTA --}}
                             <div class="text-center pt-8 border-t border-gray-100 dark:border-gray-700">
