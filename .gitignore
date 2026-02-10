@@ -5,3 +5,4 @@ laravel/public/sitemap.xml
 laravel/.env.save
 /public/sitemap.xml
 /public/robots.txt
+laravel/public/robots.txt
