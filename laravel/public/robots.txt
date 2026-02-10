@@ -1,8 +1,0 @@
-User-agent: *
-Disallow: /nova/
-Disallow: /admin/
-Disallow: /dashboard
-Disallow: /myteam
-Disallow: /mysubscription
-
-Sitemap: {{ url('/sitemap.xml') }}
