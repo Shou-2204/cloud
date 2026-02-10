@@ -53,7 +53,7 @@ services:
     restart: unless-stopped
     environment:
       DEFAULT_DOMAIN: shlink.shouphotobooth.cloud
-      IS_HTTPS_ENABLED: "false"
+      IS_HTTPS_ENABLED: "true"
       DB_DRIVER: mysql
       DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD:-root}
