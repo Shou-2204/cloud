@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->web(append: [
             \App\Http\Middleware\CheckInAppBrowser::class,
+            \App\Http\Middleware\ForceAppUrl::class,
         ]);
     })
 
