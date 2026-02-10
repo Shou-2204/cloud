@@ -25,20 +25,6 @@ services:
     volumes:
       - redis_data:/data
 
-  minio:
-    image: minio/minio
-    container_name: cloud-minio-dev
-    restart: unless-stopped
-    environment:
-      MINIO_ROOT_USER: minio
-      MINIO_ROOT_PASSWORD: minio123
-    command: server /data --console-address ":9001"
-    ports:
-      - "127.0.0.1:9000:9000"
-      - "127.0.0.1:9001:9001"
-    volumes:
-      - minio_data:/data
-
   meilisearch:
     image: getmeili/meilisearch:v1.10
     container_name: cloud-meilisearch-dev
@@ -66,13 +52,15 @@ services:
     container_name: cloud-shlink-dev
     restart: unless-stopped
     environment:
-      DEFAULT_DOMAIN: localhost:8081
+      DEFAULT_DOMAIN: shlink.shouphotobooth.cloud
       IS_HTTPS_ENABLED: "false"
       DB_DRIVER: mysql
       DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD:-root}
       DB_HOST: mysql
       DB_NAME: shlink
+      TRUSTED_PROXIES: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+      CORS_ALLOW_ORIGIN: "*"
     ports:
       - "127.0.0.1:8081:8080"
     depends_on:
@@ -83,10 +71,10 @@ services:
     container_name: cloud-shlink-web-dev
     restart: unless-stopped
     environment:
-      SHLINK_SERVER_URL: http://localhost:8081
+      SHLINK_SERVER_URL: https://shlink.shouphotobooth.cloud
       SHLINK_SERVER_API_KEY: ${SHLINK_API_KEY:-e143acb6-a5c7-4528-a389-c9d07789e29c}
     ports:
-      - "127.0.0.1:8082:80"
+      - "127.0.0.1:8082:8080"
     depends_on:
       - shlink
   n8n:

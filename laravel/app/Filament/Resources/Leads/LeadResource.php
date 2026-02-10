@@ -11,10 +11,12 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 
 class LeadResource extends Resource
@@ -53,6 +55,9 @@ class LeadResource extends Resource
                 TextInput::make('source')
                     ->label('Source')
                     ->maxLength(255),
+                Toggle::make('newsletter_subscribed')
+                    ->label('Abonné à la newsletter')
+                    ->default(true),
             ]);
     }
 
@@ -88,6 +93,9 @@ class LeadResource extends Resource
                     ->label('Suivi')
                     ->dateTime()
                     ->sortable(),
+                IconColumn::make('newsletter_subscribed')
+                    ->label('Abonné')
+                    ->boolean(),
             ])
             ->filters([
                 //

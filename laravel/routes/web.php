@@ -62,6 +62,9 @@ Route::get('/faq', [App\Http\Controllers\PublicSiteController::class, 'faq'])->n
 // Legal
 Route::get('/legal/{page}', [App\Http\Controllers\PublicSiteController::class, 'legal'])->name('legal.show');
 
+// Unsubscribe
+Route::get('/news_unsubscribe', App\Livewire\Unsubscribe::class)->name('news_unsubscribe');
+
 // Subscription (Public)
 Route::get('/pricing', [SubscriptionController::class, 'index'])->name('subscription.index');
 Route::get('/subscribe/{price}', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');

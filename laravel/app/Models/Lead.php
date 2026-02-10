@@ -18,6 +18,7 @@ class Lead extends Model
         'utm_source',
         'utm_medium',
         'utm_campaign',
+        'newsletter_subscribed',
     ];
 
     protected $casts = [
@@ -25,5 +26,6 @@ class Lead extends Model
         'next_follow_up_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'newsletter_subscribed' => 'boolean',
     ];
 }
