@@ -30,6 +30,8 @@ class Team extends JetstreamTeam
         'join_code',
         'auto_approval',
         'public_uuid',
+        'short_url',
+        'qr_code_path',
         // Cashier/Stripe fields are guarded or managed by trait, but we can list them if needed.
         // Usually they are not in fillable unless we manually update them.
         // For now, keeping only what was core.
@@ -112,6 +114,23 @@ class Team extends JetstreamTeam
     public function stripeName(): ?string
     {
         return $this->billingDetail->billing_name ?? $this->name;
+    }
+
+    /**
+     * The disk used for storing QR codes.
+     */
+    public const QR_CODE_DISK = 'cloud_public';
+
+    /**
+     * Get the URL of the QR code.
+     */
+    public function getQrCodeUrlAttribute(): ?string
+    {
+        if (empty($this->qr_code_path)) {
+            return null;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk(self::QR_CODE_DISK)->url($this->qr_code_path);
     }
 
     /**

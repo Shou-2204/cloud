@@ -12,6 +12,23 @@ class TeamObserver
      */
     public function created(Team $team): void
     {
+        if (empty($team->public_uuid)) {
+             return;
+        }
+
+        /** @var \App\Services\ShlinkService $shlinkService */
+        $shlinkService = app(\App\Services\ShlinkService::class);
+        $longUrl = route('profile.public', ['team' => $team->public_uuid]);
+
+        try {
+            $shortUrl = $shlinkService->createShortUrl($longUrl, ['team-' . $team->id]);
+            if ($shortUrl) {
+                $team->forceFill(['short_url' => $shortUrl])->saveQuietly();
+                \App\Jobs\GenerateTeamQrCode::dispatch($team);
+            }
+        } catch (\Exception $e) {
+            // Logged in service or ignored to not block creation
+        }
         // On notifie le propriétaire
         $team->owner->notify(new TeamActivityLog('team_created', [
             'team_id' => $team->id,

@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "calebporzio/sushi": "^2.5",
+        "endroid/qr-code": "^6.0",
         "filament/filament": "^4.3",
         "laravel/cashier": "^16.1",
         "laravel/framework": "^12.0",

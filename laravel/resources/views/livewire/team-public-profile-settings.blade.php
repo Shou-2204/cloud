@@ -18,6 +18,30 @@
         <div class="mt-2 text-xs text-gray-500">
             UUID: {{ $team->public_uuid }}
         </div>
+        @if($team->short_url)
+        <div class="mt-4 border-t border-gray-100 pt-4">
+            <div class="text-xs text-gray-500 mb-2">Lien court (Shlink) :</div>
+            <a href="{{ $team->short_url }}" target="_blank" class="text-emerald-600 hover:underline font-medium">{{ $team->short_url }}</a>
+            
+            @if($team->qr_code_path)
+            <div class="mt-4 flex items-center space-x-4">
+                <div class="bg-white p-2 border rounded-lg shadow-sm">
+                    <img src="{{ $team->qr_code_url }}" alt="QR Code" class="h-24 w-24">
+                </div>
+                <div>
+                    <div class="text-xs text-gray-500 mb-1">QR Code</div>
+                    <a href="{{ $team->qr_code_url }}" download="qrcode-{{ $team->slug ?? 'team' }}.png" target="_blank"
+                       class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-xs leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                        <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        {{ __('Télécharger le QR Code') }}
+                    </a>
+                </div>
+            </div>
+            @endif
+        </div>
+        @endif
     </x-slot>
 
     <x-slot name="form">

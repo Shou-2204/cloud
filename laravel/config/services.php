@@ -70,4 +70,10 @@ return [
         'id' => env('GOOGLE_ANALYTICS_ID'),
     ],
 
+
+    'shlink' => [
+        'url' => env('SHLINK_SERVER_URL'),
+        'api_key' => env('SHLINK_API_KEY'),
+    ],
+
 ];
