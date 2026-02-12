@@ -2,13 +2,20 @@
 
 namespace App\Livewire;
 
+use App\Services\SlackNotificationService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class BugReport extends Component
 {
+    protected SlackNotificationService $slack;
+
+    public function boot(SlackNotificationService $slack)
+    {
+        $this->slack = $slack;
+    }
+
     public bool $isOpen = false;
     public string $description = '';
     public bool $submitted = false;
@@ -43,13 +50,9 @@ class BugReport extends Component
 
 
 
-        try {
-            Http::post('https://hooks.slack.com/services/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', [
-                'text' => "🐛 Nouveau Rapport de Bug !\n\n👤 *Utilisateur:* {$user->name} ({$user->email})\n🔗 *URL:* {$currentUrl}\n📝 *Description:*\n{$this->description}",
-            ]);
-        } catch (\Exception $e) {
-            // Silently fail
-        }
+        $this->slack->notifyBug(
+            "🐛 Nouveau Rapport de Bug !\n\n👤 *Utilisateur:* {$user->name} ({$user->email})\n🔗 *URL:* {$currentUrl}\n📝 *Description:*\n{$this->description}"
+        );
 
         $this->submitted = true;
     }

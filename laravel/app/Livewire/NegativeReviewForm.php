@@ -160,16 +160,10 @@ class NegativeReviewForm extends Component
             ->push($this->team->owner->id)
             ->unique();
 
-        // Retrieve users from IDs to avoid loading everything if possible,
-        // but Notification::send requires Notifiable objects.
-        // To optimize memory, we chunk or let the queue handle it if we passed a query.
-        // However, Notification::send with a Collection is standard.
-        // The optimization requested is to NOT load all into memory at once if huge.
-        // Better approach: Query Builder.
-
-        $users = \App\Models\User::whereIn('id', $recipients)->get();
-
-        Notification::send($users, new NewPrivateFeedback($rating));
+        // Optimization: Process notifications in chunks to avoid memory overflow
+        \App\Models\User::whereIn('id', $recipients)->chunk(100, function ($users) use ($rating) {
+            Notification::send($users, new NewPrivateFeedback($rating));
+        });
 
         $this->submitted = true;
     }

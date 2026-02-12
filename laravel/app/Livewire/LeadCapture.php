@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use Illuminate\Support\Facades\Http;
+use App\Services\SlackNotificationService;
 use Livewire\Component;
 
 class LeadCapture extends Component
@@ -11,6 +11,13 @@ class LeadCapture extends Component
     public string $name = '';
     public string $phone = '';
     public bool $withDetails = false;
+
+    protected SlackNotificationService $slack;
+
+    public function boot(SlackNotificationService $slack)
+    {
+        $this->slack = $slack;
+    }
 
     public function mount(bool $withDetails = false)
     {
@@ -62,19 +69,13 @@ class LeadCapture extends Component
             'utm_campaign' => $utmCampaign,
         ]);
 
-        try {
-            $message = "🚀 Nouvelle Lead Capture !\n\n📧 *Email:* {$this->email}\n📍 *Source:* {$utmSource}\n🔗 *Campagne:* {$utmCampaign}";
-            
-            if ($this->withDetails) {
-                $message .= "\n👤 *Nom:* {$this->name}\n📞 *Téléphone:* {$this->phone}";
-            }
+        $message = "🚀 Nouvelle Lead Capture !\n\n📧 *Email:* {$this->email}\n📍 *Source:* {$utmSource}\n🔗 *Campagne:* {$utmCampaign}";
 
-            Http::post('https://hooks.slack.com/services/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', [
-                'text' => $message,
-            ]);
-        } catch (\Exception $e) {
-            // Silently fail to avoid disrupting user experience
+        if ($this->withDetails) {
+            $message .= "\n👤 *Nom:* {$this->name}\n📞 *Téléphone:* {$this->phone}";
         }
+
+        $this->slack->notifyLead($message);
 
         $this->submitted = true;
         $this->email = '';

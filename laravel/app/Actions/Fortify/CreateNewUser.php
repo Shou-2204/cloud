@@ -3,8 +3,8 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Services\SlackNotificationService;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
@@ -12,6 +12,10 @@ use Laravel\Jetstream\Jetstream;
 class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
+
+    public function __construct(
+        protected SlackNotificationService $slack
+    ) {}
 
     /**
      * Validate and create a newly registered user.
@@ -35,13 +39,9 @@ class CreateNewUser implements CreatesNewUsers
             'has_set_password' => true,
         ]);
 
-        try {
-            Http::post('https://hooks.slack.com/services/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', [
-                'text' => "🎉 Nouvel Utilisateur Inscrit !\n\n👤 *Nom:* {$user->name}\n📧 *Email:* {$user->email}",
-            ]);
-        } catch (\Exception $e) {
-            // Silently fail
-        }
+        $this->slack->notifyUser(
+            "🎉 Nouvel Utilisateur Inscrit !\n\n👤 *Nom:* {$user->name}\n📧 *Email:* {$user->email}"
+        );
 
         return $user;
     }

@@ -85,6 +85,9 @@ class ApplicationAvailabilityTest extends TestCase
             'name' => 'My Team',
         ]);
         
+        $user->current_team_id = $team->id;
+        $user->save();
+
         // Authenticate as the user
         $this->actingAs($user);
 

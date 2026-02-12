@@ -28,6 +28,10 @@ class SubscriptionFlowTest extends TestCase
 
     public function test_subscription_cancellation()
     {
+        if (! getenv('STRIPE_SECRET')) {
+            $this->markTestSkipped('Stripe secret key not set.');
+        }
+
         $user = User::factory()->withPersonalTeam()->create();
         $team = $user->currentTeam;
 
@@ -57,7 +61,7 @@ class SubscriptionFlowTest extends TestCase
             ],
         ]);
 
-        $listener = new StripeInvoicePaidListener;
+        $listener = app(StripeInvoicePaidListener::class);
         $listener->handle($event);
 
         Queue::assertPushed(UploadInvoiceToS3::class, function ($job) {

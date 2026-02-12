@@ -88,7 +88,8 @@ class PrivateFeedbackNotificationTest extends TestCase
         $this->assertEquals(1, $user->fresh()->unreadNotifications->count());
 
         $this->actingAs($user)
-            ->get(route('reviews.private'));
+            ->get(route('reviews.private'))
+            ->assertStatus(200);
 
         $this->assertEquals(0, $user->fresh()->unreadNotifications->count());
     }

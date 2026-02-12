@@ -14,7 +14,7 @@ class CreateUserFromProviderTest extends TestCase
 
     public function test_it_creates_a_new_user_if_not_exists()
     {
-        $action = new CreateUserFromProvider;
+        $action = app(CreateUserFromProvider::class);
 
         $socialiteUser = new SocialiteUser;
         $socialiteUser->map([
@@ -37,7 +37,7 @@ class CreateUserFromProviderTest extends TestCase
             'name' => 'Jane Doe',
         ]);
 
-        $action = new CreateUserFromProvider;
+        $action = app(CreateUserFromProvider::class);
 
         $socialiteUser = new SocialiteUser;
         $socialiteUser->map([

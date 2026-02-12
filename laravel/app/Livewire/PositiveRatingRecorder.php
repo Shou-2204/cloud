@@ -86,12 +86,10 @@ class PositiveRatingRecorder extends Component
                     ->push($this->team->owner->id)
                     ->unique();
 
-                $users = \App\Models\User::whereIn('id', $recipients)->get();
-
-                \Illuminate\Support\Facades\Notification::send(
-                    $users,
-                    new \App\Notifications\NewPrivateFeedback($rating)
-                );
+                // Optimization: Process notifications in chunks
+                \App\Models\User::whereIn('id', $recipients)->chunk(100, function ($users) use ($rating) {
+                    \Illuminate\Support\Facades\Notification::send($users, new \App\Notifications\NewPrivateFeedback($rating));
+                });
             }
         }
 

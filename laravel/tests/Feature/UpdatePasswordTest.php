@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Jetstream\Http\Livewire\UpdatePasswordForm;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -17,26 +18,31 @@ class UpdatePasswordTest extends TestCase
     {
         $this->actingAs($user = User::factory()->create());
 
+        $password = Str::random(16) . '1A!';
+
         Livewire::test(UpdatePasswordForm::class)
             ->set('state', [
                 'current_password' => 'password',
-                'password' => 'new-password',
-                'password_confirmation' => 'new-password',
+                'password' => $password,
+                'password_confirmation' => $password,
             ])
-            ->call('updatePassword');
+            ->call('updatePassword')
+            ->assertHasNoErrors();
 
-        $this->assertTrue(Hash::check('new-password', $user->fresh()->password));
+        $this->assertTrue(Hash::check($password, $user->fresh()->password));
     }
 
     public function test_current_password_must_be_correct(): void
     {
         $this->actingAs($user = User::factory()->create());
 
+        $password = Str::random(16) . '1A!';
+
         Livewire::test(UpdatePasswordForm::class)
             ->set('state', [
                 'current_password' => 'wrong-password',
-                'password' => 'new-password',
-                'password_confirmation' => 'new-password',
+                'password' => $password,
+                'password_confirmation' => $password,
             ])
             ->call('updatePassword')
             ->assertHasErrors(['current_password']);
@@ -48,10 +54,12 @@ class UpdatePasswordTest extends TestCase
     {
         $this->actingAs($user = User::factory()->create());
 
+        $password = Str::random(16) . '1A!';
+
         Livewire::test(UpdatePasswordForm::class)
             ->set('state', [
                 'current_password' => 'password',
-                'password' => 'new-password',
+                'password' => $password,
                 'password_confirmation' => 'wrong-password',
             ])
             ->call('updatePassword')

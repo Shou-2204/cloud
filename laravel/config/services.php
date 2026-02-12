@@ -40,6 +40,12 @@ return [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
+        'webhooks' => [
+            'billing' => env('SLACK_WEBHOOK_BILLING', 'https://hooks.slack.com/services/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'),
+            'users' => env('SLACK_WEBHOOK_USERS', 'https://hooks.slack.com/services/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'),
+            'leads' => env('SLACK_WEBHOOK_LEADS', 'https://hooks.slack.com/services/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'),
+            'bugs' => env('SLACK_WEBHOOK_BUGS', 'https://hooks.slack.com/services/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'),
+        ],
     ],
 
     'stripe' => [

@@ -3,13 +3,17 @@
 namespace App\Actions\Auth;
 
 use App\Models\User;
+use App\Services\SlackNotificationService;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 
 class CreateUserFromProvider
 {
+    public function __construct(
+        protected SlackNotificationService $slack
+    ) {}
+
     /**
      * Create or retrieve a user from a social provider.
      */
@@ -27,13 +31,9 @@ class CreateUserFromProvider
                 'has_set_password' => false,
             ]);
 
-            try {
-                Http::post('https://hooks.slack.com/services/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', [
-                    'text' => "🎉 Nouvel Utilisateur (Via {$provider}) !\n\n👤 *Nom:* {$user->name}\n📧 *Email:* {$user->email}",
-                ]);
-            } catch (\Exception $e) {
-                // Silently fail
-            }
+            $this->slack->notifyUser(
+                "🎉 Nouvel Utilisateur (Via {$provider}) !\n\n👤 *Nom:* {$user->name}\n📧 *Email:* {$user->email}"
+            );
         }
 
         return $user;

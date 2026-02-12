@@ -9,11 +9,11 @@ use App\Actions\Billing\SyncStripeBilling;
 use App\Http\Requests\Billing\StoreBillingRequest;
 use App\Http\Requests\Billing\SwapSubscriptionRequest;
 use App\Models\Team;
+use App\Services\SlackNotificationService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Laravel\Cashier\Checkout;
 
 /**
@@ -24,6 +24,7 @@ class SubscriptionController extends Controller
     public function __construct(
         protected SyncStripeBilling $syncStripeBilling,
         protected SwapSubscription $swapSubscription,
+        protected SlackNotificationService $slack,
     ) {}
 
     /**
@@ -156,14 +157,10 @@ class SubscriptionController extends Controller
         $user = $request->user();
 
         // Send cancellation notification to Slack instead of email
-        try {
-            $contactAllowedStr = isset($validated['contact_allowed']) ? 'Oui' : 'Non';
-            Http::post('https://hooks.slack.com/services/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', [
-                'text' => "💔 Abonnement Annulé...\n\n👤 *Client:* {$user->name} ({$user->email})\n🏢 *Équipe:* {$team->name}\n📝 *Raison:* {$validated['reason']}\n📞 *Contact autorisé:* {$contactAllowedStr}",
-            ]);
-        } catch (\Exception $e) {
-            // Silently fail
-        }
+        $contactAllowedStr = isset($validated['contact_allowed']) ? 'Oui' : 'Non';
+        $this->slack->notifyBilling(
+            "💔 Abonnement Annulé...\n\n👤 *Client:* {$user->name} ({$user->email})\n🏢 *Équipe:* {$team->name}\n📝 *Raison:* {$validated['reason']}\n📞 *Contact autorisé:* {$contactAllowedStr}"
+        );
 
         return $team->redirectToBillingPortal(route('subscription.show', $team));
     }
