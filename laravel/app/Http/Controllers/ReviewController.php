@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Jobs\FetchGoogleReviews;
 use App\Models\TeamRating;
 use App\Services\GooglePlacesService;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,22 @@ class ReviewController extends Controller
         $googleData = null;
 
         if ($team && $team->subscribed() && $team->settings->google_place_id) {
-            $googleData = $this->googlePlacesService->getPlaceReviews($team->settings->google_place_id);
+            // Try to get from cache
+            $googleData = $this->googlePlacesService->getCachedReviews($team->settings->google_place_id);
+
+            // If not in cache, dispatch job to fetch it
+            if (! $googleData) {
+                FetchGoogleReviews::dispatch($team->settings->google_place_id);
+                // Return empty/loading state for now
+                $googleData = [
+                    'reviews' => [],
+                    'rating' => null,
+                    'total_reviews' => null,
+                    'name' => null,
+                    'error' => null,
+                    'loading' => true, // Flag to show "Loading..." in UI
+                ];
+            }
         }
 
         return view('reviews.stats', [
@@ -46,15 +62,21 @@ class ReviewController extends Controller
 
         $googleData = null;
         $error = null;
+        $isLoading = false;
 
         if ($team && $team->subscribed()) {
             if (! $this->googlePlacesService->isConfigured()) {
                 $error = 'service_not_configured';
             } elseif ($team->settings->google_place_id) {
-                $googleData = $this->googlePlacesService->getPlaceReviews(
-                    $team->settings->google_place_id
-                );
-                $error = $googleData['error'] ?? null;
+                // Try to get from cache
+                $googleData = $this->googlePlacesService->getCachedReviews($team->settings->google_place_id);
+
+                if (! $googleData) {
+                    FetchGoogleReviews::dispatch($team->settings->google_place_id);
+                    $isLoading = true;
+                } else {
+                    $error = $googleData['error'] ?? null;
+                }
             } else {
                 $error = 'google_place_id_missing';
             }
@@ -64,6 +86,7 @@ class ReviewController extends Controller
             'team' => $team,
             'googleData' => $googleData,
             'error' => $error,
+            'isLoading' => $isLoading,
         ]);
     }
 

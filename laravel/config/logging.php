@@ -1,5 +1,6 @@
 <?php
 
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -71,6 +72,7 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
+            'formatter' => env('LOG_FORMATTER', null),
         ],
 
         'slack' => [
@@ -125,6 +127,16 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        // Nouvelle configuration production avec JSON
+        'production' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/laravel-json.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
+            'formatter' => JsonFormatter::class,
+            'replace_placeholders' => true,
         ],
 
     ],

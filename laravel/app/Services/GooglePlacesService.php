@@ -26,12 +26,25 @@ class GooglePlacesService
     }
 
     /**
-     * Get reviews for a Google Place using Places API (New).
+     * Get cached reviews for a Google Place.
+     *
+     * @param  string  $placeId  Google Place ID
+     * @return array|null
+     */
+    public function getCachedReviews(string $placeId): ?array
+    {
+        $cacheKey = "google_reviews_{$placeId}";
+        return Cache::get($cacheKey);
+    }
+
+    /**
+     * Force fetch reviews from Google Places API and cache them.
+     * This method is intended to be called from a background job.
      *
      * @param  string  $placeId  Google Place ID
      * @return array{reviews: array, rating: float|null, total_reviews: int|null, error: string|null}
      */
-    public function getPlaceReviews(string $placeId): array
+    public function fetchAndCacheReviews(string $placeId): array
     {
         if (! $this->isConfigured()) {
             return [
@@ -45,16 +58,11 @@ class GooglePlacesService
 
         $cacheKey = "google_reviews_{$placeId}";
 
-        // Return cached data if available
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-
         try {
             // Places API (New) endpoint
             $url = "https://places.googleapis.com/v1/places/{$placeId}";
 
-            Log::info('Google Places API Request', ['endpoint' => 'place_details', 'place_id' => $placeId]);
+            Log::info('Google Places API Request (Job)', ['endpoint' => 'place_details', 'place_id' => $placeId]);
 
             $response = Http::timeout(10)
                 ->withHeaders([
@@ -64,7 +72,7 @@ class GooglePlacesService
                     'Referer' => config('app.url'),
                 ])->get($url);
 
-            Log::info('Google Places API Response', ['status' => $response->status()]);
+            Log::info('Google Places API Response (Job)', ['status' => $response->status()]);
 
             if (! $response->successful()) {
                 $errorBody = $response->json();
@@ -102,12 +110,13 @@ class GooglePlacesService
                 'error' => null,
             ];
 
-            // Only cache successful results
+            // Cache successful results
             Cache::put($cacheKey, $result, now()->addWeek());
 
             return $result;
 
         } catch (\Exception $e) {
+            Log::error('Google Places Service Error', ['message' => $e->getMessage()]);
             return [
                 'reviews' => [],
                 'rating' => null,
