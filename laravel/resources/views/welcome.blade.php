@@ -14,13 +14,13 @@
 
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
+      "@@context": "https://schema.org",
+      "@@type": "SoftwareApplication",
       "name": "{{ config('app.name') }}",
       "operatingSystem": "Web",
       "applicationCategory": "BusinessApplication",
       "offers": {
-        "@type": "Offer",
+        "@@type": "Offer",
         "price": "49.00",
         "priceCurrency": "EUR"
       }

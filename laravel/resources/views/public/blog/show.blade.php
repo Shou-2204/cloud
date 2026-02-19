@@ -2,12 +2,12 @@
     @push('structured-data')
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
+      "@@context": "https://schema.org",
+      "@@type": "BlogPosting",
       "headline": "{{ $data['title'] }}",
       "datePublished": "2026-02-03",
       "author": {
-        "@type": "Organization",
+        "@@type": "Organization",
         "name": "{{ config('app.name') }}"
       }
     }
