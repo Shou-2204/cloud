@@ -40,6 +40,12 @@ return [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
+        'webhooks' => [
+            'default' => env('SLACK_WEBHOOK_URL'),
+            'bugs' => env('SLACK_WEBHOOK_URL_BUGS'),
+            'leads' => env('SLACK_WEBHOOK_URL_LEADS'),
+            'users' => env('SLACK_WEBHOOK_URL_USERS'),
+        ],
     ],
 
     'stripe' => [

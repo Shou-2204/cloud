@@ -158,11 +158,15 @@ class SubscriptionController extends Controller
         // Send cancellation notification to Slack instead of email
         try {
             $contactAllowedStr = isset($validated['contact_allowed']) ? 'Oui' : 'Non';
-            Http::post('https://hooks.slack.com/services/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', [
-                'text' => "💔 Abonnement Annulé...\n\n👤 *Client:* {$user->name} ({$user->email})\n🏢 *Équipe:* {$team->name}\n📝 *Raison:* {$validated['reason']}\n📞 *Contact autorisé:* {$contactAllowedStr}",
-            ]);
+            $slackWebhook = config('services.slack.webhooks.default');
+            
+            if ($slackWebhook) {
+                Http::post($slackWebhook, [
+                    'text' => "💔 Abonnement Annulé...\n\n👤 *Client:* {$user->name} ({$user->email})\n🏢 *Équipe:* {$team->name}\n📝 *Raison:* {$validated['reason']}\n📞 *Contact autorisé:* {$contactAllowedStr}",
+                ]);
+            }
         } catch (\Exception $e) {
-            // Silently fail
+            \Illuminate\Support\Facades\Log::error('Slack Notification Failed on Cancel: ' . $e->getMessage());
         }
 
         return $team->redirectToBillingPortal(route('subscription.show', $team));

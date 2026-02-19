@@ -1,4 +1,19 @@
 <x-guest-layout :seo="$seo">
+    @push('structured-data')
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "{{ $data['title'] }}",
+      "datePublished": "2026-02-03",
+      "author": {
+        "@type": "Organization",
+        "name": "{{ config('app.name') }}"
+      }
+    }
+    </script>
+    @endpush
+
     <div class="pt-24 pb-12 bg-white dark:bg-gray-900 min-h-screen">
         <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <x-breadcrumb :crumbs="$seo['breadcrumbs']" />

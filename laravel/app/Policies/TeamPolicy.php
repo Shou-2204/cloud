@@ -85,4 +85,12 @@ class TeamPolicy
     {
         return $user->ownsTeam($team);
     }
+
+    /**
+     * Determine whether the user can view private feedbacks.
+     */
+    public function viewPrivateFeedbacks(User $user, Team $team): bool
+    {
+        return $user->id === $team->owner_id || $user->hasTeamRole($team, 'admin');
+    }
 }

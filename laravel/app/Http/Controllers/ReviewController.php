@@ -103,12 +103,7 @@ class ReviewController extends Controller
              return redirect()->route('onboarding');
         }
 
-        // Security Check: Only Owner or Admin (role based)
-        // Assuming 'admin' role exists in pivot or user is owner.
-        // Jetstream default roles are 'admin', 'editor', etc.
-        if ($user->id !== $team->owner_id && ! $user->hasTeamRole($team, 'admin')) {
-             abort(403, 'Unauthorized access to private feedback.');
-        }
+        $this->authorize('viewPrivateFeedbacks', $team);
 
         $feedbacks = collect();
 

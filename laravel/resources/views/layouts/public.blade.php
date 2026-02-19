@@ -21,12 +21,14 @@
     <meta property="og:url" content="{{ $seoUrl }}">
     <meta property="og:title" content="{{ $seoTitle }}">
     <meta property="og:description" content="{{ $seoDescription }}">
+    <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
 
     {{-- Twitter --}}
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ $seoUrl }}">
     <meta property="twitter:title" content="{{ $seoTitle }}">
     <meta property="twitter:description" content="{{ $seoDescription }}">
+    <meta property="twitter:image" content="{{ asset('images/og-image.jpg') }}">
 
     @stack('structured-data')
 
@@ -87,10 +89,7 @@
             {{ $slot }}
         </main>
 
-        <!-- No Footer -->
-        <div class="py-6 text-center text-xs text-gray-500 underline">
-            <a href="{{ route('welcome') }}">Propulsé par {{ config('app.name') }}</a>
-        </div>
+        <x-public-footer />
     </div>
 
     <x-cookie-banner />

@@ -44,11 +44,14 @@ class BugReport extends Component
 
 
         try {
-            Http::post('https://hooks.slack.com/services/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', [
-                'text' => "🐛 Nouveau Rapport de Bug !\n\n👤 *Utilisateur:* {$user->name} ({$user->email})\n🔗 *URL:* {$currentUrl}\n📝 *Description:*\n{$this->description}",
-            ]);
+            $slackWebhook = config('services.slack.webhooks.bugs');
+            if ($slackWebhook) {
+                Http::post($slackWebhook, [
+                    'text' => "🐛 Nouveau Rapport de Bug !\n\n👤 *Utilisateur:* {$user->name} ({$user->email})\n🔗 *URL:* {$currentUrl}\n📝 *Description:*\n{$this->description}",
+                ]);
+            }
         } catch (\Exception $e) {
-            // Silently fail
+            \Illuminate\Support\Facades\Log::error('Slack Notification Failed on Bug Report: ' . $e->getMessage());
         }
 
         $this->submitted = true;

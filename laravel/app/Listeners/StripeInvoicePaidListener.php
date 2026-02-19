@@ -50,11 +50,14 @@ class StripeInvoicePaidListener
         $team->owner->notify(new SubscriptionChanged($planName, 'subscribed'));
 
         try {
-            Http::post('https://hooks.slack.com/services/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', [
-                'text' => "💰 Nouvel Abonnement !\n\n👤 *Client:* {$team->owner->name} ({$team->owner->email})\n🏢 *Équipe:* {$team->name}\n🏷 *Plan:* {$planName}",
-            ]);
+            $slackWebhook = config('services.slack.webhooks.default');
+            if ($slackWebhook) {
+                Http::post($slackWebhook, [
+                    'text' => "💰 Nouvel Abonnement !\n\n👤 *Client:* {$team->owner->name} ({$team->owner->email})\n🏢 *Équipe:* {$team->name}\n🏷 *Plan:* {$planName}",
+                ]);
+            }
         } catch (\Exception $e) {
-            // Silently fail
+            \Illuminate\Support\Facades\Log::error('Slack Notification Failed on New Subscription: ' . $e->getMessage());
         }
     }
 

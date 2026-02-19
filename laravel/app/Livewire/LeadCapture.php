@@ -69,11 +69,14 @@ class LeadCapture extends Component
                 $message .= "\n👤 *Nom:* {$this->name}\n📞 *Téléphone:* {$this->phone}";
             }
 
-            Http::post('https://hooks.slack.com/services/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', [
-                'text' => $message,
-            ]);
+            $slackWebhook = config('services.slack.webhooks.leads');
+            if ($slackWebhook) {
+                Http::post($slackWebhook, [
+                    'text' => $message,
+                ]);
+            }
         } catch (\Exception $e) {
-            // Silently fail to avoid disrupting user experience
+            \Illuminate\Support\Facades\Log::error('Slack Notification Failed on Lead Capture: ' . $e->getMessage());
         }
 
         $this->submitted = true;

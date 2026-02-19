@@ -44,16 +44,16 @@ class GenerateSitemap extends Command
             ->add(Url::create('/faq')->setPriority(0.8)->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY))
             ->add(Url::create('/blog')->setPriority(0.8)->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
 
-        // Add Dynamic Solutions (In real app, fetch from DB)
-        $solutions = ['restaurants', 'retail', 'services'];
+        // Add Dynamic Solutions (Fetch from config)
+        $solutions = array_keys(config('marketing.solutions', []));
         foreach ($solutions as $slug) {
             $sitemap->add(Url::create("/solutions/{$slug}")
                 ->setPriority(0.8)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
         }
 
-        // Add Dynamic Blog Posts (In real app, fetch from DB)
-        $posts = ['boost-seo-2026', 'customer-retention'];
+        // Add Dynamic Blog Posts (Fetch from config)
+        $posts = array_keys(config('marketing.blog_posts', []));
         foreach ($posts as $slug) {
             $sitemap->add(Url::create("/blog/{$slug}")
                 ->setPriority(0.6)

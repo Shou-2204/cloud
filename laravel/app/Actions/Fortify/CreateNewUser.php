@@ -36,11 +36,14 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         try {
-            Http::post('https://hooks.slack.com/services/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', [
-                'text' => "🎉 Nouvel Utilisateur Inscrit !\n\n👤 *Nom:* {$user->name}\n📧 *Email:* {$user->email}",
-            ]);
+            $slackWebhook = config('services.slack.webhooks.users');
+            if ($slackWebhook) {
+                Http::post($slackWebhook, [
+                    'text' => "🎉 Nouvel Utilisateur Inscrit !\n\n👤 *Nom:* {$user->name}\n📧 *Email:* {$user->email}",
+                ]);
+            }
         } catch (\Exception $e) {
-            // Silently fail
+            \Illuminate\Support\Facades\Log::error('Slack Notification Failed on Regular User Registration: ' . $e->getMessage());
         }
 
         return $user;
