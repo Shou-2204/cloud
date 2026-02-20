@@ -14,6 +14,7 @@ class JoinLoyaltyProgram extends Component
     public $name = '';
     public $email = '';
     public $phone = '';
+    public $date_of_birth = null;
     public $opt_in_loyalty = true;
     public $opt_in_marketing = false;
 
@@ -24,7 +25,8 @@ class JoinLoyaltyProgram extends Component
         'name' => 'required|string|max:255',
         'email' => 'nullable|email|max:255',
         'phone' => ['nullable', 'phone:FR'],
-        'opt_in_loyalty' => 'accepted', // Must accept loyalty terms
+        'date_of_birth' => 'nullable|date|before:today',
+        'opt_in_loyalty' => 'accepted',
         'opt_in_marketing' => 'boolean',
     ];
 
@@ -62,6 +64,7 @@ class JoinLoyaltyProgram extends Component
                 'name' => $this->name,
                 'phone' => $normalizedPhone ?: $contact->phone,
                 'email' => $this->email ?: $contact->email,
+                'date_of_birth' => $this->date_of_birth ?: $contact->date_of_birth,
                 'opt_in_loyalty' => $this->opt_in_loyalty,
                 'opt_in_marketing' => $this->opt_in_marketing,
             ]);
@@ -71,6 +74,7 @@ class JoinLoyaltyProgram extends Component
                 'name' => $this->name,
                 'email' => $this->email,
                 'phone' => $normalizedPhone,
+                'date_of_birth' => $this->date_of_birth,
                 'opt_in_loyalty' => $this->opt_in_loyalty,
                 'opt_in_marketing' => $this->opt_in_marketing,
             ]);

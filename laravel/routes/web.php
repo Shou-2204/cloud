@@ -157,6 +157,13 @@ Route::middleware([
         Route::get('/private', [App\Http\Controllers\ReviewController::class, 'privateFeedbacks'])->name('private');
     });
 
+    // Loyalty Dashboard
+    Route::get('/loyalty', App\Livewire\LoyaltyDashboard::class)->name('loyalty.index');
+    Route::get('/loyalty/search', App\Livewire\LoyaltySearch::class)->name('loyalty.search');
+
+    // Campaigns Dashboard
+    Route::get('/campaigns', App\Livewire\CampaignsDashboard::class)->name('campaigns.index');
+
     // Notifications Interaction
     Route::get('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'read'])->name('notifications.read');
 });

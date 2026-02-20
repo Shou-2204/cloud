@@ -89,6 +89,13 @@
                     <x-input-error for="email" class="mt-2" />
                 </div>
             </div>
+
+            <div class="group">
+                <x-label for="date_of_birth" value="{{ __('Date de naissance') }}" class="text-gray-700 dark:text-gray-300 font-semibold mb-1 group-focus-within:text-emerald-600 transition-colors" />
+                <x-input id="date_of_birth" type="date" class="mt-1 block w-full py-3 px-4 rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring focus:ring-emerald-500/20 transition-all bg-white dark:bg-gray-900/50" wire:model="date_of_birth" max="{{ now()->format('Y-m-d') }}" />
+                <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Facultatif — pour recevoir des offres d'anniversaire</p>
+                <x-input-error for="date_of_birth" class="mt-2" />
+            </div>
             
             <div class="bg-blue-50/50 dark:bg-blue-900/10 rounded-xl p-3 border border-blue-100 dark:border-blue-800/30">
                 <p class="flex items-center text-xs text-blue-800 dark:text-blue-300">

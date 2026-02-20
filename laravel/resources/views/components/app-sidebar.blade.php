@@ -253,6 +253,38 @@
                                 </a>
                             </div>
                         </div>
+
+                        {{-- Fidélité Section --}}
+                        <a href="{{ route('loyalty.index') }}" wire:navigate
+                            class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative mt-1 {{ request()->routeIs('loyalty.*') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
+                            :class="sidebarCollapsed ? 'justify-center' : ''">
+                            <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('loyalty.*') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            <span class="ml-3 whitespace-nowrap transition-opacity duration-200 font-medium"
+                                x-show="!sidebarCollapsed">Fidélité</span>
+                            <div x-show="sidebarCollapsed"
+                                class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                                Fidélité</div>
+                        </a>
+
+                        {{-- Campagne Marketing Section --}}
+                        <a href="{{ route('campaigns.index') }}" wire:navigate
+                            class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-colors group relative mt-1 {{ request()->routeIs('campaigns.*') ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-emerald-dark-600 hover:text-gray-900 dark:hover:text-white' }}"
+                            :class="sidebarCollapsed ? 'justify-center' : ''">
+                            <svg class="h-6 w-6 flex-shrink-0 transition-colors {{ request()->routeIs('campaigns.*') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                            </svg>
+                            <span class="ml-3 whitespace-nowrap transition-opacity duration-200 font-medium"
+                                x-show="!sidebarCollapsed">Campagnes</span>
+                            <div x-show="sidebarCollapsed"
+                                class="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                                Campagnes</div>
+                        </a>
                     @else
                         <a href="{{ route('subscription.index') }}" wire:navigate
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-xl text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 group relative"
