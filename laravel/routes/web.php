@@ -76,6 +76,7 @@ Route::get('/invite/{code}', [InviteController::class, 'redirect'])->name('invit
 // Public Organisation Profile (Business Card)
 Route::get('/p/{team:public_uuid}', [App\Http\Controllers\PublicProfileController::class, 'show'])->name('profile.public');
 Route::get('/p/{team:public_uuid}/survey', [App\Http\Controllers\PublicProfileController::class, 'review'])->name('profile.survey');
+Route::get('/p/{team:public_uuid}/loyalty', [App\Http\Controllers\PublicProfileController::class, 'loyalty'])->name('profile.loyalty');
 
 // Sales Conditions (Legacy Redirect or Keep as is?)
 // Keeping for backward compatibility if needed, else we rely on /legal/terms

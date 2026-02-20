@@ -154,7 +154,7 @@
                 </div>
                 <div class="col-span-1">
                     <x-label for="phone" value="{{ __('Téléphone') }}" />
-                    <x-input id="phone" type="text" class="mt-1 block w-full" wire:model="state.phone" />
+                    <x-phone-input id="team-phone" wireModel="state.phone" :initialValue="$state['phone'] ?? ''" />
                     <x-input-error for="state.phone" class="mt-2" />
                 </div>
             </div>

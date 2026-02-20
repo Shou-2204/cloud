@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Helpers\PhoneHelper;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
@@ -26,7 +27,7 @@ class LeadCapture extends Component
 
         if ($this->withDetails) {
             $rules['name'] = ['nullable', 'string', 'max:255'];
-            $rules['phone'] = ['nullable', 'string', 'max:255'];
+            $rules['phone'] = ['nullable', 'phone:FR'];
         }
 
         return $rules;
@@ -55,7 +56,7 @@ class LeadCapture extends Component
         \App\Models\Lead::create([
             'email' => $this->email,
             'name' => $this->name,
-            'phone' => $this->phone,
+            'phone' => PhoneHelper::toE164($this->phone),
             'source' => 'lead_capture_form',
             'utm_source' => $utmSource,
             'utm_medium' => $utmMedium,

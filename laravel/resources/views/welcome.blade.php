@@ -87,6 +87,15 @@
                 border: 1px solid rgba(255, 255, 255, 0.1);
             }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@26.5.1/build/css/intlTelInput.css">
+    <style>
+        .iti { width: 100%; }
+        .iti__tel-input { padding-left: 52px !important; }
+        .dark .iti__dropdown-content { background-color: rgb(17, 24, 39); border-color: rgb(55, 65, 81); }
+        .dark .iti__search-input { background-color: rgb(17, 24, 39); color: rgb(209, 213, 219); border-color: rgb(55, 65, 81); }
+        .dark .iti__country.iti__highlight { background-color: rgb(31, 41, 55); }
+        .dark .iti__country-name, .dark .iti__dial-code { color: rgb(209, 213, 219); }
+    </style>
 
 </head>
 
@@ -409,6 +418,7 @@
     </main>
     <x-public-footer />
     <x-cookie-banner />
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@26.5.1/build/js/intlTelInputWithUtils.min.js"></script>
 
 </body>
 

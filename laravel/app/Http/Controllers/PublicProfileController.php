@@ -54,4 +54,21 @@ class PublicProfileController extends Controller
             'team' => $team,
         ]);
     }
+    /**
+     * Display the loyalty program signup form.
+     */
+    public function loyalty(Request $request, Team $team)
+    {
+        if (! $team->subscribed()) {
+            return redirect(config('app.url'));
+        }
+
+        if (! $team->settings->loyalty_enabled) {
+            return redirect()->route('profile.public', $team->public_uuid);
+        }
+
+        return view('public.loyalty', [
+            'team' => $team,
+        ]);
+    }
 }

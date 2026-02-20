@@ -147,4 +147,11 @@ class Team extends JetstreamTeam
             'country' => $this->billingDetail->billing_country,
         ];
     }
+    /**
+     * Get the CRM contacts associated with the team.
+     */
+    public function crmContacts()
+    {
+        return $this->hasMany(CrmContact::class);
+    }
 }

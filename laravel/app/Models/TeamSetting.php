@@ -15,6 +15,7 @@ class TeamSetting extends Model
         'digest_frequency',
         'feedback_email',
         'reviews_enabled',
+        'loyalty_enabled',
         'review_positive_message',
         'review_negative_message',
         'google_review_url',
@@ -24,6 +25,7 @@ class TeamSetting extends Model
 
     protected $casts = [
         'reviews_enabled' => 'boolean',
+        'loyalty_enabled' => 'boolean',
         'google_business_data' => 'array',
     ];
 

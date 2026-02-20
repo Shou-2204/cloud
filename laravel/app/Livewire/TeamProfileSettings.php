@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Helpers\PhoneHelper;
+
 use App\Models\Team;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
@@ -46,7 +48,7 @@ class TeamProfileSettings extends Component
         $validated = $this->validate([
             'state.tagline' => ['nullable', 'string', 'max:255'],
             'state.bio' => ['nullable', 'string', 'max:1000'],
-            'state.phone' => ['nullable', 'string', 'max:20'],
+            'state.phone' => ['nullable', 'phone:FR'],
             'state.email_public' => ['nullable', 'email', 'max:255'],
             'state.website' => ['nullable', 'url', 'max:255'],
             'state.address' => ['nullable', 'string', 'max:500'],
@@ -76,6 +78,11 @@ class TeamProfileSettings extends Component
             $this->team->profile()->updateOrCreate([], [
                 'cover_image_path' => $this->cover->storePublicly('team-covers', ['disk' => 'cloud_public']),
             ]);
+        }
+
+        // Normalize phone to E.164 before saving
+        if (isset($validated['state']['phone'])) {
+            $validated['state']['phone'] = PhoneHelper::toE164($validated['state']['phone']);
         }
 
         // Profile Updates

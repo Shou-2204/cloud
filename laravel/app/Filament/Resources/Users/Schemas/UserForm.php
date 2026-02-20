@@ -22,6 +22,7 @@ class UserForm
                 TextInput::make('phone')
                     ->label('Numéro de téléphone')
                     ->tel()
+                    ->rules(['nullable', 'phone:FR'])
                     ->maxLength(20),
                 DateTimePicker::make('email_verified_at'),
                 TextInput::make('password')

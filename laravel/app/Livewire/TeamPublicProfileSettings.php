@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Helpers\PhoneHelper;
+
 use App\Models\Team;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
@@ -36,7 +38,7 @@ class TeamPublicProfileSettings extends Component
         Gate::forUser($this->team->owner)->authorize('update', $this->team);
 
         $validated = $this->validate([
-            'state.phone' => ['nullable', 'string', 'max:20'],
+            'state.phone' => ['nullable', 'phone:FR'],
             'state.email_public' => ['nullable', 'email', 'max:255'],
             'state.website' => ['nullable', 'url', 'max:255'],
             'state.address' => ['nullable', 'string', 'max:500'],
@@ -46,6 +48,11 @@ class TeamPublicProfileSettings extends Component
             'state.social_linkedin' => ['nullable', 'url', 'max:255'],
             'state.social_twitter' => ['nullable', 'url', 'max:255'],
         ]);
+
+        // Normalize phone to E.164 before saving
+        if (isset($validated['state']['phone'])) {
+            $validated['state']['phone'] = PhoneHelper::toE164($validated['state']['phone']);
+        }
 
         // Profile Updates
         $this->team->profile()->updateOrCreate([], Arr::only($validated['state'], [

@@ -29,6 +29,7 @@ class TeamSettingsController extends Controller
             'general' => 'Informations générales',
             'public-profile' => 'Profil public',
             'reviews' => 'Gestion des avis',
+            'loyalty' => 'Fidélité',
             'members' => 'Membres',
         ];
 

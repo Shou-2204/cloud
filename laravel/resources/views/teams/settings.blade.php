@@ -31,6 +31,8 @@
                     <livewire:team-public-profile-settings :team="$team" />
                 @elseif($activeTab === 'reviews')
                     <livewire:team-review-settings :team="$team" />
+                @elseif($activeTab === 'loyalty')
+                    <livewire:team-loyalty-settings :team="$team" />
                 @elseif($activeTab === 'members')
                     <div class="mt-10 sm:mt-0">
                         @if (Gate::check('addTeamMember', $team))

@@ -17,6 +17,8 @@
 
     @livewireStyles
 
+    @stack('styles')
+
     {{-- Script Anti-Flash (S'exécute avant le chargement du body) --}}
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -92,6 +94,8 @@
     @endauth
 
     @stack('modals')
+
+    @stack('scripts')
 
     @livewireScripts
 </body>

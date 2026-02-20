@@ -39,6 +39,7 @@ class LeadResource extends Resource
                 TextInput::make('phone')
                     ->label('Téléphone')
                     ->tel()
+                    ->rules(['nullable', 'phone:FR'])
                     ->maxLength(255),
                 TextInput::make('status')
                     ->required()

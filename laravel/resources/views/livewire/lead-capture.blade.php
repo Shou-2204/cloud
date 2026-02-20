@@ -25,22 +25,21 @@
             <div class="flex flex-col gap-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <input wire:model.live="name" type="text" placeholder="Votre Nom"
+                        <input wire:model.blur="name" type="text" placeholder="Votre Nom"
                             class="w-full px-6 py-4 text-base rounded-xl border-2 border-gray-200 dark:border-emerald-dark-400 bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all outline-none @error('name') border-red-500 dark:border-red-500 @enderror">
                         @error('name')
                             <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <input wire:model.live="phone" type="tel" placeholder="Votre Téléphone"
-                            class="w-full px-6 py-4 text-base rounded-xl border-2 border-gray-200 dark:border-emerald-dark-400 bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all outline-none @error('phone') border-red-500 dark:border-red-500 @enderror">
+                        <x-phone-input id="lead-phone" wireModel="phone" :initialValue="$phone" placeholder="Votre Téléphone" size="lg" />
                         @error('phone')
                             <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
                 <div>
-                    <input wire:model.live="email" type="email" placeholder="votre@email.com"
+                    <input wire:model.blur="email" type="email" placeholder="votre@email.com"
                         class="w-full px-6 py-4 text-base rounded-xl border-2 border-gray-200 dark:border-emerald-dark-400 bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all outline-none @error('email') border-red-500 dark:border-red-500 @enderror">
                     @error('email')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -54,7 +53,7 @@
         @else
             <div class="flex flex-col sm:flex-row gap-3">
                 <div class="flex-1">
-                    <input wire:model.live="email" type="email" placeholder="votre@email.com"
+                    <input wire:model.blur="email" type="email" placeholder="votre@email.com"
                         class="w-full px-6 py-4 text-base rounded-xl border-2 border-gray-200 dark:border-emerald-dark-400 bg-white dark:bg-emerald-dark-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all outline-none @error('email') border-red-500 dark:border-red-500 @enderror">
                     @error('email')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>

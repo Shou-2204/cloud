@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Helpers\PhoneHelper;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
@@ -21,7 +22,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'phone' => ['nullable', 'string', 'max:20'],
+            'phone' => [
+                'nullable',
+                'phone:FR',
+                Rule::unique('users', 'phone')->ignore($user->id),
+            ],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ], [
             // --- Messages personnalisés ---
@@ -40,7 +45,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->forceFill([
                 'name' => $input['name'],
                 'email' => $input['email'],
-                'phone' => $input['phone'] ?? null,
+                'phone' => PhoneHelper::toE164($input['phone'] ?? null),
             ])->save();
         }
     }
@@ -55,7 +60,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         $user->forceFill([
             'name' => $input['name'],
             'email' => $input['email'],
-            'phone' => $input['phone'] ?? null,
+            'phone' => PhoneHelper::toE164($input['phone'] ?? null),
             'email_verified_at' => null,
         ])->save();
 

@@ -41,6 +41,8 @@
 
     @livewireStyles
 
+    @stack('styles')
+
     {{-- Script Anti-Flash --}}
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia(
@@ -89,8 +91,10 @@
             {{ $slot }}
         </main>
 
-        @if((isset($hideFooter) && $hideFooter) || (isset($attributes) && $attributes->get('hideFooter')))
-            <div class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        @if((isset($removeFooter) && $removeFooter) || (isset($attributes) && $attributes->get('removeFooter')))
+            <!-- No footer -->
+        @elseif((isset($hideFooter) && $hideFooter) || (isset($attributes) && $attributes->get('hideFooter')))
+            <div class="py-6 text-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-800">
                 Propulsé par <a href="{{ config('app.url') }}" target="_blank" class="font-semibold text-emerald-600 hover:text-emerald-500 transition">{{ config('app.name') }}</a>
             </div>
         @else
@@ -99,6 +103,8 @@
     </div>
 
     <x-cookie-banner />
+
+    @stack('scripts')
 
     @livewireScripts
 </body>
