@@ -45,6 +45,7 @@ return [
             'bugs' => env('SLACK_WEBHOOK_URL_BUGS'),
             'leads' => env('SLACK_WEBHOOK_URL_LEADS'),
             'users' => env('SLACK_WEBHOOK_URL_USERS'),
+            'subscriptions' => env('SLACK_WEBHOOK_URL_SUBSCRIPTIONS'),
         ],
     ],
 

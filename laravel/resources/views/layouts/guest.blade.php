@@ -116,7 +116,7 @@
         <main class="flex-grow">
             {{ $slot }}
         </main>
-        <x-app-footer />
+        <x-public-footer />
     </div>
 
     <x-cookie-banner />

@@ -404,23 +404,10 @@
         </div>
 
         <!-- FOOTER -->
-        <div class="max-w-7xl mx-auto px-6 w-full mt-20 text-center border-t border-gray-200 dark:border-gray-800 pt-8">
-            <div
-                class="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400 dark:text-gray-500">
-                <span>&copy; {{ date('Y') }} {{ config('app.name') }}. Tous droits réservés.</span>
-                <div class="flex gap-4">
-                    <a href="{{ route('terms.show') }}"
-                        class="hover:text-emerald-600 dark:hover:text-emerald-400 transition">CGU</a>
-                    <a href="{{ route('policy.show') }}"
-                        class="hover:text-emerald-600 dark:hover:text-emerald-400 transition">Confidentialité</a>
-                    <a href="{{ route('sales.show') }}"
-                        class="hover:text-emerald-600 dark:hover:text-emerald-400 transition">CGV</a>
-                </div>
-            </div>
-        </div>
+       
 
     </main>
-
+    <x-public-footer />
     <x-cookie-banner />
 
 </body>

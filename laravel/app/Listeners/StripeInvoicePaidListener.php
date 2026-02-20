@@ -50,7 +50,7 @@ class StripeInvoicePaidListener
         $team->owner->notify(new SubscriptionChanged($planName, 'subscribed'));
 
         try {
-            $slackWebhook = config('services.slack.webhooks.default');
+            $slackWebhook = config('services.slack.webhooks.subscriptions');
             if ($slackWebhook) {
                 Http::post($slackWebhook, [
                     'text' => "💰 Nouvel Abonnement !\n\n👤 *Client:* {$team->owner->name} ({$team->owner->email})\n🏢 *Équipe:* {$team->name}\n🏷 *Plan:* {$planName}",
