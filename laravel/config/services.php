@@ -83,4 +83,10 @@ return [
         'api_key' => env('SHLINK_API_KEY'),
     ],
 
+    'social' => [
+        'youtube' => env('YOUTUBE_URL'),
+        'whatsapp' => env('WHATSAPP_URL'),
+        'linkedin' => env('LINKEDIN_URL'),
+    ],
+
 ];

@@ -6,3 +6,4 @@ laravel/.env.save
 /public/sitemap.xml
 /public/robots.txt
 laravel/public/robots.txt
+laravel/.env.example
