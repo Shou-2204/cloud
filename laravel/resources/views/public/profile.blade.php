@@ -1,4 +1,4 @@
-<x-public-layout>
+<x-public-layout hideFooter="true">
     @push('structured-data')
     <script type="application/ld+json">
     {
@@ -202,7 +202,7 @@
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-white">
                                     <a href="mailto:{{ $team->profile->email_public }}"
-                                        class="hover:text-emerald-500 transition">{{ $team->profile->email_public }}</a>
+                                        class="hover:text-emerald-500 transition break-all">{{ $team->profile->email_public }}</a>
                                 </dd>
                             </div>
                         @endif
@@ -220,7 +220,7 @@
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Site Web</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-white">
                                     <a href="{{ $team->profile->website }}" target="_blank" rel="noopener"
-                                        class="text-emerald-600 hover:text-emerald-500 transition">{{ $team->profile->website }}</a>
+                                        class="text-emerald-600 hover:text-emerald-500 transition break-all">{{ $team->profile->website }}</a>
                                 </dd>
                             </div>
                         @endif

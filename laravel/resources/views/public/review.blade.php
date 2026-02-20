@@ -1,4 +1,4 @@
-<x-public-layout :seo="['title' => 'Enquête de satisfaction - ' . $team->name, 'description' => 'Votre avis compte pour ' . $team->name]">
+<x-public-layout hideFooter="true" :seo="['title' => 'Enquête de satisfaction - ' . $team->name, 'description' => 'Votre avis compte pour ' . $team->name]">
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-4">
 
         <!-- Header -->

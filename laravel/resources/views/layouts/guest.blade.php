@@ -77,7 +77,7 @@
 
 </head>
 
-<body class="font-sans antialiased text-gray-900 dark:text-gray-100" x-data="{ 
+<body class="font-sans antialiased text-gray-900 dark:text-gray-100 overflow-x-hidden" x-data="{ 
             theme: localStorage.getItem('theme') || 'light',
             sidebarOpen: false,
             init() {

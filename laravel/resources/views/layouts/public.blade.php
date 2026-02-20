@@ -52,7 +52,7 @@
     </script>
 </head>
 
-<body class="font-sans antialiased text-gray-900 dark:text-gray-100" x-data="{ 
+<body class="font-sans antialiased text-gray-900 dark:text-gray-100 overflow-x-hidden" x-data="{ 
             theme: localStorage.getItem('theme') || 'light',
             init() {
                 this.applyTheme(this.theme);
@@ -89,7 +89,13 @@
             {{ $slot }}
         </main>
 
-        <x-public-footer />
+        @if((isset($hideFooter) && $hideFooter) || (isset($attributes) && $attributes->get('hideFooter')))
+            <div class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                Propulsé par <a href="{{ config('app.url') }}" target="_blank" class="font-semibold text-emerald-600 hover:text-emerald-500 transition">{{ config('app.name') }}</a>
+            </div>
+        @else
+            <x-public-footer />
+        @endif
     </div>
 
     <x-cookie-banner />
