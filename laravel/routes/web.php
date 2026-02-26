@@ -160,6 +160,7 @@ Route::middleware([
     // Loyalty Dashboard
     Route::get('/loyalty', App\Livewire\LoyaltyDashboard::class)->name('loyalty.index');
     Route::get('/loyalty/search', App\Livewire\LoyaltySearch::class)->name('loyalty.search');
+    Route::get('/loyalty/new_customer', App\Livewire\LoyaltyAddClient::class)->name('loyalty.add-client');
 
     // Campaigns Dashboard
     Route::get('/campaigns', App\Livewire\CampaignsDashboard::class)->name('campaigns.index');

@@ -195,34 +195,84 @@
                                 <x-input-error for="pointsToAdd" class="mt-2" />
                             @endif
 
-                            {{-- Progress / Available Rewards section --}}
-                            @if(count($rewards) > 0)
+                            {{-- Progress toward next reward --}}
+                            @if($progress && $progress['next_reward'])
+                                @php $next = $progress['next_reward']; @endphp
                                 <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
-                                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Récompenses disponibles</h4>
-                                    <div class="space-y-2">
-                                        @foreach($rewards as $reward)
-                                            @php
-                                                $canClaim = $selectedContact->loyalty_points >= $reward->points_required;
-                                            @endphp
-                                            <div class="flex items-center justify-between p-2 rounded {{ $canClaim ? 'bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800' : 'opacity-50 grayscale' }}">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="w-10 h-10 rounded-full {{ $canClaim ? 'bg-orange-200 text-orange-700 outline outline-2 outline-offset-1 outline-orange-300' : 'bg-gray-200 text-gray-500' }} flex items-center justify-center text-xl shadow-sm">
-                                                        {{ ['gift'=>'🎁','star'=>'⭐','coffee'=>'☕','ticket'=>'🎫','percent'=>'🏷️','cake'=>'🎂','burger'=>'🍔','pizza'=>'🍕','drink'=>'🥤','icecream'=>'🍦','scissors'=>'✂️','massage'=>'💆','car'=>'🚗','bag'=>'👜','money'=>'💸'][$reward->icon ?? 'gift'] ?? '🎁' }}
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Prochaine récompense</h4>
+                                        <span class="text-xs font-bold {{ $next['can_claim'] ? 'text-orange-600' : 'text-gray-400' }}">{{ $next['progress_percent'] }}%</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-2xl">{{ $next['emoji'] }}</span>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-bold text-gray-800 dark:text-white">{{ $next['name'] }}</p>
+                                            <p class="text-xs {{ $next['can_claim'] ? 'text-orange-600 font-bold' : 'text-gray-400' }}">
+                                                @if($next['can_claim'])
+                                                    🎉 Disponible !
+                                                @else
+                                                    Encore {{ $next['points_remaining'] }} {{ $progress['unit_label'] }}
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {{-- Visual progress bar --}}
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                                        <div class="h-2.5 rounded-full transition-all duration-500 {{ $next['can_claim'] ? 'bg-orange-500' : 'bg-emerald-500' }}" style="width: {{ $next['progress_percent'] }}%"></div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- All rewards with individual progress --}}
+                            @if($progress && $progress['all_rewards']->count() > 0)
+                                <div class="mt-5 pt-4 border-t border-gray-100 dark:border-gray-700">
+                                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Toutes les récompenses</h4>
+                                    <div class="space-y-2" x-data="{ confirmRewardId: null, confirmRewardName: '' }">
+                                        @foreach($progress['all_rewards'] as $rw)
+                                            <div class="flex items-center justify-between p-2 rounded {{ $rw['can_claim'] ? 'bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800' : '' }}">
+                                                <div class="flex items-center gap-3 flex-1 min-w-0">
+                                                    <div class="w-10 h-10 rounded-full {{ $rw['can_claim'] ? 'bg-orange-200 text-orange-700 outline outline-2 outline-offset-1 outline-orange-300' : 'bg-gray-200 text-gray-500' }} flex items-center justify-center text-xl shadow-sm flex-shrink-0">
+                                                        {{ $rw['emoji'] }}
                                                     </div>
-                                                    <div>
-                                                        <span class="text-sm font-bold {{ $canClaim ? 'text-orange-900 dark:text-orange-300' : 'text-gray-500' }} block">{{ $reward->name }}</span>
-                                                        <span class="text-xs {{ $canClaim ? 'text-orange-700 dark:text-orange-400' : 'text-gray-400' }} font-medium">{{ $reward->points_required }} pt(s)</span>
+                                                    <div class="flex-1 min-w-0">
+                                                        <div class="flex items-center justify-between">
+                                                            <span class="text-sm font-bold {{ $rw['can_claim'] ? 'text-orange-900 dark:text-orange-300' : 'text-gray-500' }} truncate">{{ $rw['name'] }}</span>
+                                                            <span class="text-xs {{ $rw['can_claim'] ? 'text-orange-700 dark:text-orange-400' : 'text-gray-400' }} font-medium ml-2 flex-shrink-0">{{ $rw['points_required'] }} pt(s)</span>
+                                                        </div>
+                                                        {{-- Mini progress bar per reward --}}
+                                                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-1">
+                                                            <div class="h-1.5 rounded-full transition-all duration-500 {{ $rw['can_claim'] ? 'bg-orange-400' : 'bg-emerald-400' }}" style="width: {{ $rw['progress_percent'] }}%"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                @if($canClaim)
-                                                    <button wire:click="consumeReward({{ $reward->id }})" class="text-xs bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-full uppercase tracking-wide font-bold transition-colors shadow-sm disabled:opacity-50" wire:loading.attr="disabled">
+                                                @if($rw['can_claim'])
+                                                    <button @click="confirmRewardId = {{ $rw['id'] }}; confirmRewardName = '{{ addslashes($rw['name']) }}'" class="ml-3 text-xs bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-full uppercase tracking-wide font-bold transition-colors shadow-sm disabled:opacity-50 flex-shrink-0" wire:loading.attr="disabled">
                                                         Consommer
                                                     </button>
                                                 @else
-                                                    <span class="text-xs font-semibold text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">Encore {{ $reward->points_required - $selectedContact->loyalty_points }}</span>
+                                                    <span class="ml-3 text-xs font-semibold text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded flex-shrink-0">-{{ $rw['points_remaining'] }}</span>
                                                 @endif
                                             </div>
                                         @endforeach
+
+                                        {{-- Consume confirmation modal --}}
+                                        <div x-show="confirmRewardId !== null" x-transition style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" @click.self="confirmRewardId = null">
+                                            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4">
+                                                <div class="text-center mb-4">
+                                                    <div class="mx-auto w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center mb-3">
+                                                        <svg class="w-7 h-7 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.072 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+                                                    </div>
+                                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Consommer la récompense ?</h3>
+                                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                                        Voulez-vous consommer <strong x-text="confirmRewardName"></strong> pour ce client ? Les points seront déduits immédiatement.
+                                                    </p>
+                                                </div>
+                                                <div class="flex gap-3">
+                                                    <button @click="confirmRewardId = null" class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-medium text-sm transition-colors">Annuler</button>
+                                                    <button @click="$wire.consumeReward(confirmRewardId); confirmRewardId = null" class="flex-1 px-4 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold text-sm transition-colors shadow-sm">Oui, consommer</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             @endif

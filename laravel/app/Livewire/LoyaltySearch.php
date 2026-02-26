@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Helpers\PhoneHelper;
 use App\Models\CrmContact;
 use App\Models\LoyaltyRedemption;
+use App\Services\LoyaltyProgressService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -249,9 +250,21 @@ class LoyaltySearch extends Component
 
     public function render()
     {
+        $rewards = $this->rewards;
+        $progress = null;
+
+        if ($this->selectedContact && $this->teamLoyaltyProgram) {
+            $progress = LoyaltyProgressService::getProgress(
+                $this->selectedContact,
+                $this->teamLoyaltyProgram,
+                $rewards
+            );
+        }
+
         return view('livewire.loyalty-search', [
             'teamLoyaltyProgram' => $this->teamLoyaltyProgram,
-            'rewards' => $this->rewards,
+            'rewards' => $rewards,
+            'progress' => $progress,
         ])->layout('layouts.app');
     }
 }

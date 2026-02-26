@@ -53,6 +53,7 @@
                 </div>
             </div>
         </div>
+    @else
         @if($isMagicLink)
             <div class="text-center mb-8 border-b border-gray-100 dark:border-gray-700/50 pb-6 relative">
                 <h3 class="text-2xl leading-none font-bold text-gray-900 dark:text-white">Votre espace Fidélité</h3>

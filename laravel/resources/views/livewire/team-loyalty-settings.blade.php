@@ -89,7 +89,12 @@
                         <div class="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mt-4">
                             <div class="flex justify-between items-center mb-6">
                                 <div>
-                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Paliers de récompenses</h3>
+                                    <div class="flex items-center gap-3">
+                                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Paliers de récompenses</h3>
+                                        <span class="px-2 py-0.5 text-xs font-bold rounded-full {{ count($this->rewards) >= 10 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' }}">
+                                            {{ count($this->rewards) }}/10
+                                        </span>
+                                    </div>
                                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                         Programme actuel: 
                                         <strong class="{{ $state['loyalty_program_type'] === 'visits' ? 'text-emerald-600' : 'text-purple-600' }}">
