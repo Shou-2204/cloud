@@ -30,9 +30,32 @@ class JoinLoyaltyProgram extends Component
         'opt_in_marketing' => 'boolean',
     ];
 
+    public ?string $contactUuid = null;
+    public bool $isMagicLink = false;
+
     public function mount(Team $team)
     {
         $this->team = $team;
+        
+        // Vérifier si c'est un magic link signé
+        if (request()->hasValidSignature() && request()->has('contact')) {
+            $this->isMagicLink = true;
+            $this->contactUuid = request()->query('contact');
+            
+            // Pré-remplir les infos si le client existe
+            $contact = CrmContact::where('team_id', $this->team->id)
+                ->where('id', $this->contactUuid)
+                ->first();
+                
+            if ($contact) {
+                $this->name = $contact->name;
+                $this->email = $contact->email;
+                $this->phone = $contact->phone;
+                $this->date_of_birth = $contact->date_of_birth ? \Carbon\Carbon::parse($contact->date_of_birth)->format('Y-m-d') : null;
+                $this->opt_in_loyalty = (bool) $contact->opt_in_loyalty;
+                $this->opt_in_marketing = (bool) $contact->opt_in_marketing;
+            }
+        }
     }
 
     public function submit()
@@ -47,38 +70,57 @@ class JoinLoyaltyProgram extends Component
         // Normalize phone to E.164
         $normalizedPhone = PhoneHelper::toE164($this->phone);
 
-        // Upsert by either email or phone depending on what's available
-        $contact = null;
-        if (!empty($this->email)) {
-            $contact = CrmContact::where('team_id', $this->team->id)->where('email', $this->email)->first();
+        // Si on est en mode "Magic Link" validé
+        if ($this->isMagicLink && $this->contactUuid) {
+            $contact = CrmContact::where('team_id', $this->team->id)->where('id', $this->contactUuid)->first();
+            
+            if ($contact) {
+                $contact->update([
+                    'name' => $this->name,
+                    'phone' => $normalizedPhone,
+                    'email' => $this->email,
+                    'date_of_birth' => $this->date_of_birth,
+                    'opt_in_loyalty' => $this->opt_in_loyalty,
+                    'opt_in_marketing' => $this->opt_in_marketing,
+                ]);
+                $this->successMessage = 'returning';
+                return;
+            }
         }
+
+        // --- Logique d'inscription classique (Non Magic Link) ---
         
-        if (!$contact && !empty($normalizedPhone)) {
-            $contact = CrmContact::where('team_id', $this->team->id)->where('phone', $normalizedPhone)->first();
+        // On vérifie si le client existe déjà
+        $existingContact = null;
+        if (!empty($this->email)) {
+            $existingContact = CrmContact::where('team_id', $this->team->id)->where('email', $this->email)->first();
+        }
+        if (!$existingContact && !empty($normalizedPhone)) {
+            $existingContact = CrmContact::where('team_id', $this->team->id)->where('phone', $normalizedPhone)->first();
         }
 
-        $this->successMessage = $contact ? 'returning' : 'new';
-
-        if ($contact) {
-            $contact->update([
-                'name' => $this->name,
-                'phone' => $normalizedPhone ?: $contact->phone,
-                'email' => $this->email ?: $contact->email,
-                'date_of_birth' => $this->date_of_birth ?: $contact->date_of_birth,
-                'opt_in_loyalty' => $this->opt_in_loyalty,
-                'opt_in_marketing' => $this->opt_in_marketing,
-            ]);
-        } else {
-            CrmContact::create([
-                'team_id' => $this->team->id,
-                'name' => $this->name,
-                'email' => $this->email,
-                'phone' => $normalizedPhone,
-                'date_of_birth' => $this->date_of_birth,
-                'opt_in_loyalty' => $this->opt_in_loyalty,
-                'opt_in_marketing' => $this->opt_in_marketing,
-            ]);
+        if ($existingContact) {
+            // Blocage strict de la modification via le formulaire public
+            $this->addError('contact', 'Ce contact existe déjà. Veuillez demander un lien de mise à jour à votre commerçant.');
+            return;
         }
+
+        // Création du nouveau client
+        $contact = CrmContact::create([
+            'team_id' => $this->team->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'phone' => $normalizedPhone,
+            'date_of_birth' => $this->date_of_birth,
+            'opt_in_loyalty' => $this->opt_in_loyalty,
+            'opt_in_marketing' => $this->opt_in_marketing,
+        ]);
+        
+        // Génération du token pour le nouveau client
+        $service = new \App\Services\GeneratePassTokenService();
+        $service->assignToken($contact);
+
+        $this->successMessage = 'new';
     }
 
     public function render()

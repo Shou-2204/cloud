@@ -60,6 +60,29 @@ class LoyaltySearch extends Component
             ->get();
     }
 
+    public function copyMagicLink()
+    {
+        if (!$this->selectedContact) {
+            return;
+        }
+
+        $team = \App\Models\Team::find($this->selectedContact->team_id);
+        
+        $magicLink = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+            'profile.loyalty',
+            now()->addHours(24),
+            ['team' => $team->public_uuid, 'contact' => $this->selectedContact->id]
+        );
+
+        $shlinkService = app(\App\Services\ShlinkService::class);
+        // Shorten the URL and set it to expire in 24 hours
+        $shortUrl = $shlinkService->createShortUrl($magicLink, ['magic-link', 'loyalty'], now()->addHours(24));
+
+        $finalUrl = $shortUrl ?? $magicLink;
+
+        $this->dispatch('magic-link-generated', url: $finalUrl);
+    }
+
     public function render()
     {
         return view('livewire.loyalty-search')->layout('layouts.app');
