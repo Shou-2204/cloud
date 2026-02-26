@@ -186,7 +186,7 @@
                                 <div class="flex flex-col sm:flex-row gap-3">
                                     <div class="flex-1">
                                         <x-label for="add_points" value="Points à ajouter (selon le montant de l'achat)" class="sr-only" />
-                                        <x-input id="add_points" type="number" min="1" wire:model="pointsToAdd" placeholder="Montant/Points..." class="w-full py-2.5 rounded-xl border-gray-200" />
+                                        <x-input id="add_points" type="number" inputmode="numeric" pattern="[0-9]*" min="1" wire:model="pointsToAdd" placeholder="Montant/Points..." class="w-full py-2.5 rounded-xl border-gray-200" />
                                     </div>
                                     <button wire:click="addPoints" class="w-full sm:w-auto px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl shadow-sm font-medium transition-colors whitespace-nowrap disabled:opacity-50" wire:loading.attr="disabled" wire:target="addPoints">
                                         Ajouter des points
