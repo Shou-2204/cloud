@@ -1,15 +1,14 @@
-<x-form-section submit="updateGeneralInformation">
-    <x-slot name="title">
-        {{ __('Identité Visuelle') }}
-    </x-slot>
+<div class="max-w-4xl mx-auto">
+    <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('Identité Visuelle') }}</h2>
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            {{ __('Configurez les éléments visuels de votre organisation (Logo, Couverture, Bio) qui apparaitront sur votre profil public.') }}
+        </p>
+    </div>
 
-    <x-slot name="description">
-        {{ __('Configurez les éléments visuels de votre organisation (Logo, Couverture, Bio) qui apparaitront sur votre profil public.') }}
-    </x-slot>
-
-    <x-slot name="form">
-        <!-- Branding -->
-        <div class="col-span-6">
+    <form wire:submit="updateGeneralInformation" class="bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 sm:rounded-2xl overflow-hidden">
+        <div class="p-6 sm:p-8 space-y-6">
+            <!-- Branding -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <!-- Logo -->
@@ -101,37 +100,37 @@
                     <x-input-error for="cover" class="mt-2" />
                 </div>
             </div>
+
+            <div>
+                <x-label for="name">{{ __('Nom de l\'organisation') }}</x-label>
+                <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" :disabled="! Gate::check('update', $team)" />
+                <x-input-error for="state.name" class="mt-2" />
+            </div>
+
+            <div>
+                <x-label for="tagline" value="{{ __('Slogan / Accroche') }}" />
+                <x-input id="tagline" type="text" class="mt-1 block w-full" wire:model="state.tagline"
+                    placeholder="Ex: Les meilleurs burgers de Paris" />
+                <x-input-error for="state.tagline" class="mt-2" />
+            </div>
+
+            <div>
+                <x-label for="bio" value="{{ __('Présentation (Bio)') }}" />
+                <textarea id="bio" wire:model="state.bio" rows="4"
+                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm"
+                    placeholder="Racontez votre histoire..."></textarea>
+                <x-input-error for="state.bio" class="mt-2" />
+            </div>
         </div>
 
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="name">{{ __('Nom de l\'organisation') }}</x-label>
-            <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" :disabled="! Gate::check('update', $team)" />
-            <x-input-error for="state.name" class="mt-2" />
+        <div class="flex items-center justify-end px-6 py-4 bg-gray-50 dark:bg-gray-800/50 text-right sm:px-8 border-t border-gray-100 dark:border-gray-700">
+            <x-action-message class="me-3" on="saved">
+                {{ __('Sauvegardé.') }}
+            </x-action-message>
+
+            <x-button wire:loading.attr="disabled" wire:target="photo, cover">
+                {{ __('Enregistrer') }}
+            </x-button>
         </div>
-
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="tagline" value="{{ __('Slogan / Accroche') }}" />
-            <x-input id="tagline" type="text" class="mt-1 block w-full" wire:model="state.tagline"
-                placeholder="Ex: Les meilleurs burgers de Paris" />
-            <x-input-error for="state.tagline" class="mt-2" />
-        </div>
-
-        <div class="col-span-6">
-            <x-label for="bio" value="{{ __('Présentation (Bio)') }}" />
-            <textarea id="bio" wire:model="state.bio" rows="4"
-                class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm"
-                placeholder="Racontez votre histoire..."></textarea>
-            <x-input-error for="state.bio" class="mt-2" />
-        </div>
-    </x-slot>
-
-    <x-slot name="actions">
-        <x-action-message class="me-3" on="saved">
-            {{ __('Sauvegardé.') }}
-        </x-action-message>
-
-        <x-button wire:loading.attr="disabled" wire:target="photo, cover">
-            {{ __('Enregistrer') }}
-        </x-button>
-    </x-slot>
-</x-form-section>
+    </form>
+</div>

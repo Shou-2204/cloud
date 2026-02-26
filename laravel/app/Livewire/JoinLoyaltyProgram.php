@@ -17,6 +17,7 @@ class JoinLoyaltyProgram extends Component
     public $date_of_birth = null;
     public $opt_in_loyalty = true;
     public $opt_in_marketing = false;
+    public $loyalty_points = 0;
 
     /** @var string|false 'new'|'returning'|false */
     public $successMessage = false;
@@ -54,6 +55,7 @@ class JoinLoyaltyProgram extends Component
                 $this->date_of_birth = $contact->date_of_birth ? \Carbon\Carbon::parse($contact->date_of_birth)->format('Y-m-d') : null;
                 $this->opt_in_loyalty = (bool) $contact->opt_in_loyalty;
                 $this->opt_in_marketing = (bool) $contact->opt_in_marketing;
+                $this->loyalty_points = $contact->loyalty_points;
             }
         }
     }

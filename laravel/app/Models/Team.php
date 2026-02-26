@@ -154,4 +154,12 @@ class Team extends JetstreamTeam
     {
         return $this->hasMany(CrmContact::class);
     }
+
+    /**
+     * Get the loyalty rewards defined by the team.
+     */
+    public function loyaltyRewards()
+    {
+        return $this->hasMany(LoyaltyReward::class);
+    }
 }

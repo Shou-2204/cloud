@@ -21,12 +21,18 @@ class TeamSetting extends Model
         'google_review_url',
         'google_place_id',
         'google_business_data',
+        'loyalty_program_type',
+        'last_loyalty_scan_at',
+        'loyalty_points_expire',
+        'loyalty_points_expiration_date',
     ];
 
     protected $casts = [
         'reviews_enabled' => 'boolean',
         'loyalty_enabled' => 'boolean',
+        'loyalty_points_expire' => 'boolean',
         'google_business_data' => 'array',
+        'last_loyalty_scan_at' => 'datetime',
     ];
 
     public function team(): BelongsTo

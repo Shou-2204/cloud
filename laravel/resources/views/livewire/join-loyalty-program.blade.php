@@ -53,13 +53,59 @@
                 </div>
             </div>
         </div>
-    @else
-        <div class="text-center mb-8 border-b border-gray-100 dark:border-gray-700/50 pb-6 relative">
-            <h3 class="text-2xl leading-none font-bold text-gray-900 dark:text-white">Inscription Privilège</h3>
-            <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">
-                Créez votre compte en quelques secondes pour débloquer des cadeaux exclusifs !
-            </p>
-        </div>
+        @if($isMagicLink)
+            <div class="text-center mb-8 border-b border-gray-100 dark:border-gray-700/50 pb-6 relative">
+                <h3 class="text-2xl leading-none font-bold text-gray-900 dark:text-white">Votre espace Fidélité</h3>
+                
+                <div class="mt-4 inline-flex items-center justify-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-2xl border-2 border-orange-200 dark:border-orange-800 animate-[fade-in-up_0.6s_ease-out]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-800 text-orange-600 dark:text-orange-300 flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-xs text-orange-800 dark:text-orange-400 font-medium uppercase tracking-wider">Solde actuel</p>
+                            <p class="text-2xl font-black text-orange-600 dark:text-orange-300">{{ $loyalty_points }} {{ ($team->settings->loyalty_program_type ?? 'points') === 'visits' ? 'visite(s)' : 'point(s)' }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                @php
+                    $rewards = $team->loyaltyRewards()->orderBy('points_required')->get();
+                @endphp
+                @if($rewards->count() > 0)
+                    <div class="mt-6 text-left space-y-2">
+                        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 px-1">Récompenses :</p>
+                        @foreach($rewards as $reward)
+                            @php
+                                $canClaim = $loyalty_points >= $reward->points_required;
+                            @endphp
+                            <div class="flex items-center justify-between p-3 rounded-xl {{ $canClaim ? 'bg-orange-100 dark:bg-orange-900/40 border border-orange-200 dark:border-orange-700' : 'bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700' }}">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full {{ $canClaim ? 'bg-orange-200 text-orange-700' : 'bg-gray-200 text-gray-500' }} flex items-center justify-center font-bold text-xs">
+                                        {{ $reward->points_required }}
+                                    </div>
+                                    <span class="text-sm font-medium {{ $canClaim ? 'text-orange-900 dark:text-orange-300' : 'text-gray-600 dark:text-gray-400' }}">{{ $reward->name }}</span>
+                                </div>
+                                @if($canClaim)
+                                    <span class="text-xs bg-orange-500 text-white px-2 py-1 rounded-full uppercase tracking-wide font-bold">Débloqué</span>
+                                @else
+                                    <span class="text-xs text-gray-500">Encore {{ $reward->points_required - $loyalty_points }}</span>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+                
+                <p class="mt-6 text-xs text-gray-500 dark:text-gray-400 italic">Mettez à jour vos coordonnées ci-dessous si nécessaire.</p>
+            </div>
+        @else
+            <div class="text-center mb-8 border-b border-gray-100 dark:border-gray-700/50 pb-6 relative">
+                <h3 class="text-2xl leading-none font-bold text-gray-900 dark:text-white">Inscription Privilège</h3>
+                <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">
+                    Créez votre compte en quelques secondes pour débloquer des cadeaux exclusifs !
+                </p>
+            </div>
+        @endif
 
         <form wire:submit.prevent="submit" class="space-y-6 text-left relative z-10">
             

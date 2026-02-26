@@ -15,3 +15,6 @@ Schedule::command('ratings:send-digest monthly')->monthlyOn(1, '08:00'); // 1st 
 
 // Sitemap regeneration
 Schedule::command('sitemap:generate')->daily();
+
+// Loyalty Rewards Cleanup (Delete soft-deleted rewards older than a year)
+Schedule::command('loyalty:cleanup-rewards')->daily();

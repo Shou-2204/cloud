@@ -23,12 +23,16 @@ class CrmContact extends Model
         'date_of_birth',
         'opt_in_loyalty',
         'opt_in_marketing',
+        'loyalty_points',
+        'last_scanned_at',
     ];
 
     protected $casts = [
         'opt_in_loyalty' => 'boolean',
         'opt_in_marketing' => 'boolean',
         'date_of_birth' => 'date',
+        'loyalty_points' => 'integer',
+        'last_scanned_at' => 'datetime',
     ];
 
     public function team()
