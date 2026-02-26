@@ -25,6 +25,7 @@ class TeamSetting extends Model
         'last_loyalty_scan_at',
         'loyalty_points_expire',
         'loyalty_points_expiration_date',
+        'loyalty_points_next_expiration',
     ];
 
     protected $casts = [
@@ -33,6 +34,7 @@ class TeamSetting extends Model
         'loyalty_points_expire' => 'boolean',
         'google_business_data' => 'array',
         'last_loyalty_scan_at' => 'datetime',
+        'loyalty_points_next_expiration' => 'date',
     ];
 
     public function team(): BelongsTo

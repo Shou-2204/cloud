@@ -1,5 +1,26 @@
 <div class="animate-[fade-in-up_0.6s_ease-out]">
-    @if ($successMessage)
+    @if ($successMessage === 'expired')
+        <div class="text-center py-8 px-4 sm:px-6 relative overflow-hidden animate-[fade-in_0.5s_ease-out]">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-gray-400/20 rounded-full blur-3xl animate-pulse"></div>
+            <div class="relative z-10">
+                <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full mb-6 shadow-inner ring-4 bg-gray-100 dark:bg-gray-800 ring-gray-50 dark:ring-gray-700">
+                    <svg class="h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl leading-8 font-extrabold text-gray-900 dark:text-white tracking-tight">Lien expiré</h3>
+                <p class="mt-3 text-base text-gray-600 dark:text-gray-300">
+                    Ce lien de mise à jour a déjà été utilisé.
+                    <br><span class="text-gray-500 dark:text-gray-400 font-medium">Demandez un nouveau lien à votre commerçant si nécessaire.</span>
+                </p>
+                <div class="mt-8">
+                    <a href="{{ route('profile.public', $team->public_uuid) }}" class="inline-flex justify-center items-center w-full rounded-xl px-5 py-3.5 text-base font-bold text-white shadow-lg transition-all transform hover:-translate-y-1 bg-gradient-to-r from-gray-600 to-gray-500 hover:from-gray-500 hover:to-gray-400 hover:shadow-xl focus:ring-gray-500">
+                        Retour au profil
+                    </a>
+                </div>
+            </div>
+        </div>
+    @elseif ($successMessage)
         <div class="text-center py-8 px-4 sm:px-6 relative overflow-hidden animate-[fade-in_0.5s_ease-out]">
             {{-- Glow background --}}
             @if ($successMessage === 'new')
@@ -34,11 +55,11 @@
                         Votre carte de fidélité <strong>{{ $team->name }}</strong> est prête.
                         <br><span class="text-emerald-600 dark:text-emerald-400 font-medium">Commencez dès maintenant à cumuler vos avantages !</span>
                     </p>
-                @else
-                    <h3 class="text-2xl leading-8 font-extrabold text-gray-900 dark:text-white tracking-tight">Bienvenue de retour ! 👋</h3>
+                @elseif ($successMessage === 'updated')
+                    <h3 class="text-2xl leading-8 font-extrabold text-gray-900 dark:text-white tracking-tight">Informations mises à jour ✅</h3>
                     <p class="mt-3 text-base text-gray-600 dark:text-gray-300">
-                        Votre carte de fidélité <strong>{{ $team->name }}</strong> est toujours active.
-                        <br><span class="text-blue-600 dark:text-blue-400 font-medium">Vos points et avantages sont intacts !</span>
+                        Vos coordonnées chez <strong>{{ $team->name }}</strong> ont bien été enregistrées.
+                        <br><span class="text-blue-600 dark:text-blue-400 font-medium">Merci pour la mise à jour !</span>
                     </p>
                 @endif
 
@@ -56,48 +77,10 @@
     @else
         @if($isMagicLink)
             <div class="text-center mb-8 border-b border-gray-100 dark:border-gray-700/50 pb-6 relative">
-                <h3 class="text-2xl leading-none font-bold text-gray-900 dark:text-white">Votre espace Fidélité</h3>
-                
-                <div class="mt-4 inline-flex items-center justify-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-2xl border-2 border-orange-200 dark:border-orange-800 animate-[fade-in-up_0.6s_ease-out]">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-800 text-orange-600 dark:text-orange-300 flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        </div>
-                        <div class="text-left">
-                            <p class="text-xs text-orange-800 dark:text-orange-400 font-medium uppercase tracking-wider">Solde actuel</p>
-                            <p class="text-2xl font-black text-orange-600 dark:text-orange-300">{{ $loyalty_points }} {{ ($team->settings->loyalty_program_type ?? 'points') === 'visits' ? 'visite(s)' : 'point(s)' }}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                @php
-                    $rewards = $team->loyaltyRewards()->orderBy('points_required')->get();
-                @endphp
-                @if($rewards->count() > 0)
-                    <div class="mt-6 text-left space-y-2">
-                        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 px-1">Récompenses :</p>
-                        @foreach($rewards as $reward)
-                            @php
-                                $canClaim = $loyalty_points >= $reward->points_required;
-                            @endphp
-                            <div class="flex items-center justify-between p-3 rounded-xl {{ $canClaim ? 'bg-orange-100 dark:bg-orange-900/40 border border-orange-200 dark:border-orange-700' : 'bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700' }}">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full {{ $canClaim ? 'bg-orange-200 text-orange-700' : 'bg-gray-200 text-gray-500' }} flex items-center justify-center font-bold text-xs">
-                                        {{ $reward->points_required }}
-                                    </div>
-                                    <span class="text-sm font-medium {{ $canClaim ? 'text-orange-900 dark:text-orange-300' : 'text-gray-600 dark:text-gray-400' }}">{{ $reward->name }}</span>
-                                </div>
-                                @if($canClaim)
-                                    <span class="text-xs bg-orange-500 text-white px-2 py-1 rounded-full uppercase tracking-wide font-bold">Débloqué</span>
-                                @else
-                                    <span class="text-xs text-gray-500">Encore {{ $reward->points_required - $loyalty_points }}</span>
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-                
-                <p class="mt-6 text-xs text-gray-500 dark:text-gray-400 italic">Mettez à jour vos coordonnées ci-dessous si nécessaire.</p>
+                <h3 class="text-2xl leading-none font-bold text-gray-900 dark:text-white">Mise à jour de vos informations</h3>
+                <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">
+                    Vérifiez et mettez à jour vos coordonnées ci-dessous.
+                </p>
             </div>
         @else
             <div class="text-center mb-8 border-b border-gray-100 dark:border-gray-700/50 pb-6 relative">

@@ -40,7 +40,6 @@ class JoinLoyaltyProgram extends Component
         
         // Vérifier si c'est un magic link signé
         if (request()->hasValidSignature() && request()->has('contact')) {
-            $this->isMagicLink = true;
             $this->contactUuid = request()->query('contact');
             
             // Pré-remplir les infos si le client existe
@@ -49,6 +48,13 @@ class JoinLoyaltyProgram extends Component
                 ->first();
                 
             if ($contact) {
+                // Check if magic link was already used (one-time token)
+                if ($contact->magic_link_used_at) {
+                    $this->successMessage = 'expired';
+                    return;
+                }
+
+                $this->isMagicLink = true;
                 $this->name = $contact->name;
                 $this->email = $contact->email;
                 $this->phone = $contact->phone;
@@ -84,8 +90,9 @@ class JoinLoyaltyProgram extends Component
                     'date_of_birth' => $this->date_of_birth,
                     'opt_in_loyalty' => $this->opt_in_loyalty,
                     'opt_in_marketing' => $this->opt_in_marketing,
+                    'magic_link_used_at' => now(), // Invalidate the magic link (one-time use)
                 ]);
-                $this->successMessage = 'returning';
+                $this->successMessage = 'updated';
                 return;
             }
         }
@@ -102,8 +109,8 @@ class JoinLoyaltyProgram extends Component
         }
 
         if ($existingContact) {
-            // Blocage strict de la modification via le formulaire public
-            $this->addError('contact', 'Ce contact existe déjà. Veuillez demander un lien de mise à jour à votre commerçant.');
+            // Generic message to prevent user enumeration (don't reveal if email/phone exists)
+            $this->addError('contact', 'Un problème est survenu. Si vous êtes déjà inscrit(e), demandez un lien de mise à jour à votre commerçant.');
             return;
         }
 

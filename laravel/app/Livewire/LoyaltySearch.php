@@ -126,7 +126,12 @@ class LoyaltySearch extends Component
 
         $team = Auth::user()->currentTeam;
         Gate::authorize('update', $team);
-        
+
+        // Guard: only allow arbitrary point additions in 'points' mode
+        if ($this->teamLoyaltyProgram !== 'points') {
+            return;
+        }
+
         $this->validate([
             'pointsToAdd' => ['required', 'integer', 'min:1', 'max:100000']
         ]);
@@ -232,6 +237,9 @@ class LoyaltySearch extends Component
         }
 
         $team = \App\Models\Team::find($this->selectedContact->team_id);
+
+        // Reset the one-time flag so this new link works
+        $this->selectedContact->update(['magic_link_used_at' => null]);
         
         $magicLink = \Illuminate\Support\Facades\URL::temporarySignedRoute(
             'profile.loyalty',

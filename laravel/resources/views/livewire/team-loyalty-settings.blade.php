@@ -159,7 +159,7 @@
                                                 <p class="text-xs font-bold text-{{ $state['loyalty_program_type'] === 'visits' ? 'emerald' : 'purple' }}-600">{{ $reward->points_required }} {{ $state['loyalty_program_type'] === 'visits' ? 'visites' : 'points' }}</p>
                                             </div>
                                         </div>
-                                        <button type="button" wire:click="deleteReward({{ $reward->id }})" class="text-red-500 hover:text-red-700 p-2 transition-colors">
+                                        <button type="button" wire:click="confirmDeleteReward({{ $reward->id }})" class="text-red-500 hover:text-red-700 p-2 transition-colors">
                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                         </button>
                                     </div>
@@ -248,6 +248,27 @@
 
             <x-danger-button class="ms-3" wire:click="changeProgramAndResetPoints" wire:loading.attr="disabled">
                 {{ __('Oui, changer de programme et réinitialiser') }}
+            </x-danger-button>
+        </x-slot>
+    </x-confirmation-modal>
+
+    <!-- Confirm Reward Deletion Modal -->
+    <x-confirmation-modal wire:model.live="confirmingRewardDeletion">
+        <x-slot name="title">
+            {{ __('Supprimer cette récompense') }}
+        </x-slot>
+
+        <x-slot name="content">
+            {{ __('Êtes-vous sûr de vouloir supprimer cette récompense ? Cette action est irréversible.') }}
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-secondary-button wire:click="$toggle('confirmingRewardDeletion')" wire:loading.attr="disabled">
+                {{ __('Annuler') }}
+            </x-secondary-button>
+
+            <x-danger-button class="ms-3" wire:click="deleteReward" wire:loading.attr="disabled">
+                {{ __('Oui, supprimer') }}
             </x-danger-button>
         </x-slot>
     </x-confirmation-modal>

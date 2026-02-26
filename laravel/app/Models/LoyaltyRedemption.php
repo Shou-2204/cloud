@@ -11,6 +11,7 @@ class LoyaltyRedemption extends Model
     use HasUuids;
 
     protected $fillable = [
+        'type',
         'team_id',
         'crm_contact_id',
         'loyalty_reward_id',

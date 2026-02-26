@@ -25,6 +25,7 @@ class CrmContact extends Model
         'opt_in_marketing',
         'loyalty_points',
         'last_scanned_at',
+        'magic_link_used_at',
     ];
 
     protected $casts = [
@@ -33,6 +34,7 @@ class CrmContact extends Model
         'date_of_birth' => 'date',
         'loyalty_points' => 'integer',
         'last_scanned_at' => 'datetime',
+        'magic_link_used_at' => 'datetime',
     ];
 
     public function team()

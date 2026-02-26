@@ -12,6 +12,8 @@ class TeamLoyaltySettings extends Component
     public $newReward = ['name' => '', 'points_required' => '', 'icon' => 'gift'];
     public $confirmingProgramChange = false;
     public $newProgramType = null;
+    public $confirmingRewardDeletion = false;
+    public $rewardToDelete = null;
 
     /**
      * Mount the component.
@@ -132,11 +134,21 @@ class TeamLoyaltySettings extends Component
         $this->dispatch('reward-added');
     }
 
-    public function deleteReward($id)
+    public function confirmDeleteReward($id)
     {
-        $reward = \App\Models\LoyaltyReward::where('team_id', $this->team->id)->findOrFail($id);
+        $this->rewardToDelete = $id;
+        $this->confirmingRewardDeletion = true;
+    }
+
+    public function deleteReward()
+    {
+        if (!$this->rewardToDelete) return;
+
+        $reward = \App\Models\LoyaltyReward::where('team_id', $this->team->id)->findOrFail($this->rewardToDelete);
         $reward->delete();
         $this->dispatch('reward-deleted');
+        $this->confirmingRewardDeletion = false;
+        $this->rewardToDelete = null;
     }
 
     public function getRewardsProperty()
