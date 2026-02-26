@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class TeamLoyaltySettings extends Component
@@ -31,6 +32,10 @@ class TeamLoyaltySettings extends Component
 
     public function selectProgramType($type)
     {
+        if (!in_array($type, ['visits', 'points'])) {
+            return;
+        }
+
         if ($this->team->settings && 
             $this->team->settings->loyalty_program_type && 
             $this->team->settings->loyalty_program_type !== $type) {
@@ -46,11 +51,13 @@ class TeamLoyaltySettings extends Component
 
     public function changeProgramAndResetPoints()
     {
-        // Reset customer points
-        $this->team->crmContacts()->update(['loyalty_points' => 0]);
-        
-        // Delete all rewards for the team
-        \App\Models\LoyaltyReward::where('team_id', $this->team->id)->delete();
+        DB::transaction(function () {
+            // Reset customer points
+            $this->team->crmContacts()->update(['loyalty_points' => 0]);
+            
+            // Soft-delete all rewards for the team (using Eloquent to respect SoftDeletes)
+            $this->team->loyaltyRewards->each->delete();
+        });
 
         $this->state['loyalty_program_type'] = $this->newProgramType;
         $this->updateLoyaltySettings();

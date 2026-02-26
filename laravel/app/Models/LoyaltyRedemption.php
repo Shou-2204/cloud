@@ -14,6 +14,7 @@ class LoyaltyRedemption extends Model
         'team_id',
         'crm_contact_id',
         'loyalty_reward_id',
+        'reward_name',
         'points_spent',
     ];
 

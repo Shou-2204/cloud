@@ -18,3 +18,6 @@ Schedule::command('sitemap:generate')->daily();
 
 // Loyalty Rewards Cleanup (Delete soft-deleted rewards older than a year)
 Schedule::command('loyalty:cleanup-rewards')->daily();
+
+// Loyalty Points Expiration (Reset points on configured date)
+Schedule::command('loyalty:expire-points')->dailyAt('00:01');

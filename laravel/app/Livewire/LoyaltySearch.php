@@ -6,6 +6,8 @@ use App\Helpers\PhoneHelper;
 use App\Models\CrmContact;
 use App\Models\LoyaltyRedemption;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
 class LoyaltySearch extends Component
@@ -18,6 +20,15 @@ class LoyaltySearch extends Component
     
     // Pour l'annulation
     public $lastAction = null;
+
+    // Cached values (loaded once in mount/selectContact)
+    public $teamLoyaltyProgram = null;
+
+    public function mount()
+    {
+        $team = Auth::user()->currentTeam;
+        $this->teamLoyaltyProgram = $team->settings->loyalty_program_type ?? null;
+    }
 
     public function updatedSearch()
     {
@@ -78,18 +89,31 @@ class LoyaltySearch extends Component
             ->get();
     }
 
+    public function getRewardsProperty()
+    {
+        return Auth::user()->currentTeam->loyaltyRewards()
+            ->orderBy('points_required')
+            ->get();
+    }
+
     public function recordVisit()
     {
         if (!$this->selectedContact) return;
 
         $team = Auth::user()->currentTeam;
+        Gate::authorize('update', $team);
+
+        DB::transaction(function () use ($team) {
+            // Refresh to get the latest data
+            $this->selectedContact->refresh();
+
+            $this->selectedContact->increment('loyalty_points', 1);
+            $this->selectedContact->update(['last_scanned_at' => now()]);
+            
+            $team->settings->update(['last_loyalty_scan_at' => now()]);
+        });
         
-        // Add 1 point/visit
-        $this->selectedContact->increment('loyalty_points', 1);
-        $this->selectedContact->update(['last_scanned_at' => now()]);
-        
-        $team->settings->update(['last_loyalty_scan_at' => now()]);
-        
+        $this->selectedContact->refresh();
         $this->lastAction = ['type' => 'add', 'amount' => 1];
         
         $this->dispatch('visit-recorded');
@@ -100,17 +124,25 @@ class LoyaltySearch extends Component
         if (!$this->selectedContact || !$this->pointsToAdd) return;
 
         $team = Auth::user()->currentTeam;
+        Gate::authorize('update', $team);
         
         $this->validate([
             'pointsToAdd' => ['required', 'integer', 'min:1', 'max:100000']
         ]);
 
-        $this->selectedContact->increment('loyalty_points', $this->pointsToAdd);
-        $this->selectedContact->update(['last_scanned_at' => now()]);
+        $amount = (int) $this->pointsToAdd;
+
+        DB::transaction(function () use ($team, $amount) {
+            $this->selectedContact->refresh();
+
+            $this->selectedContact->increment('loyalty_points', $amount);
+            $this->selectedContact->update(['last_scanned_at' => now()]);
+            
+            $team->settings->update(['last_loyalty_scan_at' => now()]);
+        });
         
-        $team->settings->update(['last_loyalty_scan_at' => now()]);
-        
-        $this->lastAction = ['type' => 'add', 'amount' => $this->pointsToAdd];
+        $this->selectedContact->refresh();
+        $this->lastAction = ['type' => 'add', 'amount' => $amount];
         
         $this->pointsToAdd = null;
         $this->dispatch('points-added');
@@ -122,22 +154,32 @@ class LoyaltySearch extends Component
             return;
         }
 
-        if ($this->lastAction['type'] === 'add') {
-            $amount = $this->lastAction['amount'];
-            if ($this->selectedContact->loyalty_points >= $amount) {
-                $this->selectedContact->decrement('loyalty_points', $amount);
-            } else {
-                $this->selectedContact->update(['loyalty_points' => 0]);
+        $team = Auth::user()->currentTeam;
+        Gate::authorize('update', $team);
+
+        DB::transaction(function () use ($team) {
+            $this->selectedContact->refresh();
+
+            if ($this->lastAction['type'] === 'add') {
+                $amount = $this->lastAction['amount'];
+                if ($this->selectedContact->loyalty_points >= $amount) {
+                    $this->selectedContact->decrement('loyalty_points', $amount);
+                } else {
+                    $this->selectedContact->update(['loyalty_points' => 0]);
+                }
+            } elseif ($this->lastAction['type'] === 'consume') {
+                $this->selectedContact->increment('loyalty_points', $this->lastAction['amount']);
+                
+                // Delete the tracking record — scoped to team for ownership safety
+                if (isset($this->lastAction['redemption_id'])) {
+                    LoyaltyRedemption::where('id', $this->lastAction['redemption_id'])
+                        ->where('team_id', $team->id)
+                        ->delete();
+                }
             }
-        } elseif ($this->lastAction['type'] === 'consume') {
-            $this->selectedContact->increment('loyalty_points', $this->lastAction['amount']);
-            
-            // Delete the tracking record if it exists
-            if (isset($this->lastAction['redemption_id'])) {
-                LoyaltyRedemption::where('id', $this->lastAction['redemption_id'])->delete();
-            }
-        }
+        });
         
+        $this->selectedContact->refresh();
         $this->lastAction = null;
         $this->dispatch('action-undone');
     }
@@ -147,19 +189,32 @@ class LoyaltySearch extends Component
         if (!$this->selectedContact) return;
         
         $team = Auth::user()->currentTeam;
+        Gate::authorize('update', $team);
+
         $reward = $team->loyaltyRewards()->findOrFail($rewardId);
 
-        if ($this->selectedContact->loyalty_points >= $reward->points_required) {
-            $this->selectedContact->decrement('loyalty_points', $reward->points_required);
+        $redemption = DB::transaction(function () use ($team, $reward) {
+            // Lock the contact row to prevent race conditions (double-click, multiple tabs)
+            $contact = CrmContact::where('id', $this->selectedContact->id)->lockForUpdate()->first();
+
+            if ($contact->loyalty_points < $reward->points_required) {
+                return null; // Not enough points after re-check
+            }
+
+            $contact->decrement('loyalty_points', $reward->points_required);
             
-            // Log the redemption
-            $redemption = LoyaltyRedemption::create([
+            // Log the redemption with denormalized reward name
+            return LoyaltyRedemption::create([
                 'team_id' => $team->id,
-                'crm_contact_id' => $this->selectedContact->id,
+                'crm_contact_id' => $contact->id,
                 'loyalty_reward_id' => $reward->id,
+                'reward_name' => $reward->name,
                 'points_spent' => $reward->points_required,
             ]);
-            
+        });
+
+        if ($redemption) {
+            $this->selectedContact->refresh();
             $this->lastAction = [
                 'type' => 'consume', 
                 'amount' => $reward->points_required,
@@ -195,8 +250,8 @@ class LoyaltySearch extends Component
     public function render()
     {
         return view('livewire.loyalty-search', [
-            'teamLoyaltyProgram' => Auth::user()->currentTeam->settings->loyalty_program_type ?? null,
-            'rewards' => Auth::user()->currentTeam->loyaltyRewards()->orderBy('points_required')->get() ?? collect(),
+            'teamLoyaltyProgram' => $this->teamLoyaltyProgram,
+            'rewards' => $this->rewards,
         ])->layout('layouts.app');
     }
 }
