@@ -162,4 +162,9 @@ class Team extends JetstreamTeam
     {
         return $this->hasMany(LoyaltyReward::class);
     }
+
+    public function walletPassSettings(): HasOne
+    {
+        return $this->hasOne(WalletPassSetting::class)->withDefault();
+    }
 }

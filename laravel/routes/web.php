@@ -57,6 +57,9 @@ Route::name('blog.')->prefix('blog')->group(function () {
     Route::get('/{slug}', [App\Http\Controllers\PublicSiteController::class, 'post'])->name('show');
 });
 
+// Apple Wallet Pass Download
+Route::get('/wallet/pass/{contact}', [\App\Http\Controllers\AppleWalletController::class, 'downloadPass'])->name('wallet.download-pass');
+
 // Features
 Route::get('/features', [App\Http\Controllers\PublicSiteController::class, 'features'])->name('features');
 

@@ -63,6 +63,19 @@
                     </p>
                 @endif
 
+                {{-- Apple Wallet Download Badge (Official Apple SVG) --}}
+                @if($createdContactId)
+                    <div class="mt-6 flex flex-col items-center">
+                        <a href="{{ route('wallet.download-pass', $createdContactId) }}"
+                           class="inline-block transition-transform transform hover:-translate-y-0.5 active:translate-y-0">
+                            <img src="{{ asset('images/wallet/add-to-wallet-badge-fr.svg') }}"
+                                 alt="Ajouter à l'app Cartes Apple"
+                                 style="height: 44px; width: auto;">
+                        </a>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">Ouvrez ce lien depuis votre iPhone pour ajouter la carte.</p>
+                    </div>
+                @endif
+
                 <div class="mt-8">
                     <a href="{{ route('profile.public', $team->public_uuid) }}" class="inline-flex justify-center items-center w-full rounded-xl px-5 py-3.5 text-base font-bold text-white shadow-lg transition-all transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2
                         {{ $successMessage === 'new'

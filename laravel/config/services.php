@@ -98,4 +98,13 @@ return [
         'linkedin' => env('LINKEDIN_URL'),
     ],
 
+    'apple_wallet' => [
+        'cert_path' => env('APPLE_WALLET_CERT_PATH', 'storage/app/appleCertWallet.p12'),
+        'cert_password' => env('APPLE_WALLET_CERT_PASSWORD', ''),
+        'pass_type_identifier' => env('APPLE_WALLET_PASS_TYPE_IDENTIFIER', 'pass.cloud.shouphotobooth.web'),
+        'team_identifier' => env('APPLE_WALLET_TEAM_IDENTIFIER', '5NZKKW832Q'),
+        'push_cert_path' => env('APPLE_WALLET_PUSH_CERT_PATH', 'storage/app/appleCertWallet.pem'),
+        'push_key_path' => env('APPLE_WALLET_PUSH_KEY_PATH', 'storage/app/appleCertWallet.key'),
+    ],
+
 ];

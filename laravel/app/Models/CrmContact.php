@@ -17,6 +17,7 @@ class CrmContact extends Model
     protected $fillable = [
         'team_id',
         'pass_token',
+        'wallet_auth_token',
         'name',
         'email',
         'phone',

@@ -32,6 +32,7 @@ class JoinLoyaltyProgram extends Component
     ];
 
     public ?string $contactUuid = null;
+    public ?string $createdContactId = null;
     public bool $isMagicLink = false;
 
     public function mount(Team $team)
@@ -92,6 +93,7 @@ class JoinLoyaltyProgram extends Component
                     'opt_in_marketing' => $this->opt_in_marketing,
                     'magic_link_used_at' => now(), // Invalidate the magic link (one-time use)
                 ]);
+                $this->createdContactId = $contact->id;
                 $this->successMessage = 'updated';
                 return;
             }
@@ -129,6 +131,7 @@ class JoinLoyaltyProgram extends Component
         $service = new \App\Services\GeneratePassTokenService();
         $service->assignToken($contact);
 
+        $this->createdContactId = $contact->id;
         $this->successMessage = 'new';
     }
 

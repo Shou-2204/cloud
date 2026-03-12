@@ -30,6 +30,7 @@ class TeamSettingsController extends Controller
             'public-profile' => 'Profil public',
             'reviews' => 'Gestion des avis',
             'loyalty' => 'Fidélité',
+            'wallet' => 'Apple Wallet',
             'members' => 'Membres',
         ];
 
