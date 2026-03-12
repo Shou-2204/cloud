@@ -35,6 +35,12 @@ Route::prefix('auth/google')->group(function (): void {
     Route::get('/callback', [GoogleController::class, 'handleGoogleCallback']);
 });
 
+// Apple OAuth
+Route::prefix('auth/apple')->group(function (): void {
+    Route::get('/', [\App\Http\Controllers\AppleController::class, 'redirectToApple'])->name('auth.apple');
+    Route::match(['get', 'post'], '/callback', [\App\Http\Controllers\AppleController::class, 'handleAppleCallback']);
+});
+
 // Magic Link Auth
 Route::post('/login/magic-link', [App\Http\Controllers\Auth\MagicLinkController::class, 'store'])->name('login.magic-link');
 Route::get('/login/magic-link/{user}', [App\Http\Controllers\Auth\MagicLinkController::class, 'verify'])->name('login.magic-link.verify');

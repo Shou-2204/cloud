@@ -25,6 +25,15 @@ return [
         'places_api_key' => env('GOOGLE_PLACES_API_KEY'),
     ],
 
+    'apple' => [
+        'client_id' => trim(env('APPLE_CLIENT_ID', '')),
+        'client_secret' => env('APPLE_CLIENT_SECRET'),
+        'team_id' => trim(env('APPLE_TEAM_ID', '')),
+        'key_id' => trim(env('APPLE_KEY_ID', '')),
+        'private_key' => env('APPLE_PRIVATE_KEY') ? file_get_contents(trim(env('APPLE_PRIVATE_KEY'))) : '',
+        'redirect' => trim(env('APPLE_REDIRECT_URL', '')),
+    ],
+
     'resend' => [
         'key' => env('RESEND_API_KEY'),
     ],

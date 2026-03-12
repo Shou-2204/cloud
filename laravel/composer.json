@@ -10,6 +10,7 @@
         "calebporzio/sushi": "^2.5",
         "endroid/qr-code": "^6.0",
         "filament/filament": "^4.3",
+        "google/apiclient": "^2.19",
         "laravel/cashier": "^16.1",
         "laravel/framework": "^12.0",
         "laravel/horizon": "^5.41",
@@ -24,6 +25,7 @@
         "meilisearch/meilisearch-php": "^1.16",
         "propaganistas/laravel-phone": "^6.0",
         "resend/resend-laravel": "^1.1",
+        "socialiteproviders/apple": "^5.8",
         "spatie/laravel-sitemap": "^7.3"
     },
     "require-dev": {

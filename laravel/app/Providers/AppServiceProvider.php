@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Models\Team;
 use App\Observers\TeamObserver;
 use Illuminate\Support\Facades\Config;
-// use Illuminate\Support\Facades\Event; // Plus besoin de cette façade pour ça
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
@@ -26,8 +26,11 @@ class AppServiceProvider extends ServiceProvider
         // Prevent Lazy Loading & other silent errors in non-prod
         \Illuminate\Database\Eloquent\Model::shouldBeStrict(! $this->app->isProduction());
 
-        // J'AI SUPPRIMÉ LES BLOCS "Event::listen" ICI.
-        // Laravel fait maintenant la liaison automatiquement grâce à l'Event Discovery.
+        // Register Apple Socialite provider
+        Event::listen(
+            \SocialiteProviders\Manager\SocialiteWasCalled::class,
+            [\SocialiteProviders\Apple\AppleExtendSocialite::class, 'handle']
+        );
 
         // Force HTTPS en prod
         if ($this->app->environment('production')) {
