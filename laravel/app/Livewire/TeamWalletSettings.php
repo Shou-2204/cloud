@@ -29,17 +29,20 @@ class TeamWalletSettings extends Component
         $settings = $team->walletPassSettings;
 
         $this->state = [
-            'label_primary' => $settings->label_primary ?? 'VOS POINTS',
-            'label_secondary' => $settings->label_secondary ?? 'CLIENT',
+            'label_primary' => 'VOS POINTS',
+            'label_secondary' => 'TITULAIRE',
             'foreground_color' => $settings->foreground_color ?? '#FFFFFF',
             'background_color' => $settings->background_color ?? '#282828',
             'label_color' => $settings->label_color ?? '#CCCCCC',
-            'logo_text' => $settings->logo_text ?? $team->name,
+            'logo_text' => $settings->logo_text ?? $this->team->name,
+            'latitude' => $settings->latitude,
+            'longitude' => $settings->longitude,
+            'relevant_text' => $settings->relevant_text,
         ];
     }
 
     /**
-     * Save the wallet pass settings (colors + labels).
+     * Save the wallet pass settings (colors + labels + geofencing).
      */
     public function save()
     {
@@ -47,13 +50,19 @@ class TeamWalletSettings extends Component
 
         Gate::forUser($this->team->owner)->authorize('update', $this->team);
 
+        $this->state['label_primary'] = 'VOS POINTS';
+        $this->state['label_secondary'] = 'TITULAIRE';
+
         $validated = $this->validate([
             'state.label_primary' => ['required', 'string', 'max:50'],
             'state.label_secondary' => ['required', 'string', 'max:50'],
-            'state.foreground_color' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'state.background_color' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'state.label_color' => ['nullable', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'state.foreground_color' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{3,6}$/'],
+            'state.background_color' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{3,6}$/'],
+            'state.label_color' => ['nullable', 'string', 'regex:/^#[0-9A-Fa-f]{3,6}$/'],
             'state.logo_text' => ['nullable', 'string', 'max:30'],
+            'state.latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'state.longitude' => ['nullable', 'numeric', 'between:-180,180'],
+            'state.relevant_text' => ['nullable', 'string', 'max:255'],
         ]);
 
         $this->team->walletPassSettings()->updateOrCreate([], $validated['state']);
@@ -150,6 +159,29 @@ class TeamWalletSettings extends Component
     }
 
     /**
+     * Set a predefined color theme.
+     */
+    public function setTheme(string $theme)
+    {
+        Gate::forUser($this->team->owner)->authorize('update', $this->team);
+
+        $themes = [
+            'midnight' => ['bg' => '#000000', 'fg' => '#FFFFFF', 'label' => '#A1A1AA'],
+            'gold'     => ['bg' => '#1A1A1A', 'fg' => '#D4AF37', 'label' => '#C5A028'],
+            'blue'     => ['bg' => '#002B5B', 'fg' => '#FFFFFF', 'label' => '#3CCF4E'],
+            'white'    => ['bg' => '#F8FAFC', 'fg' => '#0F172A', 'label' => '#64748B'],
+            'crimson'  => ['bg' => '#7F1D1D', 'fg' => '#FFFFFF', 'label' => '#FCA5A5'],
+        ];
+
+        if (isset($themes[$theme])) {
+            $this->state['background_color'] = $themes[$theme]['bg'];
+            $this->state['foreground_color'] = $themes[$theme]['fg'];
+            $this->state['label_color'] = $themes[$theme]['label'];
+            $this->save();
+        }
+    }
+
+    /**
      * Reset all settings to defaults.
      */
     public function resetToDefaults()
@@ -158,10 +190,10 @@ class TeamWalletSettings extends Component
 
         $this->state = [
             'label_primary' => 'VOS POINTS',
-            'label_secondary' => 'CLIENT',
+            'label_secondary' => 'TITULAIRE',
             'foreground_color' => '#FFFFFF',
-            'background_color' => '#282828',
-            'label_color' => '#CCCCCC',
+            'background_color' => '#000000',
+            'label_color' => '#A1A1AA',
             'logo_text' => $this->team->name,
         ];
 

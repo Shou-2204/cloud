@@ -21,6 +21,10 @@ class WalletPassSetting extends Model
         'logo_2x_path',
         'strip_path',
         'strip_2x_path',
+        'campaign_message',
+        'latitude',
+        'longitude',
+        'relevant_text',
     ];
 
     public function team(): BelongsTo

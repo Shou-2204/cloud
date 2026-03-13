@@ -173,6 +173,7 @@ Route::middleware([
 
     // Campaigns Dashboard
     Route::get('/campaigns', App\Livewire\CampaignsDashboard::class)->name('campaigns.index');
+    Route::get('/campaigns/wallet', App\Livewire\WalletCampaign::class)->name('campaigns.wallet');
 
     // Notifications Interaction
     Route::get('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'read'])->name('notifications.read');

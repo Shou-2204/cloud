@@ -47,6 +47,27 @@ class ApplePassService
             ->sortByDesc('points_required')
             ->first();
 
+        $labelPrimary = 'VOS POINTS';
+        $labelSecondary = 'TITULAIRE';
+
+        $headerFields = [
+            [
+                'key' => 'holder-name',
+                'label' => $labelSecondary,
+                'value' => $contact->name ?: 'Client',
+            ]
+        ];
+
+        $primaryFields = [
+            [
+                'key' => 'points',
+                'label' => $labelPrimary,
+                'value' => (int)($contact->points ?? 0),
+                'changeMessage' => 'Vous avez maintenant %@ points.',
+            ],
+        ];
+
+        $auxiliaryFields = [];
         if ($nextReward) {
             $remaining = $nextReward->points_required - $currentPoints;
             $unit = ($teamSettings->loyalty_program_type === 'visits') ? 'visites' : 'pts';
@@ -64,13 +85,13 @@ class ApplePassService
             ];
         }
 
-        $backFields = $this->buildBackFields($profile, $teamSettings);
+        $backFields = $this->buildBackFields($profile, $teamSettings, $settings);
 
         $data = [
             'formatVersion' => 1,
-            'passTypeIdentifier' => $config['pass_type_identifier'],
-            'serialNumber' => $contact->id,
-            'teamIdentifier' => $config['team_identifier'],
+            'passTypeIdentifier' => config('services.apple_wallet.pass_type_id'),
+            'serialNumber' => (string)$contact->id,
+            'teamIdentifier' => config('services.apple_wallet.team_id'),
             'groupingIdentifier' => $team->public_uuid,
             'organizationName' => $team->name,
             'description' => 'Carte de fidélité ' . $team->name,
@@ -80,22 +101,8 @@ class ApplePassService
             'webServiceURL' => rtrim(config('app.url'), '/') . '/api',
             'authenticationToken' => $contact->wallet_auth_token,
             'storeCard' => [
-                'headerFields' => [
-                    [
-                        'key' => 'clientName',
-                        'label' => $settings->label_secondary ?? 'CLIENT',
-                        'value' => $contact->name ?: 'Client',
-                    ],
-                ],
-                'primaryFields' => [],
-                'secondaryFields' => [
-                    [
-                        'key' => 'points',
-                        'label' => $settings->label_primary ?? 'VOS POINTS',
-                        'value' => (string)$currentPoints,
-                        'changeMessage' => 'Vous avez maintenant %@ points.',
-                    ],
-                ],
+                'headerFields' => $headerFields,
+                'primaryFields' => $primaryFields,
                 'auxiliaryFields' => $auxiliaryFields,
                 'backFields' => $backFields,
             ],
@@ -105,15 +112,18 @@ class ApplePassService
                 'messageEncoding' => 'iso-8859-1',
                 'altText' => $contact->pass_token,
             ],
-            'barcodes' => [
-                [
-                    'format' => 'PKBarcodeFormatQR',
-                    'message' => $contact->pass_token ?: $contact->id,
-                    'messageEncoding' => 'iso-8859-1',
-                    'altText' => $contact->pass_token,
-                ],
-            ],
         ];
+
+        // Geofencing
+        if (!empty($settings->latitude) && !empty($settings->longitude)) {
+            $data['locations'] = [
+                [
+                    'latitude' => (float)$settings->latitude,
+                    'longitude' => (float)$settings->longitude,
+                    'relevantText' => $settings->relevant_text ?: 'Vous êtes proche de ' . $team->name . ' !',
+                ]
+            ];
+        }
 
         if (!empty($settings->label_color)) {
             $data['labelColor'] = $this->hexToRgb($settings->label_color);
@@ -134,7 +144,7 @@ class ApplePassService
     /**
      * Build the back-of-card fields from team profile and loyalty settings.
      */
-    private function buildBackFields($profile, $teamSettings): array
+    private function buildBackFields($profile, $teamSettings, $settings): array
     {
         $backFields = [];
 
@@ -173,6 +183,16 @@ class ApplePassService
                 'key' => 'pointsExpiry',
                 'label' => 'Expiration',
                 'value' => 'Vos points n\'expirent pas ✨',
+            ];
+        }
+
+        // Campaign Message
+        if (!empty($settings->campaign_message)) {
+            $backFields[] = [
+                'key' => 'campaignMessage',
+                'label' => 'Message actuel',
+                'value' => $settings->campaign_message,
+                'changeMessage' => '%@'
             ];
         }
 

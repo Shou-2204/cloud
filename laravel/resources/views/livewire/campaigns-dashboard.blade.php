@@ -55,6 +55,28 @@
                 </div>
             </div>
 
+            {{-- BOX 3: Campagne Apple Wallet --}}
+            <div class="group bg-white dark:bg-emerald-dark-500 rounded-2xl shadow-lg border border-gray-100 dark:border-emerald-dark-400 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="p-8 flex flex-col items-center text-center h-full">
+                    <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Campagne Apple Wallet</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-xs">
+                        Envoyez une notification avec un message personnalisé qui s'affichera directement sur l'écran verrouillé de vos clients.
+                    </p>
+                    <a href="{{ route('campaigns.wallet') }}"
+                        class="w-full px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-emerald-500/20">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Créer une campagne Wallet
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
