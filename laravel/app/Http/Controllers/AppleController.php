@@ -28,7 +28,6 @@ class AppleController extends Controller
         } catch (\Exception $e) {
             Log::error('Apple Auth Error: ' . $e->getMessage(), [
                 'exception' => $e,
-                'request' => request()->all()
             ]);
             return redirect('/login')->with('error', 'Erreur de connexion Apple.');
         }
