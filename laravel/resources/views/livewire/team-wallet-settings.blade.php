@@ -206,8 +206,10 @@
                         {{-- Icon preview --}}
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg font-bold overflow-hidden"
                             style="background-color: rgba(255,255,255,0.15); color: {{ $state['foreground_color'] }};">
-                            @if($settings?->icon_path)
-                            <img src="{{ Storage::disk('cloud_public')->url($settings->icon_path) }}"
+                            @if($iconFile)
+                            <img src="{{ $iconFile->temporaryUrl() }}" class="w-full h-full object-cover">
+                            @elseif($settings?->icon_path)
+                            <img src="{{ Storage::disk('cloud_public')->url($settings->icon_path) }}?v={{ $settings->updated_at?->timestamp ?? time() }}"
                                 class="w-full h-full object-cover" alt="icon">
                             @else
                             {{ strtoupper(substr($state['logo_text'] ?: $team->name, 0, 1)) }}
@@ -221,55 +223,63 @@
 
                         {{-- Secondary Field (Holder) moved to top-right Header area --}}
                         <div class="text-right">
-                            <p class="text-[9px] uppercase tracking-wider font-bold opacity-60"
+                            <p class="text-[8px] uppercase tracking-wider font-bold opacity-60"
                                 style="color: {{ $state['label_color'] ?? $state['foreground_color'] }};">
                                 {{ $state['label_secondary'] }}
                             </p>
-                            <p class="text-[11px] font-bold" style="color: {{ $state['foreground_color'] }};">
+                            <p class="text-base font-bold" style="color: {{ $state['foreground_color'] }};">
                                 John Doe
                             </p>
                         </div>
                     </div>
 
                     {{-- Strip / Banner area --}}
-                    @if($settings?->strip_path)
-                    <div class="w-full h-24 overflow-hidden">
-                        <img src="{{ Storage::disk('cloud_public')->url($settings->strip_path) }}"
+                    @if($stripFile)
+                    <div class="w-full h-32 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                        <img src="{{ $stripFile->temporaryUrl() }}" class="w-full h-full object-cover" alt="preview">
+                    </div>
+                    @elseif($settings?->strip_path)
+                    <div class="w-full h-32 overflow-hidden">
+                        <img src="{{ Storage::disk('cloud_public')->url($settings->strip_path) }}?v={{ $settings->updated_at?->timestamp ?? time() }}"
                             class="w-full h-full object-cover" alt="strip">
                     </div>
+                    @else
+                    <div class="w-full h-32 bg-gray-100 dark:bg-gray-800/50"></div>
                     @endif
 
-                    {{-- Primary Field --}}
-                    <div class="px-5 py-4">
-                        <p class="text-[10px] uppercase tracking-wider font-bold opacity-70"
-                            style="color: {{ $state['label_color'] ?? $state['foreground_color'] }};">
-                            {{ $state['label_primary'] }}
-                        </p>
-                        <p class="text-4xl font-black mt-0.5" style="color: {{ $state['foreground_color'] }};">
-                            150
-                        </p>
+                    {{-- Points + Reward fields --}}
+                    <div class="px-5 py-6 flex flex-col gap-2 border-t border-white/5">
+                        {{-- Labels Row --}}
+                        <div class="flex items-center justify-between">
+                            <p class="text-[8px] uppercase tracking-wider font-bold opacity-50"
+                                style="color: {{ $state['label_color'] ?? $state['foreground_color'] }};">
+                                {{ $state['label_primary'] }}
+                            </p>
+                            <p class="text-[8px] uppercase tracking-wider font-bold opacity-50"
+                                style="color: {{ $state['label_color'] ?? $state['foreground_color'] }};">
+                                🎁 Récompense
+                            </p>
+                        </div>
+                        {{-- Values Row --}}
+                        <div class="flex items-center justify-between">
+                            <p class="text-base font-bold" style="color: {{ $state['foreground_color'] }};">
+                                150
+                            </p>
+                            <p class="text-base font-bold" style="color: {{ $state['foreground_color'] }};">
+                                Café offert
+                            </p>
+                        </div>
                     </div>
 
 
                     {{-- Barcode Area --}}
-                    <div class="px-5 pb-5 pt-2">
-                        <div class="bg-white rounded-xl p-4 flex items-center justify-center">
-                            <div class="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
-                                <svg class="w-16 h-16 text-gray-700" viewBox="0 0 24 24" fill="currentColor">
-                                    <rect x="3" y="3" width="3" height="3" />
-                                    <rect x="9" y="3" width="3" height="3" />
-                                    <rect x="15" y="3" width="3" height="3" />
-                                    <rect x="3" y="9" width="3" height="3" />
-                                    <rect x="9" y="9" width="3" height="3" />
-                                    <rect x="18" y="9" width="3" height="3" />
-                                    <rect x="3" y="15" width="3" height="3" />
-                                    <rect x="12" y="15" width="3" height="3" />
-                                    <rect x="18" y="15" width="3" height="3" />
-                                    <rect x="6" y="6" width="3" height="3" />
-                                    <rect x="12" y="6" width="3" height="3" />
-                                    <rect x="15" y="12" width="3" height="3" />
-                                </svg>
-                            </div>
+                    <div class="px-5 pb-8 pt-2 flex justify-center">
+                        <div class="w-28 h-28 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                            <svg class="w-20 h-20 text-black" viewBox="0 0 29 29" fill="currentColor"
+                                shape-rendering="crispEdges">
+                                <path
+                                    d="M0 0h7v7H0zM22 0h7v7h-7zM0 22h7v7H0zM2 2h3v3H2zM24 2h3v3h-3zM2 24h3v3H2zM11 0h2v2h-2zM15 0h2v4h-2V0zm4 0h2v2h-2zM8 1h2v2H8zM12 2h2v2h-2zM18 2h2v4h-2zM8 4h2v2H8zM11 4h2v2h-2zm4 4h2v2h-2zM19 4h2v2h-2zM11 7h2v2h-2zM14 7h1v1h-1zM22 8h3v1h-3zm4 0h3v1h-3zM8 9h2v2H8zm3 0h2v2h-2zm4 0h4v2h-4zM24 9h2v2h-2zm3 0h2v2h-2zM0 8h2v1H0zm3 0h4v1H3zm0 2h3v1H3zm4 0h1v1H7zm11 11h2v2h-2zm4 0h2v2h-2zm3 0h2v4h-2zM8 12h2v2H8zm3 0h2v2h-2zm4 0h2v2h-2zm11 1h3v1h-3zM0 14h2v2H0zm3 1h3v1H3zm4 0h1v1H7zm11 1h2v2h-2zm4 0h2v2h-2zm3 1h2v2h-2zM8 16h2v2H8zm3 1h2v2h-2zm4 0h2v2h-2zm11 1h3v1h-3zM0 18h7v1H0zm3 1h3v1H3zM0 20h2v1H0zm3 0h4v1H3zm8 11h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm3 0h2v2h-2zM8 22h2v2H8zm4 0h2v4h-2zm6 0h2v2h-2zm4 0h2v2h-2zm3 0h2v2h-2zM8 24h2v2H8zm11 0h2v2h-2zm3 1h3v1h-3zM0 26h2v1H0zm3 0h4v1H3zm8 0h2v2h-2zm4 0h2v2h-2zm4 1h5v1h-5z" />
+                            </svg>
                         </div>
                     </div>
                 </div>

@@ -119,14 +119,26 @@ class TeamWalletSettings extends Component
         $filename = $type . '.png';
         $path = $this->{$property}->storeAs($folder, $filename, 'cloud_public');
 
-        $this->team->walletPassSettings()->updateOrCreate([], [
-            $column => $path,
-        ]);
+        $updateData = [$column => $path];
+
+        // When uploading icon, also save as logo (same image for both)
+        if ($type === 'icon') {
+            if ($settings->logo_image_path) {
+                $disk->delete($settings->logo_image_path);
+            }
+            $logoPath = $folder . '/logo.png';
+            $disk->copy($path, $logoPath);
+            $updateData['logo_image_path'] = $logoPath;
+        }
+
+        $settings = $this->team->walletPassSettings()->updateOrCreate([], $updateData);
+        $settings->touch(); // Force updated_at refresh for cache-busting preview
 
         $this->{$property} = null;
         $this->team->refresh();
 
         $this->dispatch('image-uploaded');
+        $this->dispatch('saved');
     }
 
     /**
@@ -152,10 +164,12 @@ class TeamWalletSettings extends Component
         if ($settings->{$column}) {
             Storage::disk('cloud_public')->delete($settings->{$column});
             $settings->update([$column => null]);
+            $settings->touch();
         }
 
         $this->team->refresh();
         $this->dispatch('image-removed');
+        $this->dispatch('saved');
     }
 
     /**
