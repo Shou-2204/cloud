@@ -17,92 +17,233 @@ class ApplePassService
      */
     public function generatePass(CrmContact $contact): string
     {
-        $contact->loadMissing('team.walletPassSettings', 'team.profile');
+        $contact->loadMissing('team.walletPassSettings', 'team.profile', 'team.settings', 'team.loyaltyRewards');
 
         $team = $contact->team;
         $settings = $team->walletPassSettings;
+        $profile = $team->profile;
+        $teamSettings = $team->settings;
         $config = config('services.apple_wallet');
 
-        // Ensure wallet_auth_token exists (generated once, never changes)
         if (empty($contact->wallet_auth_token)) {
-            $contact->update([
-                'wallet_auth_token' => bin2hex(random_bytes(16)),
-            ]);
+            $contact->update(['wallet_auth_token' => bin2hex(random_bytes(16))]);
             $contact->refresh();
         }
 
         $certPath = base_path($config['cert_path']);
-        $certPassword = $config['cert_password'];
+        $pass = new PKPass($certPath, $config['cert_password']);
 
-        $pass = new PKPass($certPath, $certPassword);
+        // --- Récompenses ---
+        $auxiliaryFields = [];
+        $currentPoints = $contact->loyalty_points ?? 0;
+
+        $nextReward = $team->loyaltyRewards
+            ->where('points_required', '>', $currentPoints)
+            ->sortBy('points_required')
+            ->first();
+
+        $lastReward = $team->loyaltyRewards
+            ->where('points_required', '<=', $currentPoints)
+            ->sortByDesc('points_required')
+            ->first();
+
+        if ($nextReward) {
+            $remaining = $nextReward->points_required - $currentPoints;
+            $unit = ($teamSettings->loyalty_program_type === 'visits') ? 'visites' : 'pts';
+            $auxiliaryFields[] = [
+                'key' => 'nextReward',
+                'label' => '🎁 Prochaine récompense',
+                'value' => $nextReward->name . ' — encore ' . $remaining . ' ' . $unit,
+            ];
+        }
+        elseif ($lastReward) {
+            $auxiliaryFields[] = [
+                'key' => 'nextReward',
+                'label' => '🎁 Récompense débloquée',
+                'value' => $lastReward->name,
+            ];
+        }
+
+        $backFields = $this->buildBackFields($profile, $teamSettings);
 
         $data = [
             'formatVersion' => 1,
             'passTypeIdentifier' => $config['pass_type_identifier'],
-            'serialNumber' => $contact->id, // UUID
+            'serialNumber' => $contact->id,
             'teamIdentifier' => $config['team_identifier'],
             'groupingIdentifier' => $team->public_uuid,
-
             'organizationName' => $team->name,
             'description' => 'Carte de fidélité ' . $team->name,
             'logoText' => $settings->logo_text ?: $team->name,
-
             'foregroundColor' => $this->hexToRgb($settings->foreground_color ?? '#FFFFFF'),
             'backgroundColor' => $this->hexToRgb($settings->background_color ?? '#282828'),
-
-            // Web Service for auto-updates
             'webServiceURL' => rtrim(config('app.url'), '/') . '/api',
             'authenticationToken' => $contact->wallet_auth_token,
-
             'storeCard' => [
-                'primaryFields' => [
-                    [
-                        'key' => 'points',
-                        'label' => $settings->label_primary ?? 'VOS POINTS',
-                        'value' => (string) ($contact->loyalty_points ?? 0),
-                        'changeMessage' => 'Vous avez maintenant %@ points.',
-                    ],
-                ],
-                'secondaryFields' => [
+                'headerFields' => [
                     [
                         'key' => 'clientName',
                         'label' => $settings->label_secondary ?? 'CLIENT',
                         'value' => $contact->name ?: 'Client',
                     ],
                 ],
+                'primaryFields' => [],
+                'secondaryFields' => [
+                    [
+                        'key' => 'points',
+                        'label' => $settings->label_primary ?? 'VOS POINTS',
+                        'value' => (string)$currentPoints,
+                        'changeMessage' => 'Vous avez maintenant %@ points.',
+                    ],
+                ],
+                'auxiliaryFields' => $auxiliaryFields,
+                'backFields' => $backFields,
             ],
-
             'barcode' => [
                 'format' => 'PKBarcodeFormatQR',
                 'message' => $contact->pass_token ?: $contact->id,
                 'messageEncoding' => 'iso-8859-1',
+                'altText' => $contact->pass_token,
             ],
             'barcodes' => [
                 [
                     'format' => 'PKBarcodeFormatQR',
                     'message' => $contact->pass_token ?: $contact->id,
                     'messageEncoding' => 'iso-8859-1',
+                    'altText' => $contact->pass_token,
                 ],
             ],
         ];
 
-        // Optional label color
         if (!empty($settings->label_color)) {
             $data['labelColor'] = $this->hexToRgb($settings->label_color);
         }
 
         $pass->setData($data);
-
-        // Add images — prefer team-custom images from R2, fallback to defaults
         $this->addPassImages($pass, $settings);
 
         $pkpassContent = $pass->create(false);
 
         if (!$pkpassContent) {
-            throw new \RuntimeException('Failed to create .pkpass file. Check certificates and images.');
+            throw new \RuntimeException('Failed to create .pkpass file.');
         }
 
         return $pkpassContent;
+    }
+
+    /**
+     * Build the back-of-card fields from team profile and loyalty settings.
+     */
+    private function buildBackFields($profile, $teamSettings): array
+    {
+        $backFields = [];
+
+        // Programme type
+        if (!empty($teamSettings->loyalty_program_type)) {
+            $typeLabel = $teamSettings->loyalty_program_type === 'visits'
+                ? 'Visites (1 passage = 1 pt)'
+                : 'Points (selon le montant)';
+            $backFields[] = [
+                'key' => 'programType',
+                'label' => 'Programme',
+                'value' => $typeLabel,
+            ];
+        }
+
+        // Points expiration
+        if ($teamSettings->loyalty_points_expire) {
+            if (!empty($teamSettings->loyalty_points_next_expiration)) {
+                $expirationDate = \Carbon\Carbon::parse($teamSettings->loyalty_points_next_expiration);
+                $expiryText = 'Vos points expirent le ' . $expirationDate->translatedFormat('d F Y');
+            }
+            elseif (!empty($teamSettings->loyalty_points_expiration_date)) {
+                $expiryText = 'Expiration annuelle le ' . $teamSettings->loyalty_points_expiration_date;
+            }
+            else {
+                $expiryText = 'Vos points ont une durée limitée';
+            }
+            $backFields[] = [
+                'key' => 'pointsExpiry',
+                'label' => 'Expiration',
+                'value' => $expiryText,
+            ];
+        }
+        else {
+            $backFields[] = [
+                'key' => 'pointsExpiry',
+                'label' => 'Expiration',
+                'value' => 'Vos points n\'expirent pas ✨',
+            ];
+        }
+
+        // Address
+        if (!empty($profile->address)) {
+            $backFields[] = [
+                'key' => 'address',
+                'label' => 'Adresse',
+                'value' => $profile->address,
+            ];
+        }
+
+        // Phone (clickable)
+        if (!empty($profile->phone)) {
+            $cleanPhone = preg_replace('/\s+/', '', $profile->phone);
+            $backFields[] = [
+                'key' => 'phone',
+                'label' => 'Téléphone',
+                'value' => $profile->phone,
+                'attributedValue' => '<a href="tel:' . $cleanPhone . '">' . $profile->phone . '</a>',
+            ];
+        }
+
+        // Website (clickable)
+        if (!empty($profile->website)) {
+            $url = $profile->website;
+            if (!str_starts_with($url, 'http')) {
+                $url = 'https://' . $url;
+            }
+            $backFields[] = [
+                'key' => 'website',
+                'label' => 'Site web',
+                'value' => $profile->website,
+                'attributedValue' => '<a href="' . $url . '">' . $profile->website . '</a>',
+            ];
+        }
+
+        // Email (clickable)
+        if (!empty($profile->email_public)) {
+            $backFields[] = [
+                'key' => 'email',
+                'label' => 'Email',
+                'value' => $profile->email_public,
+                'attributedValue' => '<a href="mailto:' . $profile->email_public . '">' . $profile->email_public . '</a>',
+            ];
+        }
+
+        // Social networks (clickable)
+        $socials = [
+            'instagram' => ['field' => 'social_instagram', 'label' => 'Instagram', 'prefix' => 'https://instagram.com/'],
+            'facebook' => ['field' => 'social_facebook', 'label' => 'Facebook', 'prefix' => 'https://facebook.com/'],
+            'tiktok' => ['field' => 'social_tiktok', 'label' => 'TikTok', 'prefix' => 'https://tiktok.com/@'],
+            'linkedin' => ['field' => 'social_linkedin', 'label' => 'LinkedIn', 'prefix' => 'https://linkedin.com/in/'],
+            'twitter' => ['field' => 'social_twitter', 'label' => 'X (Twitter)', 'prefix' => 'https://x.com/'],
+        ];
+
+        foreach ($socials as $key => $meta) {
+            $value = $profile->{ $meta['field']} ?? null;
+            if (!empty($value)) {
+                // If the value is already a full URL, use it; otherwise prepend prefix
+                $url = str_starts_with($value, 'http') ? $value : $meta['prefix'] . ltrim($value, '@/');
+                $backFields[] = [
+                    'key' => $key,
+                    'label' => $meta['label'],
+                    'value' => $value,
+                    'attributedValue' => '<a href="' . $url . '">' . $value . '</a>',
+                ];
+            }
+        }
+
+        return $backFields;
     }
 
     /**
@@ -115,44 +256,51 @@ class ApplePassService
         // Icon (required)
         if ($settings->icon_path && $disk->exists($settings->icon_path)) {
             $pass->addFileContent($disk->get($settings->icon_path), 'icon.png');
-        } elseif (file_exists(public_path('images/wallet/icon.png'))) {
+        }
+        elseif (file_exists(public_path('images/wallet/icon.png'))) {
             $pass->addFile(public_path('images/wallet/icon.png'));
-        } else {
+        }
+        else {
             throw new \RuntimeException('Missing required icon.png — upload via Wallet settings or place in public/images/wallet/');
         }
 
         // Icon @2x
         if ($settings->icon_2x_path && $disk->exists($settings->icon_2x_path)) {
             $pass->addFileContent($disk->get($settings->icon_2x_path), 'icon@2x.png');
-        } elseif (file_exists(public_path('images/wallet/icon@2x.png'))) {
+        }
+        elseif (file_exists(public_path('images/wallet/icon@2x.png'))) {
             $pass->addFile(public_path('images/wallet/icon@2x.png'));
         }
 
         // Logo
         if ($settings->logo_image_path && $disk->exists($settings->logo_image_path)) {
             $pass->addFileContent($disk->get($settings->logo_image_path), 'logo.png');
-        } elseif (file_exists(public_path('images/wallet/logo.png'))) {
+        }
+        elseif (file_exists(public_path('images/wallet/logo.png'))) {
             $pass->addFile(public_path('images/wallet/logo.png'));
         }
 
         // Logo @2x
         if ($settings->logo_2x_path && $disk->exists($settings->logo_2x_path)) {
             $pass->addFileContent($disk->get($settings->logo_2x_path), 'logo@2x.png');
-        } elseif (file_exists(public_path('images/wallet/logo@2x.png'))) {
+        }
+        elseif (file_exists(public_path('images/wallet/logo@2x.png'))) {
             $pass->addFile(public_path('images/wallet/logo@2x.png'));
         }
 
         // Strip (background image behind primary fields)
         if ($settings->strip_path && $disk->exists($settings->strip_path)) {
             $pass->addFileContent($disk->get($settings->strip_path), 'strip.png');
-        } elseif (file_exists(public_path('images/wallet/strip.png'))) {
+        }
+        elseif (file_exists(public_path('images/wallet/strip.png'))) {
             $pass->addFile(public_path('images/wallet/strip.png'));
         }
 
         // Strip @2x
         if ($settings->strip_2x_path && $disk->exists($settings->strip_2x_path)) {
             $pass->addFileContent($disk->get($settings->strip_2x_path), 'strip@2x.png');
-        } elseif (file_exists(public_path('images/wallet/strip@2x.png'))) {
+        }
+        elseif (file_exists(public_path('images/wallet/strip@2x.png'))) {
             $pass->addFile(public_path('images/wallet/strip@2x.png'));
         }
     }
@@ -165,7 +313,7 @@ class ApplePassService
         $hex = ltrim($hex, '#');
 
         if (strlen($hex) === 3) {
-            $hex = $hex[0].$hex[0] . $hex[1].$hex[1] . $hex[2].$hex[2];
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
         }
 
         $r = hexdec(substr($hex, 0, 2));
