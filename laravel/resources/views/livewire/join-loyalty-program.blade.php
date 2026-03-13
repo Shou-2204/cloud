@@ -66,7 +66,8 @@
                 {{-- Apple Wallet Download Badge (Official Apple SVG) --}}
                 @if($createdContactId)
                     <div class="mt-6 flex flex-col items-center">
-                        <a href="{{ route('wallet.download-pass', $createdContactId) }}"
+                        <a id="apple-wallet-button" 
+                           href="{{ route('wallet.download-pass', $createdContactId) }}"
                            class="inline-block transition-transform transform hover:-translate-y-0.5 active:translate-y-0">
                             <img src="{{ asset('images/wallet/add-to-wallet-badge-fr.svg') }}"
                                  alt="Ajouter à l'app Cartes Apple"
@@ -211,4 +212,20 @@
             }
         </style>
     @endif
+
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('passCreated', (event) => {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                             (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                
+                if (isIOS && event[0].downloadUrl) {
+                    // Slight delay to ensure the success UI is visible
+                    setTimeout(() => {
+                        window.location.href = event[0].downloadUrl;
+                    }, 1500);
+                }
+            });
+        });
+    </script>
 </div>

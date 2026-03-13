@@ -47,13 +47,19 @@ class AppleWalletPushService
         }
 
         try {
+            // Pushok's Certificate AuthProvider expects a single file containing both cert and key.
+            // We create a temporary combined file for this request.
+            $combinedPemPath = tempnam(sys_get_temp_dir(), 'apns_');
+            $combinedContent = file_get_contents($certPath) . "\n" . file_get_contents($keyPath);
+            file_put_contents($combinedPemPath, $combinedContent);
+
             $authProvider = Certificate::create([
-                'certificate_path' => $certPath,
+                'certificate_path' => $combinedPemPath,
                 'certificate_secret' => null, // PEM key has no passphrase
+                'app_bundle_id' => $passTypeId,
             ]);
 
             $client = new Client($authProvider, $production = true);
-            $client->addCurl(CURLOPT_SSLKEY, $keyPath);
 
             $notifications = [];
 
@@ -64,10 +70,9 @@ class AppleWalletPushService
                 }
 
                 // Apple Wallet expects an empty JSON payload
-                $payload = Payload::create()->setCustomValue('aps', new \stdClass());
+                $payload = Payload::create();
 
                 $notification = new Notification($payload, $device->push_token);
-                $notification->setTopic($passTypeId);
 
                 $notifications[] = $notification;
             }
@@ -88,7 +93,15 @@ class AppleWalletPushService
                     ]);
                 }
             }
+
+            // Cleanup the temporary combined cert file
+            @unlink($combinedPemPath);
+
         } catch (\Exception $e) {
+            // Also cleanup on error
+            if (isset($combinedPemPath) && file_exists($combinedPemPath)) {
+                @unlink($combinedPemPath);
+            }
             \Log::error('AppleWalletPushService: Error sending push notifications', [
                 'error' => $e->getMessage(),
                 'contact_id' => $contact->id,

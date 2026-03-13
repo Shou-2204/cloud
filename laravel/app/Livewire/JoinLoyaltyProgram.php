@@ -95,6 +95,10 @@ class JoinLoyaltyProgram extends Component
                 ]);
                 $this->createdContactId = $contact->id;
                 $this->successMessage = 'updated';
+
+                $this->dispatch('passCreated', [
+                    'downloadUrl' => route('wallet.download-pass', $this->createdContactId)
+                ]);
                 return;
             }
         }
@@ -133,6 +137,10 @@ class JoinLoyaltyProgram extends Component
 
         $this->createdContactId = $contact->id;
         $this->successMessage = 'new';
+
+        $this->dispatch('passCreated', [
+            'downloadUrl' => route('wallet.download-pass', $this->createdContactId)
+        ]);
     }
 
     public function render()

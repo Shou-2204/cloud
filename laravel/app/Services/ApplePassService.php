@@ -253,55 +253,62 @@ class ApplePassService
     {
         $disk = Storage::disk('cloud_public');
 
-        // Icon (required)
+        // --- ICON (Used in notifications and on the pass) ---
         if ($settings->icon_path && $disk->exists($settings->icon_path)) {
-            $pass->addFileContent($disk->get($settings->icon_path), 'icon.png');
-        }
-        elseif (file_exists(public_path('images/wallet/icon.png'))) {
-            $pass->addFile(public_path('images/wallet/icon.png'));
-        }
-        else {
-            throw new \RuntimeException('Missing required icon.png — upload via Wallet settings or place in public/images/wallet/');
+            $iconContent = $disk->get($settings->icon_path);
+            $pass->addFileContent($iconContent, 'icon.png');
+            
+            // Fallback for @2x and @3x: use the main icon if high-res versions weren't uploaded
+            if ($settings->icon_2x_path && $disk->exists($settings->icon_2x_path)) {
+                $pass->addFileContent($disk->get($settings->icon_2x_path), 'icon@2x.png');
+            } else {
+                $pass->addFileContent($iconContent, 'icon@2x.png');
+                $pass->addFileContent($iconContent, 'icon@3x.png');
+            }
+        } else {
+            // Extreme fallback to system defaults
+            if (file_exists(public_path('images/wallet/icon.png'))) {
+                $pass->addFile(public_path('images/wallet/icon.png'));
+            }
+            if (file_exists(public_path('images/wallet/icon@2x.png'))) {
+                $pass->addFile(public_path('images/wallet/icon@2x.png'));
+            }
         }
 
-        // Icon @2x
-        if ($settings->icon_2x_path && $disk->exists($settings->icon_2x_path)) {
-            $pass->addFileContent($disk->get($settings->icon_2x_path), 'icon@2x.png');
-        }
-        elseif (file_exists(public_path('images/wallet/icon@2x.png'))) {
-            $pass->addFile(public_path('images/wallet/icon@2x.png'));
-        }
-
-        // Logo
+        // --- LOGO (Top left of the pass) ---
         if ($settings->logo_image_path && $disk->exists($settings->logo_image_path)) {
-            $pass->addFileContent($disk->get($settings->logo_image_path), 'logo.png');
-        }
-        elseif (file_exists(public_path('images/wallet/logo.png'))) {
+            $logoContent = $disk->get($settings->logo_image_path);
+            $pass->addFileContent($logoContent, 'logo.png');
+
+            if ($settings->logo_2x_path && $disk->exists($settings->logo_2x_path)) {
+                $pass->addFileContent($disk->get($settings->logo_2x_path), 'logo@2x.png');
+            } else {
+                $pass->addFileContent($logoContent, 'logo@2x.png');
+                $pass->addFileContent($logoContent, 'logo@3x.png');
+            }
+        } elseif (file_exists(public_path('images/wallet/logo.png'))) {
             $pass->addFile(public_path('images/wallet/logo.png'));
+            if (file_exists(public_path('images/wallet/logo@2x.png'))) {
+                $pass->addFile(public_path('images/wallet/logo@2x.png'));
+            }
         }
 
-        // Logo @2x
-        if ($settings->logo_2x_path && $disk->exists($settings->logo_2x_path)) {
-            $pass->addFileContent($disk->get($settings->logo_2x_path), 'logo@2x.png');
-        }
-        elseif (file_exists(public_path('images/wallet/logo@2x.png'))) {
-            $pass->addFile(public_path('images/wallet/logo@2x.png'));
-        }
-
-        // Strip (background image behind primary fields)
+        // --- STRIP (Background image) ---
         if ($settings->strip_path && $disk->exists($settings->strip_path)) {
-            $pass->addFileContent($disk->get($settings->strip_path), 'strip.png');
-        }
-        elseif (file_exists(public_path('images/wallet/strip.png'))) {
-            $pass->addFile(public_path('images/wallet/strip.png'));
-        }
+            $stripContent = $disk->get($settings->strip_path);
+            $pass->addFileContent($stripContent, 'strip.png');
 
-        // Strip @2x
-        if ($settings->strip_2x_path && $disk->exists($settings->strip_2x_path)) {
-            $pass->addFileContent($disk->get($settings->strip_2x_path), 'strip@2x.png');
-        }
-        elseif (file_exists(public_path('images/wallet/strip@2x.png'))) {
-            $pass->addFile(public_path('images/wallet/strip@2x.png'));
+            if ($settings->strip_2x_path && $disk->exists($settings->strip_2x_path)) {
+                $pass->addFileContent($disk->get($settings->strip_2x_path), 'strip@2x.png');
+            } else {
+                $pass->addFileContent($stripContent, 'strip@2x.png');
+                $pass->addFileContent($stripContent, 'strip@3x.png');
+            }
+        } elseif (file_exists(public_path('images/wallet/strip.png'))) {
+            $pass->addFile(public_path('images/wallet/strip.png'));
+            if (file_exists(public_path('images/wallet/strip@2x.png'))) {
+                $pass->addFile(public_path('images/wallet/strip@2x.png'));
+            }
         }
     }
 
