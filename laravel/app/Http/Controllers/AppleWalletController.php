@@ -99,52 +99,49 @@ class AppleWalletController extends Controller
      */
     public function getUpdatedSerials(Request $request, string $deviceLibraryIdentifier, string $passTypeIdentifier)
     {
-        // Vérifier que le device existe avant de requêter (Protection DoS)
         $device = WalletDevice::where('device_library_identifier', $deviceLibraryIdentifier)->first();
 
         if (!$device) {
-            return response()->json([], 200); // Ne pas révéler que le device n'existe pas
+            return response()->json([], 200);
         }
 
-        $query = WalletRegistration::where('wallet_device_id', $device->id)
-            ->where('pass_type_identifier', $passTypeIdentifier);
+        $serials = WalletRegistration::where('wallet_device_id', $device->id)
+            ->where('pass_type_identifier', $passTypeIdentifier)
+            ->pluck('serial_number');
 
-        $tag = $request->query('passesUpdatedSince');
-
-        if ($tag && !strtotime($tag)) {
-    $tag = null;
-}
-
-        if ($tag) {
-            // Tag is a timestamp — find contacts updated after that time
-            $serials = $query->pluck('serial_number');
-
-            $updatedSerials = CrmContact::whereIn('id', $serials)
-                ->where('updated_at', '>', $tag)
-                ->pluck('id')
-                ->values()
-                ->toArray();
-
-            if (empty($updatedSerials)) {
-                return response()->json([], 204);
-            }
-
-            return response()->json([
-                'serialNumbers' => $updatedSerials,
-                'lastUpdated' => now()->toIso8601String(),
-            ]);
-        }
-
-        // No tag → return all serial numbers
-        $serials = $query->pluck('serial_number')->values()->toArray();
-
-        if (empty($serials)) {
+        if ($serials->isEmpty()) {
             return response()->json([], 204);
         }
 
+        $tag = $request->query('passesUpdatedSince');
+
+        // Get all contacts for these serials, with their real updated_at
+        $contacts = CrmContact::whereIn('id', $serials);
+
+        if ($tag) {
+            try {
+                $since = \Illuminate\Support\Carbon::parse($tag);
+                $contacts = $contacts->where('updated_at', '>', $since);
+            } catch (\Exception $e) {
+                // Invalid tag, ignore and return all
+            }
+        }
+
+        $updatedContacts = $contacts->get(['id', 'updated_at']);
+
+        if ($updatedContacts->isEmpty()) {
+            return response()->json([], 204);
+        }
+
+        // The lastUpdated tag MUST be the real latest updated_at from the contacts,
+        // NOT now(). Apple uses this tag to detect changes — if the tag doesn't
+        // advance past the contact's actual modification time, Apple enters an
+        // infinite loop thinking nothing changed.
+        $latestUpdate = $updatedContacts->max('updated_at');
+
         return response()->json([
-            'serialNumbers' => $serials,
-            'lastUpdated' => now()->toIso8601String(),
+            'serialNumbers' => $updatedContacts->pluck('id')->values()->toArray(),
+            'lastUpdated' => $latestUpdate->toIso8601String(),
         ]);
     }
 

@@ -12,7 +12,7 @@ class TeamWalletSettings extends Component
 {
     use WithFileUploads;
 
-    public $team;
+    public \App\Models\Team $team;
     public $state = [];
 
     // File uploads
@@ -203,6 +203,11 @@ class TeamWalletSettings extends Component
     public function getSettingsProperty()
     {
         return $this->team->walletPassSettings;
+    }
+
+    public function updated($name, $value)
+    {
+        // Force refresh for preview
     }
 
     public function render()

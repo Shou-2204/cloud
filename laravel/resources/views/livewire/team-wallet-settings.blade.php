@@ -1,4 +1,5 @@
-<div class="max-w-5xl mx-auto">
+<div class="max-w-5xl mx-auto" wire:key="wallet-settings-{{ $team->id }}">
+    @php $settings = $this->settings; @endphp
     <div class="text-center mb-8">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('Apple Wallet') }}</h2>
         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -60,7 +61,6 @@
                         </div>
 
                         {{-- Image Uploads --}}
-                        @php $settings = $this->settings; @endphp
                         <div class="space-y-3">
                             {{-- Icon --}}
                             <div

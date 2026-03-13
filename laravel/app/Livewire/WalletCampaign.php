@@ -46,6 +46,8 @@ class WalletCampaign extends Component
             ->get();
 
         foreach ($contacts as $contact) {
+            // Important: refresh updated_at so getUpdatedSerials detects the change
+            $contact->touch();
             AppleWalletPushJob::dispatch($contact);
         }
 

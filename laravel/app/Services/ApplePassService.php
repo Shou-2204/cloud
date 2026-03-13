@@ -58,15 +58,17 @@ class ApplePassService
             ]
         ];
 
-        $primaryFields = [
+        // secondaryFields appear BELOW the strip image
+        $secondaryFields = [
             [
                 'key' => 'points',
                 'label' => $labelPrimary,
-                'value' => (int)($contact->points ?? 0),
+                'value' => (int)($contact->loyalty_points ?? 0),
                 'changeMessage' => 'Vous avez maintenant %@ points.',
             ],
         ];
 
+        // auxiliaryFields appear below secondaryFields
         $auxiliaryFields = [];
         if ($nextReward) {
             $remaining = $nextReward->points_required - $currentPoints;
@@ -89,9 +91,9 @@ class ApplePassService
 
         $data = [
             'formatVersion' => 1,
-            'passTypeIdentifier' => config('services.apple_wallet.pass_type_id'),
+            'passTypeIdentifier' => config('services.apple_wallet.pass_type_identifier'),
             'serialNumber' => (string)$contact->id,
-            'teamIdentifier' => config('services.apple_wallet.team_id'),
+            'teamIdentifier' => config('services.apple_wallet.team_identifier'),
             'groupingIdentifier' => $team->public_uuid,
             'organizationName' => $team->name,
             'description' => 'Carte de fidélité ' . $team->name,
@@ -102,15 +104,23 @@ class ApplePassService
             'authenticationToken' => $contact->wallet_auth_token,
             'storeCard' => [
                 'headerFields' => $headerFields,
-                'primaryFields' => $primaryFields,
+                'secondaryFields' => $secondaryFields,
                 'auxiliaryFields' => $auxiliaryFields,
                 'backFields' => $backFields,
             ],
             'barcode' => [
                 'format' => 'PKBarcodeFormatQR',
                 'message' => $contact->pass_token ?: $contact->id,
-                'messageEncoding' => 'iso-8859-1',
+                'messageEncoding' => 'UTF-8',
                 'altText' => $contact->pass_token,
+            ],
+            'barcodes' => [
+                [
+                    'format' => 'PKBarcodeFormatQR',
+                    'message' => $contact->pass_token ?: $contact->id,
+                    'messageEncoding' => 'UTF-8',
+                    'altText' => $contact->pass_token,
+                ]
             ],
         ];
 
