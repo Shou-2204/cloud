@@ -31,7 +31,7 @@ Route::prefix('v1')->group(function () {
     Route::get(
         'devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}',
         [AppleWalletController::class, 'getUpdatedSerials']
-    );
+    )->middleware('throttle:30,1');
 
     // Get latest pass (requires auth token)
     Route::get(
@@ -40,5 +40,5 @@ Route::prefix('v1')->group(function () {
     )->middleware(\App\Http\Middleware\ValidateWalletToken::class);
 
     // Log endpoint (no auth needed — Apple sends device logs here)
-    Route::post('log', [AppleWalletController::class, 'logMessages']);
+    Route::post('log', [AppleWalletController::class, 'logMessages'])->middleware('throttle:20,1');
 });

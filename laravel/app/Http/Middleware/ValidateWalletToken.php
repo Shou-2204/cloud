@@ -37,11 +37,13 @@ class ValidateWalletToken
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $contact = CrmContact::where('id', $serialNumber)
-            ->where('wallet_auth_token', $token)
-            ->first();
+        $contact = CrmContact::where('id', $serialNumber)->first();
 
-        if (!$contact) {
+        if (!$contact || !$contact->wallet_auth_token) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        if (!hash_equals($contact->wallet_auth_token, $token)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

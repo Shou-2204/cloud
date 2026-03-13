@@ -43,11 +43,11 @@ class AppleWalletController extends Controller
      */
     public function registerDevice(Request $request, string $deviceLibraryIdentifier, string $passTypeIdentifier, string $serialNumber)
     {
-        $pushToken = $request->input('pushToken');
+        $validated = $request->validate([
+            'pushToken' => 'required|string|min:64|max:200|regex:/^[a-f0-9]+$/i',
+        ]);
 
-        if (empty($pushToken)) {
-            return response()->json(['error' => 'pushToken is required'], 400);
-        }
+        $pushToken = $validated['pushToken'];
 
         // updateOrCreate — push_token can change after iOS restore/reinstall
         $device = WalletDevice::updateOrCreate(
@@ -99,16 +99,21 @@ class AppleWalletController extends Controller
      */
     public function getUpdatedSerials(Request $request, string $deviceLibraryIdentifier, string $passTypeIdentifier)
     {
+        // Vérifier que le device existe avant de requêter (Protection DoS)
         $device = WalletDevice::where('device_library_identifier', $deviceLibraryIdentifier)->first();
 
         if (!$device) {
-            return response()->json([], 204);
+            return response()->json([], 200); // Ne pas révéler que le device n'existe pas
         }
 
         $query = WalletRegistration::where('wallet_device_id', $device->id)
             ->where('pass_type_identifier', $passTypeIdentifier);
 
         $tag = $request->query('passesUpdatedSince');
+
+        if ($tag && !strtotime($tag)) {
+    $tag = null;
+}
 
         if ($tag) {
             // Tag is a timestamp — find contacts updated after that time
@@ -179,7 +184,12 @@ class AppleWalletController extends Controller
      */
     public function logMessages(Request $request)
     {
-        $logs = $request->input('logs', []);
+        $validated = $request->validate([
+            'logs'   => 'required|array|max:10',
+            'logs.*' => 'string|max:500',
+        ]);
+
+        $logs = $validated['logs'];
 
         foreach ($logs as $log) {
             \Log::info('AppleWallet Device Log: ' . $log);
