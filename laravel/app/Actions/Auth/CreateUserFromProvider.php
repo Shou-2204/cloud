@@ -22,7 +22,7 @@ class CreateUserFromProvider
             $user = User::create([
                 'name' => $providerUser->getName(),
                 'email' => $providerUser->getEmail(),
-                'password' => Hash::make(Str::random(16)), // Mot de passe aléatoire sécurisé
+                'password' => Hash::make(Str::password(16)), // Mot de passe aléatoire sécurisé
                 'email_verified_at' => now(),
                 'has_set_password' => false,
             ]);
