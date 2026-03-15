@@ -64,7 +64,7 @@ class ApplePassService
                 'key' => 'points',
                 'label' => $labelPrimary,
                 'value' => (int)($contact->loyalty_points ?? 0),
-                'changeMessage' => 'Vous avez maintenant %@ points.',
+                'changeMessage' => 'Merci de votre visite ! Vous avez maintenant %@ points. Venez vite découvrir votre prochaine récompense 🎁',
             ],
         ];
 
@@ -287,15 +287,17 @@ class ApplePassService
         if ($settings->icon_path && $disk->exists($settings->icon_path)) {
             $iconContent = $disk->get($settings->icon_path);
             $pass->addFileContent($iconContent, 'icon.png');
-            
+
             // Fallback for @2x and @3x: use the main icon if high-res versions weren't uploaded
             if ($settings->icon_2x_path && $disk->exists($settings->icon_2x_path)) {
                 $pass->addFileContent($disk->get($settings->icon_2x_path), 'icon@2x.png');
-            } else {
+            }
+            else {
                 $pass->addFileContent($iconContent, 'icon@2x.png');
                 $pass->addFileContent($iconContent, 'icon@3x.png');
             }
-        } else {
+        }
+        else {
             // Extreme fallback to system defaults
             if (file_exists(public_path('images/wallet/icon.png'))) {
                 $pass->addFile(public_path('images/wallet/icon.png'));
@@ -312,11 +314,13 @@ class ApplePassService
 
             if ($settings->logo_2x_path && $disk->exists($settings->logo_2x_path)) {
                 $pass->addFileContent($disk->get($settings->logo_2x_path), 'logo@2x.png');
-            } else {
+            }
+            else {
                 $pass->addFileContent($logoContent, 'logo@2x.png');
                 $pass->addFileContent($logoContent, 'logo@3x.png');
             }
-        } elseif (file_exists(public_path('images/wallet/logo.png'))) {
+        }
+        elseif (file_exists(public_path('images/wallet/logo.png'))) {
             $pass->addFile(public_path('images/wallet/logo.png'));
             if (file_exists(public_path('images/wallet/logo@2x.png'))) {
                 $pass->addFile(public_path('images/wallet/logo@2x.png'));
@@ -330,11 +334,13 @@ class ApplePassService
 
             if ($settings->strip_2x_path && $disk->exists($settings->strip_2x_path)) {
                 $pass->addFileContent($disk->get($settings->strip_2x_path), 'strip@2x.png');
-            } else {
+            }
+            else {
                 $pass->addFileContent($stripContent, 'strip@2x.png');
                 $pass->addFileContent($stripContent, 'strip@3x.png');
             }
-        } elseif (file_exists(public_path('images/wallet/strip.png'))) {
+        }
+        elseif (file_exists(public_path('images/wallet/strip.png'))) {
             $pass->addFile(public_path('images/wallet/strip.png'));
             if (file_exists(public_path('images/wallet/strip@2x.png'))) {
                 $pass->addFile(public_path('images/wallet/strip@2x.png'));

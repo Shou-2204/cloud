@@ -71,13 +71,14 @@
                                 </div>
                                 <div class="flex items-center gap-2">
                                     @if($settings?->icon_path) <span class="text-emerald-500 text-xs">✓</span> @endif
-                                    <label
+                                    <label for="icon-upload"
                                         class="cursor-pointer bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-2 py-1 rounded text-[10px] font-bold">
                                         {{ $settings?->icon_path ? 'Changer' : 'Uploader' }}
-                                        <input type="file" wire:model="iconFile" accept=".png" class="hidden">
                                     </label>
+                                    <input id="icon-upload" type="file" wire:model="iconFile" accept=".png" class="hidden">
                                 </div>
                             </div>
+                            <x-input-error for="iconFile" class="text-[10px] mt-1" />
                             @if($iconFile) <button type="button" wire:click="uploadImage('icon')"
                                 class="w-full py-1 text-[10px] font-bold bg-emerald-600 text-white rounded">Confirmer
                                 Icône</button> @endif
@@ -86,18 +87,19 @@
                             <div
                                 class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700">
                                 <div>
-                                    <p class="text-xs font-bold text-gray-900 dark:text-white">Bandeau (Strip)</p>
+                                    <p class="text-xs font-bold text-gray-900 dark:text-white">Bandeau (PNG)</p>
                                     <p class="text-[10px] text-gray-500">375×123px</p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     @if($settings?->strip_path) <span class="text-emerald-500 text-xs">✓</span> @endif
-                                    <label
+                                    <label for="strip-upload"
                                         class="cursor-pointer bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-2 py-1 rounded text-[10px] font-bold">
                                         {{ $settings?->strip_path ? 'Changer' : 'Uploader' }}
-                                        <input type="file" wire:model="stripFile" accept=".png" class="hidden">
                                     </label>
+                                    <input id="strip-upload" type="file" wire:model="stripFile" accept=".png" class="hidden">
                                 </div>
                             </div>
+                            <x-input-error for="stripFile" class="mt-1" />
                             @if($stripFile) <button type="button" wire:click="uploadImage('strip')"
                                 class="w-full py-1 text-[10px] font-bold bg-emerald-600 text-white rounded">Confirmer
                                 Bandeau</button> @endif

@@ -109,8 +109,10 @@ class TeamWalletSettings extends Component
         $disk = Storage::disk('cloud_public');
         $folder = 'wallet-passes/' . $this->team->id;
 
+        // Ensure settings exist
+        $settings = $this->team->walletPassSettings()->firstOrCreate([]);
+
         // Delete old file if exists
-        $settings = $this->team->walletPassSettings;
         if ($settings->{$column}) {
             $disk->delete($settings->{$column});
         }
