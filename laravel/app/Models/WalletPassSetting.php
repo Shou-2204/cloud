@@ -25,6 +25,8 @@ class WalletPassSetting extends Model
         'latitude',
         'longitude',
         'relevant_text',
+        'google_wallet_class_id',
+        'google_class_synced_at',
     ];
 
     public function team(): BelongsTo

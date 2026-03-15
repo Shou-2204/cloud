@@ -6,14 +6,31 @@ use App\Models\CrmContact;
 use App\Models\WalletDevice;
 use App\Models\WalletRegistration;
 use App\Services\ApplePassService;
+use App\Services\GoogleWalletService;
 use Illuminate\Http\Request;
 
 class AppleWalletController extends Controller
 {
     /**
-     * Download a personalized .pkpass for a CrmContact.
+     * Unified entry point: detect device and serve appropriate pass.
      */
-    public function downloadPass(CrmContact $contact, ApplePassService $passService)
+    public function downloadPassUnified(CrmContact $contact, Request $request, ApplePassService $appleService, GoogleWalletService $googleService)
+    {
+        $userAgent = $request->header('User-Agent', '');
+
+        // If Android and Google Wallet is configured, serve Google Wallet
+        if (str_contains($userAgent, 'Android') && $googleService->isEnabled()) {
+            return $this->downloadGooglePass($contact, $googleService);
+        }
+
+        // Default fallback (iOS, desktop, unknown) is Apple Wallet
+        return $this->downloadApplePass($contact, $appleService);
+    }
+
+    /**
+     * Download a personalized .pkpass for a CrmContact (Apple Wallet).
+     */
+    private function downloadApplePass(CrmContact $contact, ApplePassService $passService)
     {
         try {
             $pkpassContent = $passService->generatePass($contact);
@@ -28,6 +45,33 @@ class AppleWalletController extends Controller
                 'error' => $e->getMessage(),
             ]);
             return response('Erreur lors de la génération du pass : ' . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Download a Google Wallet pass.
+     */
+    public function downloadGooglePass(CrmContact $contact, GoogleWalletService $service)
+    {
+        try {
+            $team = $contact->team;
+
+            // 1. Ensure class is created/updated for the team
+            $service->createOrUpdateClass($team);
+
+            // 2. Ensure object is created/updated for the contact
+            $service->createOrUpdateObject($contact);
+
+            // 3. Generate signed JWT URL and redirect
+            $url = $service->generateAddToWalletUrl($contact);
+
+            return redirect($url);
+        } catch (\Exception $e) {
+            \Log::error('AppleWalletController: Google Pass generation failed', [
+                'contact_id' => $contact->id,
+                'error' => $e->getMessage(),
+            ]);
+            return response('Erreur Google Wallet : ' . $e->getMessage(), 500);
         }
     }
 

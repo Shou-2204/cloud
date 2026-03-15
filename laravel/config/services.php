@@ -107,4 +107,10 @@ return [
         'push_key_path' => env('APPLE_WALLET_PUSH_KEY_PATH', 'storage/app/appleCertWallet.key'),
     ],
 
+    'google_wallet' => [
+        'issuer_id' => env('GOOGLE_WALLET_ISSUER_ID', ''),
+        'key_path'  => env('GOOGLE_WALLET_KEY_PATH', 'storage/app/google-wallet-key.json'),
+        'class_suffix' => env('GOOGLE_WALLET_CLASS_SUFFIX', 'loyalty_card'),
+    ],
+
 ];

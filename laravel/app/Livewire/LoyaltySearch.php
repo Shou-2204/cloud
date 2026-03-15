@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Helpers\PhoneHelper;
-use App\Jobs\AppleWalletPushJob;
+use App\Jobs\WalletSyncJob;
 use App\Models\CrmContact;
 use App\Models\LoyaltyRedemption;
 use App\Services\LoyaltyProgressService;
@@ -119,7 +119,7 @@ class LoyaltySearch extends Component
         $this->lastAction = ['type' => 'add', 'amount' => 1];
         
         $this->dispatch('visit-recorded');
-        AppleWalletPushJob::dispatch($this->selectedContact);
+        WalletSyncJob::dispatch($this->selectedContact);
     }
 
     public function addPoints()
@@ -154,7 +154,7 @@ class LoyaltySearch extends Component
         
         $this->pointsToAdd = null;
         $this->dispatch('points-added');
-        AppleWalletPushJob::dispatch($this->selectedContact);
+        WalletSyncJob::dispatch($this->selectedContact);
     }
 
     public function undoLastAction()
@@ -191,7 +191,7 @@ class LoyaltySearch extends Component
         $this->selectedContact->refresh();
         $this->lastAction = null;
         $this->dispatch('action-undone');
-        AppleWalletPushJob::dispatch($this->selectedContact);
+        WalletSyncJob::dispatch($this->selectedContact);
     }
 
     public function consumeReward($rewardId)
@@ -231,7 +231,7 @@ class LoyaltySearch extends Component
                 'redemption_id' => $redemption->id,
             ];
             $this->dispatch('reward-consumed');
-            AppleWalletPushJob::dispatch($this->selectedContact);
+            WalletSyncJob::dispatch($this->selectedContact);
         }
     }
 

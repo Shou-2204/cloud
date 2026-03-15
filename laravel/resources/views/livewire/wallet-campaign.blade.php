@@ -6,7 +6,7 @@
                 <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                 Retour aux Campagnes
             </a>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">Campagne Apple Wallet</h1>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">Campagne Wallet Mobile</h1>
             <p class="mt-3 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto italic">
                 Communiquez directement sur l'écran verrouillé de vos clients fidèles.
             </p>

@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Jobs\AppleWalletPushJob;
+use App\Jobs\WalletSyncJob;
 use App\Models\CrmContact;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -48,7 +48,7 @@ class WalletCampaign extends Component
         foreach ($contacts as $contact) {
             // Important: refresh updated_at so getUpdatedSerials detects the change
             $contact->touch();
-            AppleWalletPushJob::dispatch($contact);
+            WalletSyncJob::dispatch($contact);
         }
 
         $this->isSending = false;

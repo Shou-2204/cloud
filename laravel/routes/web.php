@@ -57,8 +57,13 @@ Route::name('blog.')->prefix('blog')->group(function () {
     Route::get('/{slug}', [App\Http\Controllers\PublicSiteController::class, 'post'])->name('show');
 });
 
-// Apple Wallet Pass Download
-Route::get('/wallet/pass/{contact}', [\App\Http\Controllers\AppleWalletController::class, 'downloadPass'])->name('wallet.download-pass');
+// Apple & Google Wallet Pass Download (Unified)
+Route::get('/wallet/pass/{contact}', [\App\Http\Controllers\AppleWalletController::class, 'downloadPassUnified'])->name('wallet.download-pass');
+
+// Explicit Google Wallet Route (for previews)
+Route::get('/wallet/google/{contact}', [\App\Http\Controllers\AppleWalletController::class, 'downloadGooglePass'])
+    ->name('wallet.google-pass')
+    ->middleware('auth');
 
 // Features
 Route::get('/features', [App\Http\Controllers\PublicSiteController::class, 'features'])->name('features');

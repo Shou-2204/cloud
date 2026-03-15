@@ -195,7 +195,7 @@
                             <a href="{{ route('teams.settings', ['team' => Auth::user()->currentTeam, 'tab' => 'wallet']) }}"
                                 wire:navigate
                                 class="block w-full text-left py-2 px-3 text-sm rounded-lg transition-colors {{ request()->routeIs('teams.settings') && request()->route('tab') === 'wallet' ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-emerald-dark-600' }}">
-                                Apple Wallet
+                                Wallet Mobile
                             </a>
 
                             <!-- Members -->

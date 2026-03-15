@@ -221,6 +221,25 @@ class TeamWalletSettings extends Component
         return $this->team->walletPassSettings;
     }
 
+    public function getGoogleWalletEnabledProperty(): bool
+    {
+        return app(\App\Services\GoogleWalletService::class)->isEnabled();
+    }
+
+    public function getGoogleWalletPreviewUrlProperty(): ?string
+    {
+        if (!$this->googleWalletEnabled) {
+            return null;
+        }
+
+        $contact = \App\Models\CrmContact::where('team_id', $this->team->id)->first();
+        if (!$contact) {
+            return null;
+        }
+
+        return route('wallet.google-pass', $contact);
+    }
+
     public function updated($name, $value)
     {
         // Force refresh for preview

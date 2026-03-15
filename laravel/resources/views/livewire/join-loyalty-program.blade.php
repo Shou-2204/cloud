@@ -63,17 +63,26 @@
                     </p>
                 @endif
 
-                {{-- Apple Wallet Download Badge (Official Apple SVG) --}}
+                {{-- Download Badges (Apple & Google) --}}
                 @if($createdContactId)
                     <div class="mt-6 flex flex-col items-center">
-                        <a id="apple-wallet-button" 
-                           href="{{ route('wallet.download-pass', $createdContactId) }}"
-                           class="inline-block transition-transform transform hover:-translate-y-0.5 active:translate-y-0">
-                            <img src="{{ asset('images/wallet/add-to-wallet-badge-fr.svg') }}"
-                                 alt="Ajouter à l'app Cartes Apple"
-                                 style="height: 44px; width: auto;">
-                        </a>
-                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">Ouvrez ce lien depuis votre iPhone pour ajouter la carte.</p>
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                            <a id="apple-wallet-button" 
+                               href="{{ route('wallet.download-pass', $createdContactId) }}"
+                               class="inline-block transition-transform transform hover:-translate-y-0.5 active:translate-y-0">
+                                <img src="{{ asset('images/wallet/add-to-wallet-badge-fr.svg') }}"
+                                     alt="Ajouter à l'app Cartes Apple"
+                                     style="height: 44px; width: auto;">
+                            </a>
+                            <a id="google-wallet-button" 
+                               href="{{ route('wallet.google-pass', $createdContactId) }}"
+                               class="inline-block transition-transform transform hover:-translate-y-0.5 active:translate-y-0">
+                                <img src="{{ asset('images/frFR_add_to_google_wallet_add-wallet-badge.svg') }}"
+                                     alt="Ajouter à Google Wallet"
+                                     style="height: 44px; width: auto;">
+                            </a>
+                        </div>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-3 text-center">Cliquez sur l'un des boutons pour enregistrer votre carte.</p>
                     </div>
                 @endif
 
