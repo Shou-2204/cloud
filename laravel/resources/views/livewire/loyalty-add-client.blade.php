@@ -97,7 +97,7 @@
                         {{-- Name --}}
                         <div class="group">
                             <x-label for="name" value="Nom complet *" class="text-gray-700 dark:text-gray-300 font-semibold mb-1 group-focus-within:text-blue-600 transition-colors" />
-                            <x-input id="name" type="text" class="mt-1 block w-full py-3 px-4 rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500/20 transition-all bg-white dark:bg-gray-900/50" wire:model="newClient.name" placeholder="Ex: Jean Dupont" />
+                            <x-input id="name" type="text" class="mt-1 block w-full py-3 px-4 rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500/20 transition-all bg-white dark:bg-gray-900/50" wire:model="newClient.name" placeholder="Ex: Jean Dupont" autocomplete="name" />
                             <x-input-error for="newClient.name" class="mt-2" />
                         </div>
 
@@ -111,7 +111,7 @@
 
                             <div class="group">
                                 <x-label for="email" value="Adresse Email" class="text-gray-700 dark:text-gray-300 font-semibold mb-1 group-focus-within:text-blue-600 transition-colors" />
-                                <x-input id="email" type="email" class="mt-1 block w-full py-3 px-4 rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500/20 transition-all bg-white dark:bg-gray-900/50" wire:model="newClient.email" placeholder="client@email.com" />
+                                <x-input id="email" type="email" class="mt-1 block w-full py-3 px-4 rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500/20 transition-all bg-white dark:bg-gray-900/50" wire:model="newClient.email" placeholder="client@email.com" autocomplete="email" />
                                 <x-input-error for="newClient.email" class="mt-2" />
                             </div>
                         </div>

@@ -57,6 +57,8 @@
     <input 
         type="tel" 
         id="{{ $id }}" 
+        name="{{ $id }}"
+        autocomplete="tel"
         x-ref="input"
         @if($required) required @endif
         @if($placeholder) placeholder="{{ $placeholder }}" @endif

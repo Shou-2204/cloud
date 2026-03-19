@@ -21,34 +21,7 @@ class ReviewController extends Controller
      */
     public function stats(): View
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $team = $user->currentTeam;
-
-        $googleData = null;
-
-        if ($team && $team->subscribed() && $team->settings->google_place_id) {
-            // Try to get from cache
-            $googleData = $this->googlePlacesService->getCachedReviews($team->settings->google_place_id);
-
-            // If not in cache, dispatch job to fetch it
-            if (! $googleData) {
-                FetchGoogleReviews::dispatch($team->settings->google_place_id);
-                // Return empty/loading state for now
-                $googleData = [
-                    'reviews' => [],
-                    'rating' => null,
-                    'total_reviews' => null,
-                    'name' => null,
-                    'error' => null,
-                    'loading' => true, // Flag to show "Loading..." in UI
-                ];
-            }
-        }
-
-        return view('reviews.stats', [
-            'googleData' => $googleData,
-        ]);
+        return view('reviews.stats');
     }
 
     /**
