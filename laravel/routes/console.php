@@ -21,3 +21,6 @@ Schedule::command('loyalty:cleanup-rewards')->daily();
 
 // Loyalty Points Expiration (Reset points on configured date)
 Schedule::command('loyalty:expire-points')->dailyAt('00:01');
+
+// Google Wallet daily notification counter reset
+Schedule::command('google-wallet:reset-notify-count')->dailyAt('00:00');

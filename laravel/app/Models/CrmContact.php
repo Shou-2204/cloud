@@ -27,6 +27,7 @@ class CrmContact extends Model
         'loyalty_points',
         'last_scanned_at',
         'magic_link_used_at',
+        'google_wallet_notify_count',
     ];
 
     protected $casts = [

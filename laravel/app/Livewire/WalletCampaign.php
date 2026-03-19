@@ -12,11 +12,29 @@ class WalletCampaign extends Component
 {
     public string $message = '';
     public bool $isSending = false;
+    public bool $showConfirmation = false;
+    public int $recipientCount = 0;
 
     public function mount()
     {
         $team = Auth::user()->currentTeam;
         $this->message = $team->walletPassSettings->campaign_message ?? '';
+    }
+
+    public function confirmSend()
+    {
+        $team = Auth::user()->currentTeam;
+        Gate::authorize('update', $team);
+
+        $this->validate([
+            'message' => 'required|string|max:255',
+        ]);
+
+        $this->recipientCount = CrmContact::where('team_id', $team->id)
+            ->whereNotNull('wallet_auth_token')
+            ->count();
+
+        $this->showConfirmation = true;
     }
 
     public function sendCampaign()
@@ -29,6 +47,7 @@ class WalletCampaign extends Component
         ]);
 
         $this->isSending = true;
+        $this->showConfirmation = false;
 
         // 1. Save the message globally for the team's passes
         $settings = $team->walletPassSettings;

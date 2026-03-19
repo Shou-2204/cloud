@@ -43,5 +43,24 @@ class WalletSyncJob implements ShouldQueue
                 'error' => $e->getMessage(),
             ]);
         }
+
+        // Google — Envoi du message de campagne avec notification
+        try {
+            $this->contact->loadMissing('team.walletPassSettings');
+            $campaignMessage = $this->contact->team->walletPassSettings?->campaign_message;
+
+            if ($campaignMessage && $googleService->isEnabled()) {
+                $googleService->sendMessage(
+                    $this->contact,
+                    $this->contact->team->name,
+                    $campaignMessage,
+                );
+            }
+        } catch (\Exception $e) {
+            Log::error('WalletSyncJob: Google message failed', [
+                'contact_id' => $this->contact->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }

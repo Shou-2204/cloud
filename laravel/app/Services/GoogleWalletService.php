@@ -283,6 +283,61 @@ class GoogleWalletService
         }
     }
 
+    /**
+     * Send a campaign message to a contact's Google Wallet pass.
+     *
+     * Uses TEXT_AND_NOTIFY to trigger a lock screen notification.
+     * Falls back to TEXT (silent) if the 3-notification daily limit is reached.
+     */
+    public function sendMessage(CrmContact $contact, string $header, string $body): void
+    {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
+        $issuerId = config('services.google_wallet.issuer_id');
+        $objectId = "{$issuerId}.{$contact->id}";
+
+        // Rate limiting: max 3 push notifications per pass per day
+        $canNotify = $contact->google_wallet_notify_count < 3;
+        $messageType = $canNotify ? 'TEXT_AND_NOTIFY' : 'TEXT';
+
+        $payload = [
+            'message' => [
+                'header' => $header,
+                'body' => $body,
+                'messageType' => $messageType,
+            ],
+        ];
+
+        $response = $this->apiRequest('POST', "/loyaltyObject/{$objectId}/addMessage", $payload);
+
+        // 404 = object doesn't exist (user never added to Google Wallet), skip
+        if ($response['httpCode'] === 404) {
+            return;
+        }
+
+        if ($response['httpCode'] >= 400) {
+            Log::warning('GoogleWalletService: Failed to send message', [
+                'object_id' => $objectId,
+                'http_code' => $response['httpCode'],
+                'body' => $response['body'],
+            ]);
+            return;
+        }
+
+        // Increment the daily counter only if we sent a push notification
+        if ($canNotify) {
+            $contact->increment('google_wallet_notify_count');
+        }
+
+        Log::info('GoogleWalletService: Message sent', [
+            'object_id' => $objectId,
+            'type' => $messageType,
+            'notify_count' => $contact->google_wallet_notify_count,
+        ]);
+    }
+
     // ========================================================================
     // Private Helpers
     // ========================================================================
