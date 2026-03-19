@@ -42,4 +42,9 @@ class CrmContact extends Model
     {
         return $this->belongsTo(Team::class);
     }
+
+    public function walletRegistrations()
+    {
+        return $this->hasMany(WalletRegistration::class, 'serial_number');
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\WalletPassSetting;
+use App\Jobs\SyncTeamWalletPassesJob;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -67,6 +68,8 @@ class TeamWalletSettings extends Component
 
         $this->team->walletPassSettings()->updateOrCreate([], $validated['state']);
 
+        SyncTeamWalletPassesJob::dispatch($this->team);
+
         $this->dispatch('saved');
     }
 
@@ -98,7 +101,7 @@ class TeamWalletSettings extends Component
         $property = $propertyMap[$type] ?? null;
         $column = $columnMap[$type] ?? null;
 
-        if (!$property || !$column || !$this->{$property}) {
+        if (!$property || !$column || !$this->{ $property}) {
             return;
         }
 
@@ -113,13 +116,13 @@ class TeamWalletSettings extends Component
         $settings = $this->team->walletPassSettings()->firstOrCreate([]);
 
         // Delete old file if exists
-        if ($settings->{$column}) {
-            $disk->delete($settings->{$column});
+        if ($settings->{ $column}) {
+            $disk->delete($settings->{ $column});
         }
 
         // Store new file
         $filename = $type . '.png';
-        $path = $this->{$property}->storeAs($folder, $filename, 'cloud_public');
+        $path = $this->{ $property}->storeAs($folder, $filename, 'cloud_public');
 
         $updateData = [$column => $path];
 
@@ -136,7 +139,9 @@ class TeamWalletSettings extends Component
         $settings = $this->team->walletPassSettings()->updateOrCreate([], $updateData);
         $settings->touch(); // Force updated_at refresh for cache-busting preview
 
-        $this->{$property} = null;
+        SyncTeamWalletPassesJob::dispatch($this->team);
+
+        $this->{ $property} = null;
         $this->team->refresh();
 
         $this->dispatch('image-uploaded');
@@ -160,13 +165,16 @@ class TeamWalletSettings extends Component
         ];
 
         $column = $columnMap[$type] ?? null;
-        if (!$column) return;
+        if (!$column)
+            return;
 
         $settings = $this->team->walletPassSettings;
-        if ($settings->{$column}) {
-            Storage::disk('cloud_public')->delete($settings->{$column});
+        if ($settings->{ $column}) {
+            Storage::disk('cloud_public')->delete($settings->{ $column});
             $settings->update([$column => null]);
             $settings->touch();
+
+            SyncTeamWalletPassesJob::dispatch($this->team);
         }
 
         $this->team->refresh();
@@ -183,10 +191,10 @@ class TeamWalletSettings extends Component
 
         $themes = [
             'midnight' => ['bg' => '#000000', 'fg' => '#FFFFFF', 'label' => '#A1A1AA'],
-            'gold'     => ['bg' => '#1A1A1A', 'fg' => '#D4AF37', 'label' => '#C5A028'],
-            'blue'     => ['bg' => '#002B5B', 'fg' => '#FFFFFF', 'label' => '#3CCF4E'],
-            'white'    => ['bg' => '#F8FAFC', 'fg' => '#0F172A', 'label' => '#64748B'],
-            'crimson'  => ['bg' => '#7F1D1D', 'fg' => '#FFFFFF', 'label' => '#FCA5A5'],
+            'gold' => ['bg' => '#1A1A1A', 'fg' => '#D4AF37', 'label' => '#C5A028'],
+            'blue' => ['bg' => '#002B5B', 'fg' => '#FFFFFF', 'label' => '#3CCF4E'],
+            'white' => ['bg' => '#F8FAFC', 'fg' => '#0F172A', 'label' => '#64748B'],
+            'crimson' => ['bg' => '#7F1D1D', 'fg' => '#FFFFFF', 'label' => '#FCA5A5'],
         ];
 
         if (isset($themes[$theme])) {
@@ -242,7 +250,19 @@ class TeamWalletSettings extends Component
 
     public function updated($name, $value)
     {
-        // Force refresh for preview
+    // Force refresh for preview
+    }
+
+    public function getTextColorForBackground(string $hexColor): string
+    {
+        $hex = ltrim($hexColor, '#');
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+
+        $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+
+        return $luminance > 0.5 ? '#000000' : '#ffffff';
     }
 
     public function render()

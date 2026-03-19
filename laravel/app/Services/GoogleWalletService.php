@@ -48,16 +48,24 @@ class GoogleWalletService
         $classPayload = [
             'id' => $classId,
             'issuerName' => $team->name,
-            'programName' => $settings?->logo_text ?: $team->name,
+            'programName' => $settings?->logo_text ?: 'Ma Fidélité',
             'reviewStatus' => 'UNDER_REVIEW',
             'hexBackgroundColor' => $settings?->background_color ?? '#282828',
             'loyaltyPointsLabel' => 'VOS POINTS',
         ];
+        if ($settings?->latitude && $settings?->longitude) {
+            $classPayload['locations'] = [
+                [
+                    'latitude' => (float) $settings->latitude,
+                    'longitude' => (float) $settings->longitude,
+                ]
+        ];
+    }
 
         // Banner (Bandeau Google)
-        $wideLogo = null;
+        $heroImage = null;
         if ($settings?->strip_path) {
-            $wideLogo = Storage::disk('cloud_public')->url($settings->strip_path);
+            $heroImage = Storage::disk('cloud_public')->url($settings->strip_path);
         }
 
         if ($logoUrl) {
@@ -69,10 +77,10 @@ class GoogleWalletService
             ];
         }
 
-        if ($wideLogo) {
-            $classPayload['wideLogo'] = [
+        if ($heroImage) {
+            $classPayload['heroImage'] = [
                 'sourceUri' => [
-                    'uri' => $wideLogo,
+                    'uri' => $heroImage,
                     'description' => $team->name . ' Banner',
                 ],
             ];
@@ -148,11 +156,6 @@ class GoogleWalletService
             ],
             'textModulesData' => [
                 [
-                    'header' => 'TITULAIRE',
-                    'body' => $contact->name ?: 'Client',
-                    'id' => 'holder_name',
-                ],
-                [
                     'header' => 'Prochaine récompense',
                     'body' => $nextRewardText,
                     'id' => 'next_reward',
@@ -164,8 +167,17 @@ class GoogleWalletService
                     'int' => (int) ($contact->loyalty_points ?? 0),
                 ],
             ],
-        ];
 
+        ];
+        
+         //Geofencing
+        if ($contact->team->walletPassSettings?->relevant_text) {
+            $objectPayload['notifications'] = [
+                'upcomingNotification' => [
+                    'enableNotification' => true,
+                ]
+            ];
+        }
         // Try to create, if 409 → update
         $response = $this->apiRequest('POST', '/loyaltyObject', $objectPayload);
 

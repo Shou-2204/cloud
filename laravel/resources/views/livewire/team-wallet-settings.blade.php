@@ -75,7 +75,8 @@
                                         class="cursor-pointer bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-2 py-1 rounded text-[10px] font-bold">
                                         {{ $settings?->icon_path ? 'Changer' : 'Uploader' }}
                                     </label>
-                                    <input id="icon-upload" type="file" wire:model="iconFile" accept=".png" class="hidden">
+                                    <input id="icon-upload" type="file" wire:model="iconFile" accept=".png"
+                                        class="hidden">
                                 </div>
                             </div>
                             <x-input-error for="iconFile" class="text-[10px] mt-1" />
@@ -96,7 +97,8 @@
                                         class="cursor-pointer bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-2 py-1 rounded text-[10px] font-bold">
                                         {{ $settings?->strip_path ? 'Changer' : 'Uploader' }}
                                     </label>
-                                    <input id="strip-upload" type="file" wire:model="stripFile" accept=".png" class="hidden">
+                                    <input id="strip-upload" type="file" wire:model="stripFile" accept=".png"
+                                        class="hidden">
                                 </div>
                             </div>
                             <x-input-error for="stripFile" class="mt-1" />
@@ -131,7 +133,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            Géofencing (Détection de proximité)
+                            Détection de proximité
                         </h3>
                     </div>
 
@@ -161,7 +163,7 @@
                             wire:model.live="state.relevant_text"
                             placeholder="Ex: Vous êtes proche de {{ $team->name }} !" />
                         <p class="mt-2 text-[10px] text-gray-400 italic">Ce message apparaît sous la carte sur l'écran
-                            de verrouillage.</p>
+                            de verrouillage des iPhones uniquement.</p>
                         <x-input-error for="state.relevant_text" class="mt-2" />
                     </div>
 
@@ -274,116 +276,95 @@
                     </div>
 
 
-                    {{-- Barcode Area --}}
-                    <div class="px-5 pb-8 pt-2 flex justify-center">
-                        <div class="w-28 h-28 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                            <svg class="w-20 h-20 text-black" viewBox="0 0 29 29" fill="currentColor"
+                    {{-- QR Code : toujours blanc + noir --}}
+                    <div class="flex flex-col items-center mb-4">
+                        <div class="bg-white rounded-2xl p-3 shadow">
+                            <svg class="w-28 h-28 text-black" viewBox="0 0 29 29" fill="currentColor"
                                 shape-rendering="crispEdges">
                                 <path
                                     d="M0 0h7v7H0zM22 0h7v7h-7zM0 22h7v7H0zM2 2h3v3H2zM24 2h3v3h-3zM2 24h3v3H2zM11 0h2v2h-2zM15 0h2v4h-2V0zm4 0h2v2h-2zM8 1h2v2H8zM12 2h2v2h-2zM18 2h2v4h-2zM8 4h2v2H8zM11 4h2v2h-2zm4 4h2v2h-2zM19 4h2v2h-2zM11 7h2v2h-2zM14 7h1v1h-1zM22 8h3v1h-3zm4 0h3v1h-3zM8 9h2v2H8zm3 0h2v2h-2zm4 0h4v2h-4zM24 9h2v2h-2zm3 0h2v2h-2zM0 8h2v1H0zm3 0h4v1H3zm0 2h3v1H3zm4 0h1v1H7zm11 11h2v2h-2zm4 0h2v2h-2zm3 0h2v4h-2zM8 12h2v2H8zm3 0h2v2h-2zm4 0h2v2h-2zm11 1h3v1h-3zM0 14h2v2H0zm3 1h3v1H3zm4 0h1v1H7zm11 1h2v2h-2zm4 0h2v2h-2zm3 1h2v2h-2zM8 16h2v2H8zm3 1h2v2h-2zm4 0h2v2h-2zm11 1h3v1h-3zM0 18h7v1H0zm3 1h3v1H3zM0 20h2v1H0zm3 0h4v1H3zm8 11h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm3 0h2v2h-2zM8 22h2v2H8zm4 0h2v4h-2zm6 0h2v2h-2zm4 0h2v2h-2zm3 0h2v2h-2zM8 24h2v2H8zm11 0h2v2h-2zm3 1h3v1h-3zM0 26h2v1H0zm3 0h4v1H3zm8 0h2v2h-2zm4 0h2v2h-2zm4 1h5v1h-5z" />
                             </svg>
                         </div>
+                        <p class="text-xs font-mono mt-2 opacity-70"
+                            style="color: {{ $this->getTextColorForBackground($state['background_color']) }};">
+                            IZC-XXXXXXX</p>
                     </div>
                 </div>
-                <p class="text-center text-[10px] text-gray-400 dark:text-gray-500 mt-2">Design Apple iPhone</p>
+                <p class="text-center text-[10px] text-gray-400 dark:text-gray-500 mt-2">Aperçu Apple Wallet</p>
             </div>
 
             {{-- Google Wallet Preview --}}
-            <div class="mx-auto mt-8 mt-10" style="max-width: 340px;">
+            <div class="mx-auto mt-8" style="max-width: 340px;">
                 <div class="rounded-3xl overflow-hidden shadow-2xl relative"
-                    style="background-color: {{ $state['background_color'] }}; min-height: 200px;">
-                    
-                    {{-- Google Wallet Badge overlay --}}
-                    <div class="absolute top-4 right-4 z-10 opacity-80">
-                        <svg viewBox="0 0 54 39" width="32" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M53.1 19.4c0-2.3-1.6-4.5-5.2-4.5h-5.9l8.6-11.8c.4-.6.3-1.4-.2-1.8-.5-.5-1.4-.5-1.9 0l-14 15.6H4.2c-2.3 0-4.2 1.9-4.2 4.2 0 2.3 1.9 4.2 4.2 4.2h28l-8 10.6c-.4.6-.3 1.4.2 1.8.5.5 1.4.5 1.9 0l11.4-15H48c3.5-.1 5.1-1.6 5.1-3.3z" fill="#fff"/><path d="M53.1 19.4c0-2.3-1.6-4.5-5.2-4.5h-5.9l8.6-11.8c.4-.6.3-1.4-.2-1.8-.5-.5-1.4-.5-1.9 0l-14 15.6H4.2c-2.3 0-4.2 1.9-4.2 4.2 0 2.3 1.9 4.2 4.2 4.2h28l-8 10.6c-.4.6-.3 1.4.2 1.8.5.5 1.4.5 1.9 0l11.4-15H48c3.5-.1 5.1-1.6 5.1-3.3z" fill="url(#paint0_linear)"/><defs><linearGradient id="paint0_linear" x1="26.3" y1="13.9" x2="26.3" y2="39" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" stop-opacity=".2"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs></svg>
-                    </div>
+                    style="background-color: {{ $state['background_color'] }};">
 
-                    {{-- Hero Image Overlay (Bandeau Google) --}}
-                    @if($stripFile || $settings?->strip_path)
-                    <div class="w-full h-32 overflow-hidden relative">
-                        <!-- Dégradé lissé en bas pour fondre l'image dans le fond -->
-                        <div class="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-[{{ $state['background_color'] }}] to-transparent z-10"></div>
-                        @if($stripFile)
-                        <img src="{{ $stripFile->temporaryUrl() }}" class="w-full h-full object-cover">
-                        @else
-                        <img src="{{ Storage::disk('cloud_public')->url($settings->strip_path) }}?v={{ $settings->updated_at?->timestamp ?? time() }}"
-                            class="w-full h-full object-cover">
-                        @endif
-                    </div>
-                    @else
-                    <div class="w-full h-6"></div>
-                    @endif
-
-                    <div class="px-6 pb-6 pt-2 relative z-20">
-                        {{-- Header Row --}}
-                        <div class="flex items-center gap-4 mb-8">
-                            {{-- Logo --}}
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold overflow-hidden"
+                    <div class="px-6 pt-6 pb-4">
+                        {{-- Header : logo + programName --}}
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center font-bold text-base"
                                 style="background-color: white; color: {{ $state['background_color'] }};">
                                 @if($iconFile)
                                 <img src="{{ $iconFile->temporaryUrl() }}" class="w-full h-full object-cover">
                                 @elseif($settings?->icon_path)
-                                <img src="{{ Storage::disk('cloud_public')->url($settings->icon_path) }}?v={{ $settings->updated_at?->timestamp ?? time() }}"
-                                    class="w-full h-full object-cover" alt="icon">
+                                <img src="{{ Storage::disk('cloud_public')->url($settings->icon_path) }}"
+                                    class="w-full h-full object-cover">
                                 @else
                                 {{ strtoupper(substr($state['logo_text'] ?: $team->name, 0, 1)) }}
                                 @endif
                             </div>
-                            <div>
-                                <h3 class="font-bold text-lg" style="color: {{ $state['foreground_color'] }};">
-                                    {{ $state['logo_text'] ?: $team->name }}
-                                </h3>
-                            </div>
+                            <span class="font-bold text-base"
+                                style="color: {{ $this->getTextColorForBackground($state['background_color']) }};">
+                                {{ $state['logo_text'] ?: $team->name }}
+                            </span>
                         </div>
 
-                        {{-- Points Row --}}
-                        <div class="mb-8">
-                            <p class="text-sm font-medium mb-1" style="color: {{ $state['label_color'] ?? $state['foreground_color'] }};">
-                                {{ $state['label_primary'] }}
-                            </p>
-                            <p class="text-3xl font-bold" style="color: {{ $state['foreground_color'] }};">
-                                150
-                            </p>
-                        </div>
+                        {{-- accountName (nom du porteur) --}}
+                        <p class="text-2xl font-bold mb-1"
+                            style="color: {{ $this->getTextColorForBackground($state['background_color']) }};">
+                            Ma fidélité
+                        </p>
 
-                        {{-- Next Reward Detail --}}
-                        <div class="mb-8 pt-4 border-t border-opacity-20" style="border-color: {{ $state['foreground_color'] }};">
-                            <p class="text-xs font-medium mb-1 opacity-80" style="color: {{ $state['foreground_color'] }};">
-                                {{ __('Prochaine récompense') }}
-                            </p>
-                            <p class="text-sm font-bold" style="color: {{ $state['foreground_color'] }};">
-                                1 Bouteille offerte à 200 points
-                            </p>
-                        </div>
+                        {{-- Points --}}
+                        <p class="text-xs uppercase tracking-wider opacity-70 mb-1"
+                            style="color: {{ $this->getTextColorForBackground($state['background_color']) }};">
+                            {{ $state['label_primary'] ?: 'VOS POINTS' }}
+                        </p>
+                        <p class="text-2xl mb-6"
+                            style="color: {{ $this->getTextColorForBackground($state['background_color']) }};">
+                            150
+                        </p>
 
-                        {{-- Barcode Overlay (Material Style) - Same as Apple without white BG --}}
-                        <div class="rounded-2xl p-4 flex flex-col items-center justify-center">
-                            <div class="w-32 h-32 flex items-center justify-center mb-2">
-                                <svg class="w-28 h-28" style="color: {{ $state['foreground_color'] }}" viewBox="0 0 29 29" fill="currentColor" shape-rendering="crispEdges">
-                                    <path d="M0 0h7v7H0zM22 0h7v7h-7zM0 22h7v7H0zM2 2h3v3H2zM24 2h3v3h-3zM2 24h3v3H2zM11 0h2v2h-2zM15 0h2v4h-2V0zm4 0h2v2h-2zM8 1h2v2H8zM12 2h2v2h-2zM18 2h2v4h-2zM8 4h2v2H8zM11 4h2v2h-2zm4 4h2v2h-2zM19 4h2v2h-2zM11 7h2v2h-2zM14 7h1v1h-1zM22 8h3v1h-3zm4 0h3v1h-3zM8 9h2v2H8zm3 0h2v2h-2zm4 0h4v2h-4zM24 9h2v2h-2zm3 0h2v2h-2zM0 8h2v1H0zm3 0h4v1H3zm0 2h3v1H3zm4 0h1v1H7zm11 11h2v2h-2zm4 0h2v2h-2zm3 0h2v4h-2zM8 12h2v2H8zm3 0h2v2h-2zm4 0h2v2h-2zm11 1h3v1h-3zM0 14h2v2H0zm3 1h3v1H3zm4 0h1v1H7zm11 1h2v2h-2zm4 0h2v2h-2zm3 1h2v2h-2zM8 16h2v2H8zm3 1h2v2h-2zm4 0h2v2h-2zm11 1h3v1h-3zM0 18h7v1H0zm3 1h3v1H3zM0 20h2v1H0zm3 0h4v1H3zm8 11h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm3 0h2v2h-2zM8 22h2v2H8zm4 0h2v4h-2zm6 0h2v2h-2zm4 0h2v2h-2zm3 0h2v2h-2zM8 24h2v2H8zm11 0h2v2h-2zm3 1h3v1h-3zM0 26h2v1H0zm3 0h4v1H3zm8 0h2v2h-2zm4 0h2v2h-2zm4 1h5v1h-5z" />
+                        {{-- QR Code : toujours blanc + noir --}}
+                        <div class="flex flex-col items-center mb-4">
+                            <div class="bg-white rounded-2xl p-3 shadow">
+                                <svg class="w-28 h-28 text-black" viewBox="0 0 29 29" fill="currentColor"
+                                    shape-rendering="crispEdges">
+                                    <path
+                                        d="M0 0h7v7H0zM22 0h7v7h-7zM0 22h7v7H0zM2 2h3v3H2zM24 2h3v3h-3zM2 24h3v3H2zM11 0h2v2h-2zM15 0h2v4h-2V0zm4 0h2v2h-2zM8 1h2v2H8zM12 2h2v2h-2zM18 2h2v4h-2zM8 4h2v2H8zM11 4h2v2h-2zm4 4h2v2h-2zM19 4h2v2h-2zM11 7h2v2h-2zM14 7h1v1h-1zM22 8h3v1h-3zm4 0h3v1h-3zM8 9h2v2H8zm3 0h2v2h-2zm4 0h4v2h-4zM24 9h2v2h-2zm3 0h2v2h-2zM0 8h2v1H0zm3 0h4v1H3zm0 2h3v1H3zm4 0h1v1H7zm11 11h2v2h-2zm4 0h2v2h-2zm3 0h2v4h-2zM8 12h2v2H8zm3 0h2v2h-2zm4 0h2v2h-2zm11 1h3v1h-3zM0 14h2v2H0zm3 1h3v1H3zm4 0h1v1H7zm11 1h2v2h-2zm4 0h2v2h-2zm3 1h2v2h-2zM8 16h2v2H8zm3 1h2v2h-2zm4 0h2v2h-2zm11 1h3v1h-3zM0 18h7v1H0zm3 1h3v1H3zM0 20h2v1H0zm3 0h4v1H3zm8 11h2v2h-2zm4 0h2v2h-2zm4 0h2v2h-2zm3 0h2v2h-2zM8 22h2v2H8zm4 0h2v4h-2zm6 0h2v2h-2zm4 0h2v2h-2zm3 0h2v2h-2zM8 24h2v2H8zm11 0h2v2h-2zm3 1h3v1h-3zM0 26h2v1H0zm3 0h4v1H3zm8 0h2v2h-2zm4 0h2v2h-2zm4 1h5v1h-5z" />
                                 </svg>
                             </div>
-                            <p class="text-xs font-mono opacity-80" style="color: {{ $state['foreground_color'] }}">123456789</p>
+                            <p class="text-xs font-mono mt-2 opacity-70"
+                                style="color: {{ $this->getTextColorForBackground($state['background_color']) }};">
+                                IZC-XXXXXXX</p>
                         </div>
                     </div>
-                </div>
-                <p class="text-center text-[10px] text-gray-400 dark:text-gray-500 mt-2">Design Google Android (Material You)</p>
 
-                {{-- Action Buttons --}}
-                <div class="mt-8 flex flex-col gap-4 items-center">
-                    @if($this->googleWalletEnabled && $this->googleWalletPreviewUrl)
-                        <a href="{{ $this->googleWalletPreviewUrl }}" target="_blank"
-                            class="inline-block transition-transform hover:scale-105 active:scale-95">
-                            <img src="https://pay.google.com/about/framesystem/fr/download/buttons/add_to_google_wallet_wallet-button.svg" 
-                                alt="Ajouter à Google Wallet" class="h-10">
-                        </a>
-                    @elseif(!$this->googleWalletEnabled)
-                        <div class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-xs text-gray-500 rounded-lg border border-gray-200 dark:border-gray-700 text-center">
-                            Google Wallet n'est pas configuré sur ce serveur.<br>
-                            L'API Issuer ID est manquante dans le fichier .env.
-                        </div>
+                    {{-- Hero image EN BAS --}}
+                    @if($stripFile)
+                    <div class="w-full h-32 overflow-hidden">
+                        <img src="{{ $stripFile->temporaryUrl() }}" class="w-full h-full object-cover">
+                    </div>
+                    @elseif($settings?->strip_path)
+                    <div class="w-full h-32 overflow-hidden">
+                        <img src="{{ Storage::disk('cloud_public')->url($settings->strip_path) }}"
+                            class="w-full h-full object-cover">
+                    </div>
                     @endif
                 </div>
+
+                <p class="text-center text-[10px] text-gray-400 mt-2">
+                    Aperçu Google Wallet
+                </p>
             </div>
         </div>
     </div>
